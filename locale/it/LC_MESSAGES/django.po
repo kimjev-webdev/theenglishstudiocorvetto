@@ -1,0 +1,279 @@
+# English/Italian Translations for The English Studio.
+
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-11 14:15+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kim Piffy <piffyinfo@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: .\templates\index.html:8
+msgid "The English Studio"
+msgstr "The English Studio"
+
+#: .\templates\index.html:31
+msgid "The English Studio Logo"
+msgstr "The English Studio Logo"
+
+#: .\templates\index.html:38
+msgid "Courses"
+msgstr "Corso"
+
+#: .\templates\index.html:39
+msgid "About"
+msgstr "Informazioni"
+
+#: .\templates\index.html:40
+msgid "Blog"
+msgstr "Blog"
+
+#: templates/index.html:41 templates/main/contact.html:41
+msgid "Events"
+msgstr "Eventi"
+
+#: .\templates\index.html:42
+msgid "Contact"
+msgstr "Contatto"
+
+#: .\templates\index.html:45
+msgid "English"
+msgstr "Inglese"
+
+#: .\templates\index.html:46
+msgid "Italian"
+msgstr "Italiano"
+
+#: templates/index.html: templates/main/contact.html:
+msgid "After School Club"
+msgstr "Dopo Scuola"
+
+#: .\templates\index.html:61
+msgid "Making friends and learning English is so fun!"
+msgstr "Fare amicizia e imparare l'inglese è così divertente!"
+
+#: .\templates\index.html:62 .\templates\index.html:70
+#: .\templates\index.html:78 .\templates\index.html:86
+msgid "Learn More"
+msgstr "Scopri di più"
+
+#: .\templates\index.html:68
+msgid "Business English"
+msgstr "Inglese Commerciale"
+
+#: .\templates\index.html:69
+msgid "Study to access a world of great opportunities."
+msgstr "Studia per accedere a un mondo di grandi opportunità."
+
+#: .\templates\index.html:76
+msgid "Private Tutoring"
+msgstr "Tutoraggio privato"
+
+#: .\templates\index.html:77
+msgid "Personalized support to help you reach your goals."
+msgstr "Supporto personalizzato per aiutarti a raggiungere i tuoi obiettivi."
+
+#: .\templates\index.html:84
+msgid "IELTS Test Preps"
+msgstr "Preparazione al test IELTS"
+
+#: .\templates\index.html:85
+msgid "Feel prepared to reach your highest potential."
+msgstr "Sentiti pronto a raggiungere il tuo massimo potenziale."
+
+#: .\templates\index.html:102
+msgid "Teacher"
+msgstr "Insegnante"
+
+#: .\templates\index.html:103
+msgid "Learn English with Leanne"
+msgstr "Impara l'inglese con Leanne"
+
+#: .\templates\index.html:104
+msgid ""
+"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sed turpis "
+"vitae leo pretium feugiat."
+msgstr ""
+
+#: .\templates\index.html:105
+msgid "Contact Me"
+msgstr "Contattami"
+
+#: .\templates\index.html:109
+msgid "What We Offer"
+msgstr "Cosa Offriamo"
+
+#: .\templates\index.html:116
+msgid "AFTER SCHOOL CLUB"
+msgstr "DOPO SCUOLA"
+
+#: .\templates\index.html:117
+msgid ""
+"Come and join us after school for 90 mins of full immersion English, with "
+"our native mother tongue teacher who provides exciting and fun activities "
+"for primary school children."
+msgstr "Venite a trovarci dopo la scuola per 90 minuti di full immersion in inglese,"
+"con la nostra insegnante madrelingua che offre attività stimolanti e divertenti per i bambini della scuola primaria." 
+
+#: .\templates\index.html:118
+msgid ""
+"Expose your children to the world and help them acquire fundamental language "
+"skills at a young age, preparing them for their best possible future."
+msgstr "Esponete i vostri bambini al mondo e aiutateli ad acquisire competenze"
+"linguistiche fondamentali fin da piccoli, preparandoli per il loro futuro migliore."
+
+
+#: .\templates\index.html:119
+msgid "Price from €22/90 mins."
+msgstr "Prezzo a partire da €22/90 min."
+
+#: .\templates\index.html:119
+msgid "Up to 8 children for each session."
+msgstr "Fino a 8 bambini per sessione."
+
+#: .\templates\index.html:129
+msgid "PRIVATE ENGLISH LESSONS"
+msgstr "LEZIONI PRIVATE DI INGLESE"
+
+#: .\templates\index.html:130
+msgid ""
+"English lessons tailored to all your needs. Our professionally trained and "
+"well-experienced teacher can help you define what you are looking for and "
+"together, we can reach your goals."
+msgstr "Lezioni di inglese personalizzate per tutte le tue esigenze. Il nostro insegnante, qualificato e con"
+"grande esperienza, può aiutarti a definire ciò che stai cercando e, insieme, possiamo raggiungere i"
+"tuoi obiettivi."
+
+#: .\templates\index.html:131
+msgid ""
+"Imagine a life where you are fluent in English. If you can imagine it, we "
+"can achieve it."
+msgstr "Immagina una vita in cui parli fluentemente l'inglese."
+"Se riesci a immaginarlo, noi possiamo realizzarlo."
+
+#: .\templates\index.html:132
+msgid "€27/60 mins children"
+msgstr "€27/60 min bambini"
+
+#: .\templates\index.html:132
+msgid "€32/60 mins adults"
+msgstr "€32/60 min adulti"
+
+#: .\templates\index.html:142
+msgid "IELTS TEST PREP"
+msgstr "PREPARAZIONE AL TEST IELTS"
+
+#: .\templates\index.html:143
+msgid ""
+"Specialising in IELTS test prep, learn all the tips and tricks you need in "
+"order to achieve the score of your dreams!"
+msgstr "Specializzati nella preparazione al test IELTS, scopri tutti i trucchi e i consigli necessari per"
+"raggiungere il punteggio dei tuoi sogni!"
+
+#: .\templates\index.html:144
+msgid ""
+"Our teacher has an excellent record in helping students realise their goals "
+"through her outstanding understanding of the difficult exam and how to "
+"navigate those high band scores."
+msgstr ""
+"La nostra insegnante vanta un ha un'eccellente esperienza nell'aiutare gli studenti a raggiungere i loro obiettivi grazie"
+"alla sua straordinaria comprensione di questo difficile e di come gestire punteggi elevati."
+
+#: .\templates\index.html:145
+msgid "Price discussed on request."
+msgstr "Prezzo da concordare su richiesta."
+
+#: .\templates\index.html:155
+msgid "BUSINESS ENGLISH"
+msgstr "INGLESE COMMERCIALE"
+
+#: .\templates\index.html:156
+msgid ""
+"Available both online and in-person, finesse your Business English skills "
+"and get that promotion you’ve always dreamed of."
+msgstr "Disponibile sia online che di persona, affina le tue competenze di Inglese Commerciale"
+"e ottieni la promozione che hai sempre sognato."
+
+#: .\templates\index.html:157
+msgid ""
+"English is THE most widely spoken international business language and you "
+"are missing out on the top opportunities if you cannot express yourself "
+"properly! Together with our teacher, we can put together a course tailored "
+"specifically for you and your needs."
+msgstr "L'inglese è la lingua commerciale più parlata a livello internazionale e se"
+"non riesci a esprimerti correttamente, ti stai perdendo le migliori opportunità!"
+"Insieme al nostro insegnante, possiamo creare un corso su misura per te e le tue esigenze."
+
+#: .\templates\index.html:158
+msgid "Also available in groups."
+msgstr "Disponibile anche gruppo."
+
+#: .\templates\index.html:158
+msgid "€32/60 mins"
+msgstr "€32/60 min"
+
+#: .\templates\index.html:164
+msgid "Book Now"
+msgstr "Prenota ora"
+
+#: templates/main/contact.html:XX
+msgid "Contact Us"
+msgstr "Contattaci"
+
+#: templates/main/contact.html:XX
+msgid "Full Name"
+msgstr "Nome e Cognome"
+
+#: templates/main/contact.html:XX
+msgid "Subject"
+msgstr "Oggetto"
+
+#: templates/main/contact.html:XX
+msgid "Select an option"
+msgstr "Seleziona un'opzione"
+
+#: templates/main/contact.html:XX
+msgid "Private Lessons"
+msgstr "Lezioni Private"
+
+#: templates/main/contact.html:XX
+msgid "Business English Lessons"
+msgstr "Lezioni di Inglese Commerciale"
+
+#: templates/main/contact.html:XX
+msgid "General English Lessons"
+msgstr "Lezioni di Inglese Generale"
+
+#: templates/main/contact.html:XX
+msgid "IELTS Enquiry"
+msgstr "Richiesta per IELTS"
+
+#: templates/main/contact.html:XX
+msgid "Other"
+msgstr "Altro"
+
+#: templates/main/contact.html:XX
+msgid "Message"
+msgstr "Messaggio"
+
+#: templates/main/contact.html:XX
+msgid "Where to find us"
+msgstr "Dove trovarci"
+
+#: templates/main/contact.html:XX
+msgid "Address"
+msgstr "Indirizzo"
+
+#: templates/main/contact.html:XX
+msgid "Phone"
+msgstr "Telefono"
+
+#: templates/main/contact.html:XX
+msgid "Email"
+msgstr "Email"

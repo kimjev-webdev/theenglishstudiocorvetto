@@ -1,0 +1,200 @@
+/*---general styles---*/
+
+/*---colors---*/
+/*text navy*/
+body {
+    background-color: #fdfbf6 !important;
+    padding: 1.5rem 20px;
+}
+.navy {
+    color: #37376B !important;
+}
+
+/* text red*/
+.red {
+    color: #B30000 !important;
+}
+
+/*---fonts---*/
+/* primary/header font*/
+.primaryfont {
+    font-family: 'Archivo Black', sans-serif;
+    text-transform: uppercase;
+}
+
+/* secondary/body font*/
+.body-text {
+    font-family: 'Cabin', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+/*---navbar styles---*/
+/* hover state navbar styles*/
+.focusstyle:hover {
+    text-decoration: underline;
+    text-decoration-color: #B30000;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 5px; 
+}
+ .nav_img {
+    width: 80px;
+    height: 80px;
+ }
+
+ .nav-link {
+  display: flex !important;
+  justify-content: flex-end !important;
+ }
+
+ .locale_select {
+  display: flex !important;
+  justify-content: flex-end !important;
+ }
+
+ .locale_img {
+  padding: 5px;
+ }
+
+/*---header styles---*/
+.head-navy {
+    padding: 20px;
+    background-color: #37376B;
+    color: #FFF;
+    border: none;
+  }
+
+/*---button styles---*/
+/* initial state button styles*/
+.btn-red {
+    background-color: #B30000;
+    color: #FFF;
+    border: none;
+  }
+
+.btn-navy {
+    background-color: #37376B !important;
+    color: #FFF;
+    border: none;
+  }
+
+/* hover state button styles*/
+.btn-navy:hover,
+.btn-navy:focus,
+.btn-navy:active {
+    background-color: #B30000;
+    color: #FFF;
+    border: none;
+  }
+
+.btn-red:hover,
+.btn-red:focus {
+    background-color: #37376B;
+    color: #FFF;
+    text-decoration: none;
+  }
+  
+/*--- index.html styles---*/
+
+/*hero section styles*/
+#heroCarousel, .indexheader {
+    border-radius: 20px;  
+    overflow: hidden;     
+  }
+
+  .icon-presets {
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+    width: auto;
+    height: 130px;
+  }
+  
+.alt-icon-preset {
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+    width: auto;
+    height: 140px;   
+}
+
+.carousel-background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.carouseloverlay {
+  position: absolute;
+  z-index: 2;
+}
+
+.rounded-circle.mb-3.teacher_pic {
+  width: 10rem;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .carouseloverlay {
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    position: absolute !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    max-width: 90% !important;
+    padding: 1rem !important;
+    background-color: rgba(55, 55, 107, 0.651);
+    border-radius: 1rem;
+  }
+
+ .smallerheader {
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+  }
+
+  .smallertext {
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+  }
+
+  .smallerbtn {
+    font-size: 12px !important;
+    padding: 0.5rem 1rem !important;
+  }
+
+  .contact_header {
+    margin-top: 1.5rem !important;
+  }
+
+  .body-text {
+    font-size: 14px;
+  }
+
+  .nav-link {
+    padding: 0 !important;
+  }
+}
+
+@media (min-width: 768px) {
+    body {
+        padding: 1.5rem 75px;
+    }
+
+   .nav_img {
+    width: 120px;
+    height: auto;
+   }
+
+   .rounded-circle.mb-3.teacher_pic {
+    width: 20rem; 
+    height: auto;
+   }
+}

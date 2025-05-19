@@ -1,0 +1,76 @@
+{% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% trans "The English Studio" %}{% endblock %}</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="{% static 'images/logofull.webp' %}" type="image/webp">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Cabin&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  <header>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg pb-3">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+          <img src="{% static 'images/logofull.webp' %}" class="nav_img" alt="{% trans 'The English Studio Logo' %}">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto text-uppercase fw-bold">
+            <li class="nav-item"><a class="nav-link navy primaryfont focusstyle" href="">{% trans "Courses" %}</a></li>
+            <li class="nav-item"><a class="nav-link navy primaryfont focusstyle" href="">{% trans "About" %}</a></li>
+            <li class="nav-item"><a class="nav-link navy primaryfont focusstyle" href="">{% trans "Blog" %}</a></li>
+            <li class="nav-item"><a class="nav-link navy primaryfont focusstyle" href="">{% trans "Events" %}</a></li>
+            <li class="nav-item"><a class="nav-link navy primaryfont focusstyle" href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
+          </ul>
+          <!-- Language Selection -->
+          <div class="ms-3 locale_select">
+            <form action="{% url 'set_language' %}" method="post" style="display:inline;">
+              {% csrf_token %}
+              <input type="hidden" name="language" value="en">
+              <input type="hidden" name="next" value="{{ request.path }}">
+              <button type="submit" style="background:none; border:none; padding:0;">
+                <img src="https://flagcdn.com/16x12/gb.png" alt="{% trans 'English' %}" class="me-1" style="cursor:pointer;">
+              </button>
+            </form>
+            <form action="{% url 'set_language' %}" method="post" style="display:inline;">
+              {% csrf_token %}
+              <input type="hidden" name="language" value="it">
+              <input type="hidden" name="next" value="{{ request.path }}">
+              <button type="submit" style="background:none; border:none; padding:0;">
+                <img src="https://flagcdn.com/16x12/it.png" class="locale_img" alt="{% trans 'Italian' %}" style="cursor:pointer;">
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

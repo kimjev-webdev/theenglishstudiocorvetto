@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Contact Us" %}{% endblock %}
+
+{% block content %}
+<main class="container">
+  <div class="row contact_row">
+    <!-- Contact Form -->
+    <section class="col-md-6">
+      <h2 class="primaryfont red text-center mb-2">{% trans "Contact Us" %}</h2>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="fullName" class="form-label body-text navy">{% trans "Full Name" %}*</label>
+          <input type="text" class="form-control body-text navy" id="fullName" name="full_name" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label body-text navy">{% trans "Email" %}*</label>
+          <input type="email" class="form-control body-text navy" id="email" name="email" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="phone" class="form-label body-text navy">{% trans "Phone" %}*</label>
+          <input type="tel" class="form-control body-text navy" id="phone" name="phone" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="subject" class="form-label body-text navy">{% trans "Subject" %}*</label>
+          <select class="form-select body-text navy" id="subject" name="subject" required>
+            <option value="">{% trans "Select an option" %}</option>
+            <option>{% trans "After School Club" %}</option>
+            <option>{% trans "Private Lessons" %}</option>
+            <option>{% trans "Business English Lessons" %}</option>
+            <option>{% trans "General English Lessons" %}</option>
+            <option>{% trans "IELTS Enquiry" %}</option>
+            <option>{% trans "Events" %}</option>
+            <option>{% trans "Other" %}</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="message" class="form-label body-text navy">{% trans "Message" %}*</label>
+          <textarea class="form-control body-text navy" id="message" name="message" rows="5" required></textarea>
+        </div>
+
+        <div class="form-check mb-3">
+          <input class="form-check-input btn-red" type="checkbox" id="subscribe" name="subscribe">
+          <label class="form-check-label body-text navy" for="subscribe">
+            {% trans "Subscribe to newsletter" %}
+          </label>
+        </div>
+
+        <button type="submit" class="btn primaryfont btn-red mb-3">{% trans "Send Message" %}</button>
+      </form>
+    </section>
+
+    <!-- Right Column: Contact Info + Map -->
+    <section class="col-md-6">
+      <div class="contact-info">
+        <h3 class="red primaryfont text-center contact_header">{% trans "Where to find us" %}</h3>
+        <ul class="list-unstyled body-text navy lh-lg">
+          <li>
+            <i class="fas fa-map-marker-alt fa-lg red"></i>
+            <strong>{% trans "Address" %}:</strong> Via Oglio, 3, Corvetto, Milano, 20139
+          </li>
+          <li>
+            <i class="fas fa-phone-alt fa-lg red"></i>
+            <strong>{% trans "Phone" %}:</strong> +39 389 182 8174
+          </li>
+          <li>
+            <i class="fas fa-envelope fa-lg red"></i>
+            <strong>{% trans "Email" %}:</strong> theenglishstudiocorvetto@gmail.com
+          </li>
+        </ul>
+      </div>
+
+      <!-- Custom Google Map -->
+      <div id="map" class="map" style="height: 450px; width: 100%;"></div>
+    </section>
+  </div>
+</main>
+
+<!-- Load map logic -->
+
+<!-- Google Maps JS -->
+<script type="module" src="{% static 'js/maps.js' %}"></script>
+<script
+  src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=maps,marker&v=beta&callback=initMap"
+  async defer>
+</script>
+
+{% endblock %}
