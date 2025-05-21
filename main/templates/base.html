@@ -6,7 +6,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+
+  <!-- SEO Meta Tags -->
+  <meta name="author" content="The English Studio">
+  <meta name="description" content="Learn English in Milan with our expert teacher and friendly community.">
+  <meta name="keywords" content="English school Milan, English for kids, private English lessons, IELTS test prep Milan, Business English Corvetto, English classes for children, native English teacher Milan">
   <title>{% block title %}{% trans "The English Studio" %}{% endblock %}</title>
+  
 
   <!-- Favicon -->
   <link rel="icon" href="{% static 'images/logofull.webp' %}" type="image/webp">
@@ -31,7 +38,7 @@
         <a class="navbar-brand" href="/">
           <img src="{% static 'images/logofull.webp' %}" class="nav_img" alt="{% trans 'The English Studio Logo' %}">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <button class="navbar-toggler" type="button" aria-label="navbar toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
