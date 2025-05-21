@@ -47,6 +47,43 @@ body {
   justify-content: flex-end !important;
  }
 
+ .hamburger {
+  display: inline-block;
+  width: 32px;
+  height: 24px;
+  position: relative;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.hamburger span {
+  display: block;
+  height: 4px;
+  width: 100%;
+  background-color: #B30000;
+  margin: 5px 0;
+  border-radius: 2px;
+  transition: all 0.4s ease-in-out;
+  transform-origin: center;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+  background-color: #37376B
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+  background-color: #37376B;
+}
+
  .locale_select {
   display: flex !important;
   justify-content: flex-end !important;
