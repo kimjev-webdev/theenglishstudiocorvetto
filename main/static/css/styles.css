@@ -4,7 +4,24 @@
 /*text navy*/
 body {
     background-color: #fdfbf6 !important;
-    padding: 1.5rem 20px;
+}
+
+.mini-text {
+  font-size: 12px;
+}
+
+.border {
+  border-color: #fdfbf6 !important; 
+  border-width: 2px !important;
+  border-radius: 50%;
+}
+
+main {
+  padding: 1.5rem 20px;
+}
+
+a {
+  text-decoration: none;
 }
 
 .off-white {
@@ -12,6 +29,10 @@ body {
 }
 .navy {
     color: #37376B !important;
+}
+
+.navy-bg {
+    background-color: #37376B;
 }
 
 /* text red*/
@@ -40,10 +61,10 @@ body {
 /*---navbar styles---*/
 /* hover state navbar styles*/
 .focusstyle:hover {
-    text-decoration: underline;
-    text-decoration-color: #B30000;
-    text-decoration-thickness: 3px;
-    text-underline-offset: 5px; 
+    text-decoration: underline !important;
+    text-decoration-color: #B30000 !important;
+    text-decoration-thickness: 3px !important;
+    text-underline-offset: 5px !important; 
 }
  .nav_img {
     width: 80px;
@@ -53,6 +74,7 @@ body {
  .nav-link {
   display: flex !important;
   justify-content: flex-end !important;
+  padding: 0px !important;
  }
 
  .navbar-toggler {
@@ -100,6 +122,11 @@ body {
   background-color: #B30000;
 }
 
+.lang-but {
+  background-color: transparent;
+  border: none;
+}
+
  .locale_select {
   display: flex !important;
   justify-content: flex-end !important;
@@ -107,6 +134,8 @@ body {
 
  .locale_img {
   padding: 5px;
+  border: none !important;
+  background: nones;
  }
 
 /*---header styles---*/
@@ -147,6 +176,16 @@ body {
     text-decoration: none;
   }
   
+/*---footer styles---*/
+
+.row-border-red {
+  border-top: 2px solid #B30000 !important;
+}
+
+.footer-logo {
+          width: 100px;
+        height: auto;
+}
 /*--- index.html styles---*/
 
 /*hero section styles*/
@@ -231,16 +270,16 @@ body {
     font-size: 14px;
   }
 
+  .mini-text {
+    font-size: 10px;
+  }
+
   .nav-link {
     padding: 0 !important;
   }
 }
 
 @media (min-width: 768px) {
-    body {
-        padding: 1.5rem 75px;
-    }
-
    .nav_img {
     width: 120px;
     height: auto;
@@ -250,4 +289,11 @@ body {
     width: 20rem; 
     height: auto;
    }
+}
+
+@media (min-width: 992px) {
+  .nav-link {
+          padding-right: var(--bs-navbar-nav-link-padding-x) !important;
+        padding-left: var(--bs-navbar-nav-link-padding-x) !important;
+  }
 }

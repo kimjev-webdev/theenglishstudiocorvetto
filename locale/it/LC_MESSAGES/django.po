@@ -19,12 +19,12 @@ msgid "The English Studio"
 msgstr "The English Studio"
 
 #: .\templates\index.html:31
-msgid "The English Studio Logo"
-msgstr "The English Studio Logo"
+msgid "The English Studio Logo - Navigate Home"
+msgstr "The English Studio Logo - Naviga alla Home"
 
 #: .\templates\index.html:38
-msgid "Courses"
-msgstr "Corso"
+msgid "Classes"
+msgstr "Lezioni"
 
 #: .\templates\index.html:39
 msgid "About"
@@ -277,10 +277,6 @@ msgstr "Telefono"
 #: templates/main/contact.html:XX
 msgid "Email"
 msgstr "Email"
-
-#: templates/includes/footer.html:10
-msgid "Home"
-msgstr "Home"
 
 #: templates/includes/footer.html:14
 msgid "Privacy Policy"
