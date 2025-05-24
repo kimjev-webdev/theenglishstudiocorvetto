@@ -186,6 +186,10 @@ a {
           width: 100px;
         height: auto;
 }
+
+.footerheader {
+  font-size: 16px;
+}
 /*--- index.html styles---*/
 
 /*hero section styles*/
