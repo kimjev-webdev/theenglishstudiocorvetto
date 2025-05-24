@@ -79,6 +79,45 @@
     {% block content %}{% endblock %}
   </main>
 
+  <footer class="mt-5 pt-4 pb-4" style="background-color: #37376B;">
+  <div class="container">
+    <div class="row text-start text-md-center text-lg-start">
+      
+      <!-- Address Column -->
+      <div class="col-lg-4 mb-4 body-text off-white">
+        <p class="mb-1">{% trans "The English Studio" %}</p>
+        <p class="mb-1">Via Oglio, 3</p>
+        <p class="mb-1">Corvetto, Milano</p>
+        <p class="mb-1">20139</p>
+      </div>
+
+      <!-- Social Column -->
+      <div class="col-lg-4 mb-4 d-flex flex-column align-items-center justify-content-center body-text off-white">
+        <div class="mb-2">
+          <a href="https://www.instagram.com/theenglishstudio.corvetto" class="me-3 red-hover" target="_blank"><i class="fab fa-instagram fa-lg"></i></a>
+          <a href="https://www.facebook.com" class="me-3 red-hover" target="_blank"><i class="fab fa-facebook fa-lg"></i></a>
+          <a href="https://www.linkedin.com" class="red-hover" target="_blank"><i class="fab fa-linkedin fa-lg"></i></a>
+        </div>
+        <a href="/privacy" class="focusstyle body-text off-white">{% trans "Privacy Policy" %}</a>
+        <div class="mt-2 body-text off-white">
+          © <span id="currentYear"></span> {% trans "The English Studio" %}
+        </div>
+      </div>
+
+      <!-- Navigation Column -->
+      <div class="col-lg-4 mb-4 text-lg-end text-center body-text off-white">
+        <a href="{% url 'index' %}" class="d-block mb-1 focusstyle body-text off-white">{% trans "Home" %}</a>
+        <a href="{% url 'courses' %}" class="d-block mb-1 focusstyle body-text off-white">{% trans "Courses" %}</a>
+        <a href="{% url 'about' %}" class="d-block mb-1 focusstyle body-text off-white">{% trans "About" %}</a>
+        <a href="{% url 'blog' %}" class="d-block mb-1 focusstyle body-text off-white">{% trans "Blog" %}</a>
+        <a href="{% url 'events' %}" class="d-block mb-1 focusstyle body-text off-white">{% trans "Events" %}</a>
+        <a href="{% url 'contact' %}" class="d-block focusstyle body-text off-white">{% trans "Contact" %}</a>
+      </div>
+
+    </div>
+  </div>
+</footer>
+
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="{% static 'js/base.js' %}"></script>

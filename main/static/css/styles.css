@@ -6,12 +6,20 @@ body {
     background-color: #fdfbf6 !important;
     padding: 1.5rem 20px;
 }
+
+.off-white {
+    color: #fdfbf6 !important;
+}
 .navy {
     color: #37376B !important;
 }
 
 /* text red*/
 .red {
+    color: #B30000 !important;
+}
+
+.red-hover:hover {
     color: #B30000 !important;
 }
 
