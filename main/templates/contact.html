@@ -81,10 +81,32 @@
       <div id="map" class="map" style="height: 425px; width: 100%;"></div>
     </section>
   </div>
+
+<!-- Thank You Modal -->
+<div class="modal fade"
+     id="thankYouModal"
+     data-show="{% if show_modal %}true{% else %}false{% endif %}"
+     tabindex="-1"
+     aria-labelledby="thankYouLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center p-4">
+      <div class="modal-header border-0">
+        <h5 class="modal-title primaryfont red w-100" id="thankYouLabel">Thank you!</h5>
+      </div>
+      <div class="modal-body body-text navy">
+        <p>We look forward to embarking on this exciting journey with you!</p>
+        <p>We aim to reply within 1–2 working days.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <!--Maps javascript-->
 <script src="{% static 'js/maps.js' %}"></script>
+<script src="{% static 'js/contact.js' %}"></script>
 
 <!--Load the Google Maps script-->
 <script

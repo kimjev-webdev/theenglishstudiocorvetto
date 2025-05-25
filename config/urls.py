@@ -22,6 +22,7 @@ from django.conf.urls.i18n import i18n_patterns
 urlpatterns = [
     # Handles language switching via /i18n/setlang/
     path('i18n/', include('django.conf.urls.i18n')),
+    path('contact/', include('contact.urls')),
 ]
 
 urlpatterns += i18n_patterns(
