@@ -92,14 +92,28 @@ msgid "Teacher"
 msgstr "Insegnante"
 
 #: .\templates\index.html:103
-msgid "Learn English with Leanne"
-msgstr "Impara l'inglese con Leanne"
+msgid "Learn English"
+msgstr "Impara l'inglese"
 
-#: .\templates\index.html:104
-msgid ""
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sed turpis "
-"vitae leo pretium feugiat."
-msgstr ""
+#: .\templates\index.html:103
+msgid "with Leanne"
+msgstr "con Leanne"
+
+#: templates/index.html:104
+msgid "I am a British mother tongue English teacher who was born and raised in England. I graduated from University in 2014 and have pursued my passion as a teacher, here in Milan, since then. During my years as an English teacher, I have worked on many different projects, ranging from CLIL in public schools, to lessons with Business English students from large multinational companies, from private lessons with adults and children, to test prep groups for IELTS & TOEIC."
+msgstr "Sono un'insegnante di inglese di madrelingua britannica, nata e cresciuta in Inghilterra. Mi sono laureata nel 2014 e da allora ho coltivato la mia passione per l'insegnamento qui a Milano. Durante i miei anni come insegnante di inglese, ho lavorato a molti progetti diversi, che spaziano dal CLIL nelle scuole pubbliche, alle lezioni con studenti di Business English di grandi multinazionali, dalle lezioni private con adulti e bambini, ai gruppi di preparazione ai test IELTS e TOEIC."
+
+#: templates/index.html:105
+msgid "All of this experience has led me to where I am today, whereby I am so proud to present to you <b>The English Studio</b> - my new, comprehensive English space. Here, I will provide lessons and activities for everyone, but above all, for children."
+msgstr "Tutta questa esperienza mi ha portato dove sono oggi, e sono così orgogliosa di presentarvi <b>The English Studio</b> - il mio nuovo spazio completo per l’inglese. Qui offrirò lezioni e attività per tutti, ma soprattutto per i bambini."
+
+#: templates/index.html:106
+msgid "Combined with my passion for learning, I will give your children the best experience possible, in an atmosphere where the kids are excited to learn English, where they can have fun and play educational games in an all English environment, where they can learn new vocabulary that mirrors their Italian curriculum, and where they can pick up grammar in a natural and unforced way. My lessons and activities are full of creativity and I pour my heart and soul into every session. I am confident that if you are interested, you will not be disappointed from my lessons, and your children will not be either."
+msgstr "Unendo la mia passione per l’apprendimento, offrirò ai vostri figli la migliore esperienza possibile, in un ambiente dove i bambini saranno entusiasti di imparare l’inglese, divertirsi e giocare a giochi educativi in un ambiente totalmente in inglese, imparare vocabolario che rispecchia il loro curriculum italiano e assimilare la grammatica in modo naturale e spontaneo. Le mie lezioni sono ricche di creatività e ci metto cuore e anima. Sono certa che, se siete interessati, non rimarrete delusi, e nemmeno i vostri figli."
+
+#: templates/index.html:107
+msgid "The world is a spectacular place but the world without English, is a closed door. Give your children the head start that they need today."
+msgstr "Il mondo è un posto spettacolare, ma senza l’inglese è una porta chiusa. Date oggi ai vostri figli il vantaggio di cui hanno bisogno."
 
 #: .\templates\index.html:105
 msgid "Contact Me"

@@ -11,6 +11,7 @@ function initMap() {
 
   const pinImage = document.createElement("img");
   pinImage.src = "/static/images/map_pin.webp";
+  pinImage.alt = "map pin";
   pinImage.style.width = "90px";
   pinImage.style.height = "120px";
 
