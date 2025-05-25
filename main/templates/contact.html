@@ -83,13 +83,14 @@
   </div>
 </main>
 
-<!-- Load map logic -->
+<!--Maps javascript-->
+<script src="{% static 'js/maps.js' %}"></script>
 
-<!-- Google Maps JS -->
-<script type="module" src="{% static 'js/maps.js' %}"></script>
+<!--Load the Google Maps script-->
 <script
   src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=maps,marker&v=beta&callback=initMap"
   async defer>
 </script>
+
 
 {% endblock %}
