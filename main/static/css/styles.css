@@ -197,7 +197,7 @@ a {
 
 .footer-logo {
           width: 100px;
-        height: auto;
+        height: 100px;
 }
 
 .footerheader {
@@ -244,12 +244,12 @@ a {
 
 .rounded-circle.mb-3.teacher_pic {
   width: 10rem;
-  height: auto;
+  height: 10rem;
 }
 
 img.footerpic {
   width: 150px;
-  height: auto;
+  height: 150px;
 }
 
 @media (max-width: 768px) {
@@ -304,12 +304,12 @@ img.footerpic {
 @media (min-width: 768px) {
    .nav_img {
     width: 120px;
-    height: auto;
+    height: 120px;
    }
 
    .rounded-circle.mb-3.teacher_pic {
     width: 20rem; 
-    height: auto;
+    height: 20rem;
    }
 }
 
