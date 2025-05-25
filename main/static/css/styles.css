@@ -247,6 +247,11 @@ a {
   height: auto;
 }
 
+img.footerpic {
+  width: 150px;
+  height: auto;
+}
+
 @media (max-width: 768px) {
   .carouseloverlay {
     top: 50% !important;

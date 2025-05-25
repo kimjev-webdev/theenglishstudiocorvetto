@@ -295,3 +295,7 @@ msgstr "Email"
 #: templates/includes/footer.html:14
 msgid "Privacy Policy"
 msgstr "Politica sulla Privacy"
+
+#: templates/includes/footer.html:15
+msgid "Follow us on social media"
+msgstr "Seguici sui social media"
