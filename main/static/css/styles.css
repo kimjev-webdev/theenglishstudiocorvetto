@@ -249,7 +249,7 @@ a {
 
 img.footerpic {
   width: 150px;
-  height: 150px;
+  height: 13px;
 }
 
 @media (max-width: 768px) {
