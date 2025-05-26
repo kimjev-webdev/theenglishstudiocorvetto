@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .forms import ContactForm
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 import requests
 import os
 
@@ -22,16 +22,17 @@ def contact_view(request):
             f"Message:\n{data['message']}"
         )
 
-        # Send the email
-        send_mail(
+        # ✅ Send email with reply-to
+        email = EmailMessage(
             subject=f"New Contact Form Submission: {data['subject']}",
-            message=message,
+            body=message,
             from_email="theenglishstudio.corvetto@gmail.com",
-            recipient_list=["theenglishstudio.corvetto@gmail.com"],
-            reply_to=[data['email']],
+            to=["theenglishstudio.corvetto@gmail.com"],
+            reply_to=[data["email"]],
         )
+        email.send()
 
-        # If subscribed, add to Mailchimp
+        # ✅ Subscribe to Mailchimp if opted-in
         if data.get("subscribe"):
             mailchimp_api_key = os.getenv("MAILCHIMP_API_KEY")
             mailchimp_list_id = os.getenv("MAILCHIMP_AUDIENCE_ID")
@@ -60,12 +61,24 @@ def contact_view(request):
             except requests.exceptions.RequestException as e:
                 print(f"Mailchimp error: {e}")
 
-# After successful form submission:
+        print("✔️ Contact form submitted successfully — modal should show")
+
         return render(
             request,
             "contact.html",
-            {"form": ContactForm(), "show_modal": True}
+            {
+                "form": ContactForm(),
+                "show_modal": True,
+                "google_maps_api_key": os.getenv("GOOGLE_MAPS_API_KEY")
+            }
         )
 
-    # On initial load or error:
-    return render(request, "contact.html", {"form": form})
+    # ❌ GET or invalid form
+    return render(
+        request,
+        "contact.html",
+        {
+            "form": form,
+            "google_maps_api_key": os.getenv("GOOGLE_MAPS_API_KEY")
+        }
+    )

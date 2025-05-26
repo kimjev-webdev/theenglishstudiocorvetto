@@ -20,15 +20,12 @@ from django.urls import path, include
 from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns = [
-    # Handles language switching via /i18n/setlang/
+    # Language switching (keep this outside)
     path('i18n/', include('django.conf.urls.i18n')),
-    path('contact/', include('contact.urls')),
 ]
 
 urlpatterns += i18n_patterns(
-    # Admin dashboard
     path('admin/', admin.site.urls),
-
-    # Main site URLs (homepage and other views from your app)
     path('', include('main.urls')),
+    path('contact/', include('contact.urls')),  # ✅ move it here
 )
