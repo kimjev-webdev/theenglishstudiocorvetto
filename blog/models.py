@@ -7,7 +7,10 @@ from django.contrib.auth.models import User
 
 
 def blog_image_upload_path(instance, filename):
-    return f'blog/images/{instance.slug}/{filename}'
+    return (
+        os.path.join('blog', 'images', instance.slug, filename)
+        .replace('\\', '/')
+    )
 
 
 def blog_video_upload_path(instance, filename):

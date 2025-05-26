@@ -4,6 +4,14 @@
 {% block content %}
   <main class="container py-5">
     <h1 class="primaryfont red mb-4">{{ post.title_en }}</h1>
+    
+    {% if post.featured_image %}
+  <div class="mb-4">
+    <img src="{{ post.featured_image.url }}" class="img-fluid" alt="{{ post.title_en }}">
+  </div>
+{% endif %}
+
+
     <div class="body-text navy">
       {{ post.body_en|linebreaks }}
     </div>
