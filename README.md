@@ -179,3 +179,45 @@ The purpose of this chart is to quantify the data which needs to be collected in
 | | Source Page / Referrer | Text (auto/cookie) | Know which page/form converted |
 | | User Role | Choice | Define admin, teacher, student, etc. |
 | | Session History / Activity Log | Text/JSON | Monitor engagement for returning users |
+
+🧠 Brainstorm: What Your Blog Needs
+1. Core Blog Content
+| Feature         | Notes                                              |
+| --------------- | -------------------------------------------------- |
+| Title           | English + Italian                                  |
+| Body/content    | Rich text (formatting, links, etc.)                |
+| Slug            | Auto-generated from title                          |
+| Publish date    | Auto now, but editable                             |
+| Featured image  | Upload, compressed                                 |
+| Video upload    | Optional, compressed                               |
+| Status          | Draft / Published                                  |
+| Author          | Django admin user                                  |
+| Language toggle | Manually translated entry or auto-translate toggle |
+
+2. Media (With Compression)
+| Type    | Compression Tool Ideas                                               |
+| ------- | -------------------------------------------------------------------- |
+| Image   | Pillow or `django-imagekit`                                          |
+| Video   | Use `ffmpeg` or services like Cloudinary or upload via YouTube/embed |
+| Storage | Local (dev), S3 or Render disk (prod)                                |
+
+3. Admin Requirements
+| Feature                       | Notes                                     |
+| ----------------------------- | ----------------------------------------- |
+| Add/edit posts                | Title, content, media, translation fields |
+| Upload image and video        | Preview thumbnails                        |
+| Translate manually to Italian | Fields shown side-by-side                 |
+| Publish toggle                | “Draft” vs “Live”                         |
+| Ordering                      | By date or manually via featured flag     |
+
+4. Frontend Needs
+| Feature          | Notes                                |
+| ---------------- | ------------------------------------ |
+| Blog list page   | Title, date, thumbnail, preview      |
+| Blog detail page | Full content, images, embedded video |
+| Language switch  | Automatically loads EN/IT version    |
+| Pagination       | Optional for longer blog archives    |
+| Share buttons    | Facebook / WhatsApp etc (optional)   |
+
+
+

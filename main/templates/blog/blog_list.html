@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Blog{% endblock %}
+
+{% block content %}
+  <main class="container py-5">
+    <h1 class="primaryfont red mb-4">Blog</h1>
+    <ul class="list-unstyled">
+      {% for post in posts %}
+        <li class="mb-3">
+          <a class="navy text-decoration-none" href="{% url 'blog_detail' slug=post.slug %}">
+            <strong>{{ post.title_en }}</strong>
+          </a>
+        </li>
+      {% empty %}
+        <p>No posts found.</p>
+      {% endfor %}
+    </ul>
+  </main>
+{% endblock %}

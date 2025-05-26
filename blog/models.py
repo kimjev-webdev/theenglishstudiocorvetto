@@ -1,0 +1,72 @@
+# blog/models.py
+import os
+from django.db import models
+from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import User
+
+
+def blog_image_upload_path(instance, filename):
+    return f'blog/images/{instance.slug}/{filename}'
+
+
+def blog_video_upload_path(instance, filename):
+    return f'blog/videos/{instance.slug}/{filename}'
+
+
+class BlogPost(models.Model):
+    STATUS_CHOICES = [
+        ('draft', _('Draft')),
+        ('published', _('Published')),
+    ]
+
+    # Core content (English + Italian)
+    title_en = models.CharField(max_length=200, verbose_name=_("Title (EN)"))
+    title_it = models.CharField(
+        max_length=200,
+        verbose_name=_("Title (IT)"),
+        blank=True
+    )
+    slug = models.SlugField(unique=True, max_length=200, blank=True)
+
+    body_en = models.TextField(verbose_name=_("Content (EN)"))
+    body_it = models.TextField(verbose_name=_("Content (IT)"), blank=True)
+
+    # Media
+    featured_image = models.ImageField(
+        upload_to=blog_image_upload_path,
+        blank=True,
+        null=True
+    )
+    video = models.FileField(
+        upload_to=blog_video_upload_path,
+        blank=True,
+        null=True
+    )
+
+    # Metadata
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='draft'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    published_at = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['-published_at', '-created_at']
+        verbose_name = _("Blog Post")
+        verbose_name_plural = _("Blog Posts")
+
+    def __str__(self):
+        return self.title_en
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title_en)
+        super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return f"/blog/{self.slug}/"
