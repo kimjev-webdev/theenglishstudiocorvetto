@@ -4,8 +4,10 @@
 {% block content %}
   <main class="container py-5">
 
-  {% if post.featured_image %}
+{% if post.featured_image %}
   <p class="text-danger fw-bold">Storage backend: {{ post.featured_image.storage.__class__ }}</p>
+{% else %}
+  <p class="text-danger">No featured image available.</p>
 {% endif %}
 
 
