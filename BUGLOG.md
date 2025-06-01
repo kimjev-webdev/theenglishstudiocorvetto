@@ -67,5 +67,20 @@ Date        | Bug                                               | Focus         
 | 2025-06-01 | Cloudinary debug output still showing “No featured image available” | Template Cleanup       | This was just a fallback `alt` or message for images that failed. It appeared even when image loaded. Cleaned up that logic.              |
 | 2025-06-01 | Blog working locally but failed on Render with 500 error            | Deployment/Template    | The error only appeared in production due to strict template parsing. Fixed template and rebuilt the Render service.                      |
 | 2025-06-01 | Manual deploy needed after config cleanup                           | Deployment             | Cleared cache, rebuilt the Render service manually, then tested in incognito to confirm successful image rendering.                       |
+| 2025-06-01 | Blog images not displaying on Render deploy                       | Media Storage        | Problem traced to `ImageField` using local `upload_to` path. Fixed by switching to `CloudinaryField` and removing custom upload function.      |
+| 2025-06-01 | Video uploads not served by Cloudinary                            | Media Storage        | Replaced `FileField` with `CloudinaryField(resource_type="video")` to enable CDN delivery and video playback via Cloudinary.                    |
+| 2025-06-01 | Cloudinary images still generating `/media/` URLs after model fix | Template Rendering   | Confirmed `{{ post.featured_image.url }}` was correct, but existing posts needed to be re-uploaded to trigger Cloudinary handling.              |
+| 2025-06-01 | Deployment 500 error on blog page                                 | Template Debug       | Caused by unsafe debug line `{{ post.featured_image.storage.__class__ }}` using double underscores. Removed line to restore production safety. |
+| 2025-06-01 | Cloudinary config not applying on Render                          | Environment Variables| Verified `DEFAULT_FILE_STORAGE` and `CLOUDINARY_STORAGE` were correctly set, and `DEBUG=False` was restored in Render Dashboard.                |
+| 2025-06-01 | Indentation and syntax errors in `models.py`                      | Model Refactor       | Fixed `max_Length` typo → `max_length`, restored proper indentation, and re-imported `models` after switching to CloudinaryField.               |
+
+
+
+
+
+
+
+
+
 
 
