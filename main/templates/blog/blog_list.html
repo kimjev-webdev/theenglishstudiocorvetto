@@ -3,6 +3,12 @@
 
 {% block content %}
   <main class="container py-5">
+
+  {% if post.featured_image %}
+  <p class="text-danger fw-bold">Storage backend: {{ post.featured_image.storage.__class__ }}</p>
+{% endif %}
+
+
     <h1 class="primaryfont text-center red mb-4">Leanne's Blog</h1>
 
     <div class="row">
