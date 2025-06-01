@@ -1,6 +1,7 @@
 # blog/models.py
 import os
 from django.db import models
+from cloudinary.models import CloudinaryField
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
@@ -36,13 +37,13 @@ class BlogPost(models.Model):
     body_it = models.TextField(verbose_name=_("Content (IT)"), blank=True)
 
     # Media
-    featured_image = models.ImageField(
-        upload_to=blog_image_upload_path,
+    featured_image = CloudinaryField(
+        'image',
         blank=True,
         null=True
     )
-    video = models.FileField(
-        upload_to=blog_video_upload_path,
+    video = CloudinaryField(
+        resource_type='video',
         blank=True,
         null=True
     )
