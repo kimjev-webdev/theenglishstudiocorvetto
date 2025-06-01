@@ -18,7 +18,22 @@ GOOGLE_MAPS_API_KEY = config('GOOGLE_MAPS_API_KEY')
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
+
+DEBUG = os.getenv("DEBUG", "False") == "True"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG' if DEBUG else 'WARNING',
+    },
+}
 
 
 ALLOWED_HOSTS = [
