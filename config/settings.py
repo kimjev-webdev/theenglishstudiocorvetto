@@ -194,17 +194,3 @@ CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
 
 
 logger = logging.getLogger(__name__)
-
-
-def show_debug_error():
-    from django.views import debug
-    debug.technical_500_response = (
-        lambda request, exc_type, exc_value, tb: print(
-            f"\n500 ERROR:\n{exc_type.__name__}: {exc_value}\n"
-        )
-    )
-
-
-if DEBUG:
-    show_debug_error()
-    logger.debug("Debug mode is ON. Detailed error messages will be shown.")
