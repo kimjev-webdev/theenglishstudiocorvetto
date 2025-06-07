@@ -1,7 +1,8 @@
 from django import template
+
 register = template.Library()
 
 
 @register.filter
-def dict_key(dict_data, key):
-    return dict_data.get(key, [])
+def get_item(dictionary, key):
+    return dictionary.get(key)
