@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'main',
     'contact',
     'blog',
+    'schedule',
     'cloudinary',
     'cloudinary_storage',
 ]

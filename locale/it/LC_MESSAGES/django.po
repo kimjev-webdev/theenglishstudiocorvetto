@@ -35,8 +35,8 @@ msgid "Blog"
 msgstr "Blog"
 
 #: templates/index.html:41 templates/main/contact.html:41
-msgid "Events"
-msgstr "Eventi"
+msgid "Schedule"
+msgstr "Orario"
 
 #: .\templates\index.html:42
 msgid "Contact"

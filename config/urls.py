@@ -32,10 +32,17 @@ urlpatterns += i18n_patterns(
     path('', include('main.urls')),
     path('contact/', include('contact.urls')),
     path('blog/', include('blog.urls')),
+    path('schedule/', include('schedule.urls')),
 )
 
-# Serve media files in development — **MUST be outside i18n_patterns**
+# Serve media files in development
 if settings.DEBUG:
     urlpatterns += static(
         settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )
+
+# Serve static files in development
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.STATIC_URL, document_root=settings.STATIC_ROOT
     )
