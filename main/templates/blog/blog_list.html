@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
 {% block title %}Leanne's Blog{% endblock %}
 
 {% block content %}
@@ -11,16 +14,21 @@
         <div class="col-6 col-md-4 col-lg-3 col-xl-2 mb-4">
           <div class="card blog-card h-100 shadow-sm border-0">
             {% if post.featured_image %}
-                <div class="poststyles">
+              <div class="poststyles">
                 <img src="{{ post.featured_image.url }}"
-                     alt="{{ post.title_en }}"
+                     alt="{% if LANGUAGE_CODE == 'it' %}{{ post.title_it }}{% else %}{{ post.title_en }}{% endif %}"
                      class="blogimage">
-                
-                </div>
+              </div>
             {% endif %}
             <div class="card-body">
-                <p class="mini-text red body-text mb-1">{{ post.published_at|date:"F j, Y" }}</p>
-              <h6 class="card-title navy primaryfont mb-0">{{ post.title_en }}</h6>
+              <p class="mini-text red body-text mb-1">{{ post.published_at|date:"F j, Y" }}</p>
+              <h6 class="card-title navy primaryfont mb-0">
+                {% if LANGUAGE_CODE == "it" %}
+                  {{ post.title_it }}
+                {% else %}
+                  {{ post.title_en }}
+                {% endif %}
+              </h6>
             </div>
             <a href="{% url 'blog_detail' slug=post.slug %}" class="stretched-link"></a>
           </div>

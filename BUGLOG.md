@@ -80,6 +80,9 @@ Date        | Bug                                               | Focus         
 | 2025-06-08 | Signature image not displaying on blog detail                  | Static File Handling | Fixed hardcoded path by using `{% static 'images/signature.webp' %}`. Verified file location was `main/static/images/`.                                             |
 | 2025-06-08 | `{% static %}` tag caused `TemplateSyntaxError`                | Template Logic       | Realized `{% load static %}` was missing in the child template despite being present in `base.html`. Added `{% load static %}` explicitly.                          |
 | 2025-06-08 | Signature image needed right-alignment                         | Layout / Bootstrap   | Applied Bootstrap utility classes `d-block ms-auto` to align the signature image to the right.                                                                      |
+| 2025-06-08 | Blog titles and body content not translating on detail page          | Template Logic         | Replaced `{{ post.title_en }}` and `{{ post.body_en }}` with conditionals using `{% get_current_language as LANGUAGE_CODE %}` to display `*_it` if Italian is active. |
+| 2025-06-08 | Blog list showed only English titles and image alt text              | Template Logic         | Updated blog list template to dynamically choose between `title_en` and `title_it` using the active language code.                                       |
+| 2025-06-08 | Featured image `alt` text was not localized                          | Accessibility / i18n   | Wrapped image `alt` attribute logic with `{% if LANGUAGE_CODE == "it" %}` condition to display the appropriate language version of the title.           |
 
 
 
