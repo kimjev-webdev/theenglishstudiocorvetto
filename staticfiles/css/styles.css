@@ -87,9 +87,10 @@ a {
 .btn-navy:hover,
 .btn-navy:focus,
 .btn-navy:active {
-    background-color: #B30000;
-    color: #FFF;
+    background-color: #B30000 !important;
+    color: #FFF !important;
     border: none;
+    transition: text-decoration-color 0.2s ease;
   }
 
 .btn-red:hover,
@@ -97,6 +98,7 @@ a {
     background-color: #37376B;
     color: #FFF;
     text-decoration: none;
+    transition: text-decoration-color 0.2s ease;
   }
 
 .modal-button {
@@ -109,11 +111,16 @@ a {
 /* base.html styles*/
 /*---navbar styles---*/
 /* hover state navbar styles*/
+.focusstyle {
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 5px;
+  transition: text-decoration-color 0.2s ease;
+}
+
 .focusstyle:hover {
-    text-decoration: underline !important;
-    text-decoration-color: #B30000 !important;
-    text-decoration-thickness: 3px !important;
-    text-underline-offset: 5px !important; 
+  text-decoration-color: #B30000;
 }
  .nav_img {
     width: 80px;
@@ -281,9 +288,8 @@ img.footerpic {
 }
 
 .blogpicture {
-  max-width: 350px; 
-  max-height: 400px; 
-  object-fit: contain;
+  max-width: 100%;
+  height: auto;
 }
 
 .blog-text {
@@ -441,6 +447,12 @@ img.footerpic {
     width: 20rem; 
     height: 20rem;
    }
+
+    .blogpicture {
+    max-width: 350px;
+    max-height: 400px;
+    object-fit: contain;
+  }
   }
 
 @media (min-width: 992px) {
