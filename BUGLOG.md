@@ -73,6 +73,13 @@ Date        | Bug                                               | Focus         
 | 2025-06-01 | Deployment 500 error on blog page                                 | Template Debug       | Caused by unsafe debug line `{{ post.featured_image.storage.__class__ }}` using double underscores. Removed line to restore production safety. |
 | 2025-06-01 | Cloudinary config not applying on Render                          | Environment Variables| Verified `DEFAULT_FILE_STORAGE` and `CLOUDINARY_STORAGE` were correctly set, and `DEBUG=False` was restored in Render Dashboard.                |
 | 2025-06-01 | Indentation and syntax errors in `models.py`                      | Model Refactor       | Fixed `max_Length` typo → `max_length`, restored proper indentation, and re-imported `models` after switching to CloudinaryField.               |
+| 2025-06-08 | Blog detail layout broken on larger screens                    | Blog Template/CSS    | Replaced Bootstrap grid with float-based layout using `float-md-start` and `clearfix` to let text wrap under fixed-height image.                                    |
+| 2025-06-08 | Blog list card previews became stretched vertically            | Image Display/CSS    | Isolated `.poststyles` to list view only, restored `object-fit: cover`, and ensured card image preview uses fixed ratio container with absolute-positioned `<img>`. |
+| 2025-06-08 | Blog paragraphs split oddly with single line breaks            | Template Filter      | Created custom filter `clean_paragraphs` in `calendar_extras.py` to wrap only double newlines in `<p>` and remove single newlines entirely.                         |
+| 2025-06-08 | `TemplateSyntaxError` when loading `{% load calendarextras %}` | Custom Tags          | Renamed `calendarextras.py` to `calendar_extras.py` to match Django’s expected format. Restarted server and updated template to `{% load calendar_extras %}`.       |
+| 2025-06-08 | Signature image not displaying on blog detail                  | Static File Handling | Fixed hardcoded path by using `{% static 'images/signature.webp' %}`. Verified file location was `main/static/images/`.                                             |
+| 2025-06-08 | `{% static %}` tag caused `TemplateSyntaxError`                | Template Logic       | Realized `{% load static %}` was missing in the child template despite being present in `base.html`. Added `{% load static %}` explicitly.                          |
+| 2025-06-08 | Signature image needed right-alignment                         | Layout / Bootstrap   | Applied Bootstrap utility classes `d-block ms-auto` to align the signature image to the right.                                                                      |
 
 
 

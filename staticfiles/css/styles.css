@@ -271,15 +271,6 @@ img.footerpic {
   background-color: #ffffff !important;
 }
 
-.blogimage {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 .poststyles {
   position: relative;
   width: 100%;
@@ -287,6 +278,33 @@ img.footerpic {
   overflow: hidden;
   border-top-left-radius: 11px;
   border-top-right-radius: 11px;
+}
+
+.blogpicture {
+  max-width: 350px; 
+  max-height: 400px; 
+  object-fit: contain;
+}
+
+.blog-text {
+  text-align: justify;
+}
+
+.poststyles img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Makes preview images fill nicely */
+  border-top-left-radius: 11px;
+  border-top-right-radius: 11px;
+}
+
+.signature {
+  margin-top: 20px;
+  width: 150px;
+  height: auto;
 }
 
 /*contact.html styles*/
@@ -300,6 +318,7 @@ img.footerpic {
   justify-content: center !important; 
 }
 
+/*calendar.html  styles*/ 
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -422,7 +441,7 @@ img.footerpic {
     width: 20rem; 
     height: 20rem;
    }
-}
+  }
 
 @media (min-width: 992px) {
   .nav-link {
