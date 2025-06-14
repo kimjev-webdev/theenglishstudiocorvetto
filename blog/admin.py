@@ -6,7 +6,11 @@ from .models import BlogPost
 
 class BlogPostAdminForm(forms.ModelForm):
     body_en = forms.CharField(widget=CKEditorWidget(), label="Content (EN)")
-    body_it = forms.CharField(widget=CKEditorWidget(), label="Content (IT)", required=False)
+    body_it = forms.CharField(
+        widget=CKEditorWidget(),
+        label="Content (IT)",
+        required=False
+    )
 
     class Meta:
         model = BlogPost
