@@ -379,6 +379,26 @@ img.footerpic {
   display: block;
 }
 
+/* Custom Tippy.js tooltip theme */
+.tippy-box[data-theme~='custom'] {
+  background-color: #37376B; /* .navy */
+  color: #fdfbf6; /* .off-white */
+  font-family: 'Cabin', sans-serif; /* .body-text */
+  font-weight: 400;
+  line-height: 1.6;
+  border-radius: 4px;
+  padding: 0.1rem 0.1rem;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  text-align: center !important;
+}
+
+/* Optional: arrow match */
+.tippy-box[data-theme~='custom'][data-placement^='top'] > .tippy-arrow::before {
+  color: #37376B;
+}
+
+
 
 /* media queries for responsive design */
 

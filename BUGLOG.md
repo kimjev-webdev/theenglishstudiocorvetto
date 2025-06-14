@@ -83,6 +83,13 @@ Date        | Bug                                               | Focus         
 | 2025-06-08 | Blog titles and body content not translating on detail page          | Template Logic         | Replaced `{{ post.title_en }}` and `{{ post.body_en }}` with conditionals using `{% get_current_language as LANGUAGE_CODE %}` to display `*_it` if Italian is active. |
 | 2025-06-08 | Blog list showed only English titles and image alt text              | Template Logic         | Updated blog list template to dynamically choose between `title_en` and `title_it` using the active language code.                                       |
 | 2025-06-08 | Featured image `alt` text was not localized                          | Accessibility / i18n   | Wrapped image `alt` attribute logic with `{% if LANGUAGE_CODE == "it" %}` condition to display the appropriate language version of the title.           |
+2025-06-14 | Emoji tooltips not displaying on hover in schedule calendar     | Frontend UI / Tooltips | Replaced custom hidden `.tooltip` div with Tippy.js integration. Added `data-tippy-content` to `.emoji` elements and initialized Tippy on DOM load. Tooltip content auto-adjusts to site language using existing translation logic. |
+2025-06-14 | Tooltip HTML rendering showed escaped Unicode in frontend      | Frontend / Tooltips    | Replaced `escapejs` filter with `|safe` to allow raw HTML tags inside `data-tippy-content`. Tooltip now renders with correct formatting rather than escaped unicode (e.g., \u003Cdiv\u003E).                             |
+2025-06-14 | Tooltip still displayed emoji alongside localized class name   | Localization / Tooltip | Modified template to access `event.class_instance.name_en` and `name_it` directly based on `LANGUAGE_CODE`, excluding emoji from tooltip content. Kept emoji in calendar cell only.                                 |
+2025-06-14 | Calendar grid structure broke due to tooltip DOM overflow      | Layout / Positioning   | Applied `appendTo: document.body` and `maxWidth` in Tippy.js config to prevent tooltips from stretching or distorting the calendar layout. Also reduced padding and font size for a cleaner fit.                    |
+2025-06-14 | Calendar title displayed numeric month instead of name          | Frontend / i18n Display | Replaced raw numeric `month` with a localized full month name using `date_format(..., "F")`. Now displays “June” or “Giugno” based on active language.                           |
+2025-06-14 | Month name not localized on bilingual site                      | Localization / Template | Used Django’s `use_l10n=True` in view logic to ensure month names adapt to selected language. Removed need for conditional month formatting in templates.                          |
+
 
 
 

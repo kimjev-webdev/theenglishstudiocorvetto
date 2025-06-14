@@ -1,6 +1,7 @@
 import calendar
 from datetime import date
 from django.shortcuts import render
+from django.utils.formats import date_format  # NEW import
 from .models import Event
 
 
@@ -18,9 +19,7 @@ def calendar_view(request, year=None, month=None):
     month = int(month) if month else today.month
 
     cal = calendar.Calendar(firstweekday=0)  # Monday = 0
-    weeks = cal.monthdatescalendar(
-        year, month
-    )  # List of weeks, each a list of 7 date objects
+    weeks = cal.monthdatescalendar(year, month)
 
     # Get all events in the month
     events = Event.objects.filter(date__year=year, date__month=month)
@@ -34,7 +33,12 @@ def calendar_view(request, year=None, month=None):
 
     context = {
         'year': year,
-        'month': month,
+        # Localized full month name
+        'month': date_format(
+            date(year, month, 1),
+            "F",
+            use_l10n=True
+        ),
         'weeks': weeks,
         'events_by_day': events_by_day,
         'prev_year': prev_year,

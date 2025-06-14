@@ -7,36 +7,39 @@
 
 {% block content %}
 <main>
-  <h1>{% trans "Schedule for" %} {{ month }}/{{ year }}</h1>
+<h1 class="red primaryfont">{{ month }}</h1>
+
 
   <nav>
     <a href="{% url 'calendar_by_date' prev_year prev_month %}">← {% trans "Previous" %}</a>
     <a href="{% url 'calendar_by_date' next_year next_month %}">{% trans "Next" %} →</a>
   </nav>
 
-  <div class="calendar-grid">
-    <div class="weekday">{% trans "Mon" %}</div>
-    <div class="weekday">{% trans "Tue" %}</div>
-    <div class="weekday">{% trans "Wed" %}</div>
-    <div class="weekday">{% trans "Thu" %}</div>
-    <div class="weekday">{% trans "Fri" %}</div>
-    <div class="weekday">{% trans "Sat" %}</div>
-    <div class="weekday">{% trans "Sun" %}</div>
+ <div class="calendar-grid">
+  <div class="weekday">{% trans "Mon" %}</div>
+  <div class="weekday">{% trans "Tue" %}</div>
+  <div class="weekday">{% trans "Wed" %}</div>
+  <div class="weekday">{% trans "Thu" %}</div>
+  <div class="weekday">{% trans "Fri" %}</div>
+  <div class="weekday">{% trans "Sat" %}</div>
+  <div class="weekday">{% trans "Sun" %}</div>
 
-    {% for week in weeks %}
-      {% for day in week %}
-        <div class="day{% if day.month != month %} other-month{% endif %}">
-          <div class="date">{{ day.day }}</div>
-          {% for event in events_by_day|get_item:day %}
-          <div class="emoji" data-tippy-content="{{ event.class_instance }} | {{ event.start_time }}–{{ event.end_time }}">
+  {% for week in weeks %}
+    {% for day in week %}
+      <div class="day{% if day.month != month %} other-month{% endif %}">
+        <div class="date">{{ day.day }}</div>
+        {% for event in events_by_day|get_item:day %}
+          <div class="emoji"
+     data-tippy-content="{{ '<div class=\'tippy-content\'>' }}{% if LANGUAGE_CODE == 'it' %}{{ event.class_instance.name_it }}{% else %}{{ event.class_instance.name_en }}{% endif %}{{ '<br>' }}{{ event.start_time }}–{{ event.end_time }}{{ '</div>' | safe }}">
   {{ event.class_instance.emoji }}
 </div>
-            </div>
-          {% endfor %}
-        </div>
-      {% endfor %}
+
+        {% endfor %}
+      </div>
     {% endfor %}
-  </div>
+  {% endfor %}
+</div>
+
 </main>
 
 <script>
@@ -46,8 +49,13 @@
       animation: 'fade',
       arrow: true,
       delay: [100, 100],
+      allowHTML: true,
+      maxWidth: 240,
+      appendTo: () => document.body, // avoids layout issues
+      theme: 'custom', // custom class for styling
     });
   });
 </script>
+
 
 {% endblock %}
