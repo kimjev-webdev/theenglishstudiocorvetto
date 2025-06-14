@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'schedule',
     'cloudinary',
     'cloudinary_storage',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -211,6 +212,22 @@ CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
     'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+}
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Format', 'Bold', 'Italic', 'Underline'],
+            ['NumberedList', 'BulletedList'],
+            ['Blockquote'],
+            ['Link', 'Unlink'],
+            ['RemoveFormat', 'Source'],
+        ],
+        'format_tags': 'p;h2;h3;h4;pre',
+        'height': 300,
+        'width': 'auto',
+    }
 }
 
 CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")

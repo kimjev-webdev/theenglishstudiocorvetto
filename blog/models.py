@@ -5,6 +5,7 @@ from cloudinary.models import CloudinaryField
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
+from ckeditor.fields import RichTextField
 
 
 def blog_image_upload_path(instance, filename):
@@ -33,8 +34,8 @@ class BlogPost(models.Model):
     )
     slug = models.SlugField(unique=True, max_length=200, blank=True)
 
-    body_en = models.TextField(verbose_name=_("Content (EN)"))
-    body_it = models.TextField(verbose_name=_("Content (IT)"), blank=True)
+    body_en = RichTextField(verbose_name=_("Content (EN)"))
+    body_it = RichTextField(verbose_name=_("Content (IT)"), blank=True)
 
     # Media
     featured_image = CloudinaryField(
