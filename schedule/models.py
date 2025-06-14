@@ -27,6 +27,10 @@ class Class(models.Model):
             return f"{self.emoji} {self.name_it}"
         return f"{self.emoji} {self.name_en}"
 
+    class Meta:
+        verbose_name = "Class"
+        verbose_name_plural = "Classes"
+
 
 class Event(models.Model):
     class_instance = models.ForeignKey(
