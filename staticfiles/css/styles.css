@@ -17,11 +17,6 @@ main {
 --bs-gutter-x: none !important;
 }
 
-a {
-  color: #B30000 !important;
-  text-decoration: none;
-}
-
 /* color pallette */
 #about b {
   color: #B30000;
@@ -299,6 +294,11 @@ img.footerpic {
 
 .blog-text {
   text-align: justify;
+}
+
+blog-text a {
+  color: #B30000 !important;
+  text-decoration: none;
 }
 
 .poststyles img {
