@@ -3,6 +3,7 @@ from django.utils.translation import get_language
 from django.utils import formats
 from django.db import models
 from datetime import time
+from django.contrib.postgres.fields import ArrayField  # ✅ NEW import
 
 
 class Class(models.Model):
@@ -66,6 +67,13 @@ class Event(models.Model):
         blank=True,
         verbose_name=_("Days of the Week"),
         help_text=_("For custom repeat, enter days like 'Mon,Wed,Fri'")
+    )
+    recurrence_exceptions = ArrayField(
+        base_field=models.DateField(),
+        blank=True,
+        default=list,
+        verbose_name=_("Recurrence Exceptions"),
+        help_text=_("Dates on which this recurring event should be skipped")
     )
 
     def __str__(self):

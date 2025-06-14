@@ -92,6 +92,14 @@ Date        | Bug                                               | Focus         
 2025-06-14 | No support for recurring events in calendar schedule           | Backend / Models        | Added `recurrence` and `days_of_week` fields to the `Event` model with support for weekly, biweekly, monthly, and custom weekday rules.                                    |
 2025-06-14 | Admin interface lacked recurrence controls for events         | Admin / UX              | Registered recurrence fields in Django admin using `fieldsets` to group them cleanly. Enabled filtering by recurrence in the list view.                                     |
 2025-06-14 | Recurring events not displayed on calendar view               | View Logic / Calendar   | Extended `calendar_view` to dynamically generate virtual events within the target month based on recurrence type. Recurring items now appear with tooltip + emoji in grid. |
+2025-06-14 | Recurring events were not appearing on calendar view          | Views / Recurrence Logic | Replaced static event filter with dynamic recurrence loop. Recurring events are now generated per rule (weekly, biweekly, etc.) and rendered in correct days of the month grid. |                                                                           
+| 2025-06-14 | Migration failed due to `ValueError: Cannot quote parameter value []` | Model Migration | Replaced default `list` with `default=list` using `ArrayField`; ensured PostgreSQL usage locally |
+| 2025-06-14 | SQLite not supporting array fields                                    | Database        | Installed PostgreSQL locally and connected Django to it using `.env` credentials                 |
+| 2025-06-14 | Local PostgreSQL connection refused                                   | Local Dev DB    | Created `english_studio_dev` DB and user with full privileges using `psql`                       |
+| 2025-06-14 | `fe_sendauth: no password supplied`                                   | DB Auth         | Ensured `.env` and `settings.py` were properly configured with database credentials              |
+| 2025-06-14 | `permission denied for schema public`                                 | DB Permissions  | Granted `ALL PRIVILEGES ON DATABASE english_studio_dev TO kim;`                                  |
+| 2025-06-14 | No visible `recurrence_exceptions` field in Django admin              | Admin UI        | Updated `EventAdmin` to include the field; ensured fieldsets were correctly defined              |
+| 2025-06-14 | Exceptions ignored in calendar rendering                              | View Logic      | Updated `calendar_view` to check for and skip `recurrence_exceptions` in all recurrence modes    |
 
 
 

@@ -18,20 +18,23 @@ def calendar_view(request, year=None, month=None):
     year = int(year) if year else today.year
     month = int(month) if month else today.month
 
-    cal = calendar.Calendar(firstweekday=0)  # Monday = 0
+    cal = calendar.Calendar(firstweekday=0)
     weeks = cal.monthdatescalendar(year, month)
 
-    # Calculate first and last visible day of the month
     first_day = date(year, month, 1)
     last_day = date(year, month, calendar.monthrange(year, month)[1])
 
-    # Fetch events whose date could affect this month
     events = Event.objects.filter(date__lte=last_day)
     events_by_day = {}
 
     for event in events:
+        exceptions = set(event.recurrence_exceptions or [])
+
         if event.recurrence == 'none':
-            if first_day <= event.date <= last_day:
+            if (
+                first_day <= event.date <= last_day
+                and event.date not in exceptions
+            ):
                 events_by_day.setdefault(event.date, []).append(event)
 
         elif event.recurrence == 'weekly':
@@ -39,7 +42,8 @@ def calendar_view(request, year=None, month=None):
             while current <= last_day:
                 if (
                     current >= first_day and
-                    current.weekday() == event.date.weekday()
+                    current.weekday() == event.date.weekday() and
+                    current not in exceptions
                 ):
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(weeks=1)
@@ -49,7 +53,8 @@ def calendar_view(request, year=None, month=None):
             while current <= last_day:
                 if (
                     current >= first_day and
-                    current.weekday() == event.date.weekday()
+                    current.weekday() == event.date.weekday() and
+                    current not in exceptions
                 ):
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(weeks=2)
@@ -57,7 +62,10 @@ def calendar_view(request, year=None, month=None):
         elif event.recurrence == 'monthly':
             try:
                 recur_date = date(year, month, event.date.day)
-                if first_day <= recur_date <= last_day:
+                if (
+                    first_day <= recur_date <= last_day
+                    and recur_date not in exceptions
+                ):
                     events_by_day.setdefault(recur_date, []).append(event)
             except ValueError:
                 pass  # e.g. no Feb 30
@@ -78,12 +86,12 @@ def calendar_view(request, year=None, month=None):
             while current <= last_day:
                 if (
                     current.weekday() in selected_days and
-                    current >= event.date
+                    current >= event.date and
+                    current not in exceptions
                 ):
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(days=1)
 
-    # Determine previous/next month for navigation
     prev_year, prev_month = get_adjacent_month(year, month, -1)
     next_year, next_month = get_adjacent_month(year, month, 1)
 

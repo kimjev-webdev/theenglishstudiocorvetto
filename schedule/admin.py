@@ -18,15 +18,19 @@ class EventAdmin(admin.ModelAdmin):
     )
     list_filter = ("date", "class_instance", "recurrence")
 
-    fieldsets = (
-        (None, {
-            'fields': ('class_instance', 'date', 'start_time', 'end_time')
-        }),
-        ('Recurrence', {
-            'fields': ('recurrence', 'days_of_week'),
-            'description': (
-                'Optional: Set how often this event repeats. '
-                'Leave as "One-time only" if not repeating.'
-            )
-        }),
-    )
+
+fieldsets = (
+    (None, {
+        'fields': ('class_instance', 'date', 'start_time', 'end_time')
+    }),
+    ('Recurrence', {
+        'fields': ('recurrence', 'days_of_week', 'recurrence_exceptions'),
+        'description': (
+            'Optional: Set how often this event repeats. '
+            'Leave as "One-time only" if not repeating. '
+            'For custom days, enter weekdays like "Mon,Wed,Fri".<br>'
+            'To exclude certain days, add them in '
+            '"Recurrence Exceptions" formatted as YYYY-MM-DD, YYYY-MM-DD.'
+        )
+    }),
+)
