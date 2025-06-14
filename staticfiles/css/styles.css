@@ -17,6 +17,11 @@ main {
 --bs-gutter-x: none !important;
 }
 
+a {
+  color: #B30000 !important;
+  text-decoration: none;
+}
+
 /* color pallette */
 #about b {
   color: #B30000;
