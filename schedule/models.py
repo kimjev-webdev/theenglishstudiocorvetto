@@ -32,6 +32,14 @@ class Class(models.Model):
         verbose_name_plural = "Classes"
 
 
+class Recurrence(models.TextChoices):
+    NONE = 'none', _('One-time only')
+    WEEKLY = 'weekly', _('Weekly')
+    BIWEEKLY = 'biweekly', _('Every 2 weeks')
+    MONTHLY = 'monthly', _('Monthly')
+    CUSTOM_DAYS = 'custom_days', _('Custom weekdays')
+
+
 class Event(models.Model):
     class_instance = models.ForeignKey(
         Class,
@@ -46,6 +54,18 @@ class Event(models.Model):
     end_time = models.TimeField(
         verbose_name=_("End Time"),
         default=time(12, 0)
+    )
+    recurrence = models.CharField(
+        max_length=20,
+        choices=Recurrence.choices,
+        default=Recurrence.NONE,
+        verbose_name=_("Repeats")
+    )
+    days_of_week = models.CharField(
+        max_length=20,
+        blank=True,
+        verbose_name=_("Days of the Week"),
+        help_text=_("For custom repeat, enter days like 'Mon,Wed,Fri'")
     )
 
     def __str__(self):

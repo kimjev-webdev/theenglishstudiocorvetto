@@ -89,6 +89,9 @@ Date        | Bug                                               | Focus         
 2025-06-14 | Calendar grid structure broke due to tooltip DOM overflow      | Layout / Positioning   | Applied `appendTo: document.body` and `maxWidth` in Tippy.js config to prevent tooltips from stretching or distorting the calendar layout. Also reduced padding and font size for a cleaner fit.                    |
 2025-06-14 | Calendar title displayed numeric month instead of name          | Frontend / i18n Display | Replaced raw numeric `month` with a localized full month name using `date_format(..., "F")`. Now displays “June” or “Giugno” based on active language.                           |
 2025-06-14 | Month name not localized on bilingual site                      | Localization / Template | Used Django’s `use_l10n=True` in view logic to ensure month names adapt to selected language. Removed need for conditional month formatting in templates.                          |
+2025-06-14 | No support for recurring events in calendar schedule           | Backend / Models        | Added `recurrence` and `days_of_week` fields to the `Event` model with support for weekly, biweekly, monthly, and custom weekday rules.                                    |
+2025-06-14 | Admin interface lacked recurrence controls for events         | Admin / UX              | Registered recurrence fields in Django admin using `fieldsets` to group them cleanly. Enabled filtering by recurrence in the list view.                                     |
+2025-06-14 | Recurring events not displayed on calendar view               | View Logic / Calendar   | Extended `calendar_view` to dynamically generate virtual events within the target month based on recurrence type. Recurring items now appear with tooltip + emoji in grid. |
 
 
 
