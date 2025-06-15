@@ -15,6 +15,9 @@
 <p class="red body-text"><b>Ready to join an event?</b></p>
 <p class="navy body-text">Use the form on our contact page to book your spot. We are happy to help with anything from bookings to general enquiries. 
 
+ <div class="text-center headertext mt-4">
+      <a href="{% url 'contact' %}" class="btn btn-red primaryfont">{% trans "BOOK NOW" %}</a>
+    </div>
   {% if not events %}
   {% endif %}
 
