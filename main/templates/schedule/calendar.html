@@ -16,18 +16,18 @@
   </nav>
 
  <div class="calendar-grid">
-  <div class="weekday">{% trans "Mon" %}</div>
-  <div class="weekday">{% trans "Tue" %}</div>
-  <div class="weekday">{% trans "Wed" %}</div>
-  <div class="weekday">{% trans "Thu" %}</div>
-  <div class="weekday">{% trans "Fri" %}</div>
-  <div class="weekday">{% trans "Sat" %}</div>
-  <div class="weekday">{% trans "Sun" %}</div>
+  <div class="weekday navy-bg off-white primaryfont">{% trans "Mon" %}</div>
+  <div class="weekday navy-bg off-white primaryfont">{% trans "Tue" %}</div>
+  <div class="weekday navy-bg off-white primaryfont">{% trans "Wed" %}</div>
+  <div class="weekday navy-bg off-white primaryfont">{% trans "Thu" %}</div>
+  <div class="weekday navy-bg off-white primaryfont">{% trans "Fri" %}</div>
+  <div class="weekday navy-bg off-white primaryfont">{% trans "Sat" %}</div>
+  <div class="weekday navy-bg off-white primaryfont">{% trans "Sun" %}</div>
 
   {% for week in weeks %}
     {% for day in week %}
       <div class="day{% if day.month != month %} other-month{% endif %}">
-        <div class="date">{{ day.day }}</div>
+        <div class="date red primaryfont">{{ day.day }}</div>
         {% for event in events_by_day|get_item:day %}
           <div class="emoji"
      data-tippy-content="{{ '<div class=\'tippy-content\'>' }}{% if LANGUAGE_CODE == 'it' %}{{ event.class_instance.name_it }}{% else %}{{ event.class_instance.name_en }}{% endif %}{{ '<br>' }}{{ event.start_time }}–{{ event.end_time }}{{ '</div>' | safe }}">

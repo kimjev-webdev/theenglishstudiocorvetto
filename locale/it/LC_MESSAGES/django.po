@@ -199,10 +199,6 @@ msgstr ""
 "La nostra insegnante vanta un ha un'eccellente esperienza nell'aiutare gli studenti a raggiungere i loro obiettivi grazie"
 "alla sua straordinaria comprensione di questo difficile e di come gestire punteggi elevati."
 
-#: .\templates\index.html:145
-msgid "Price discussed on request."
-msgstr "Prezzo da concordare su richiesta."
-
 #: .\templates\index.html:155
 msgid "BUSINESS ENGLISH"
 msgstr "INGLESE COMMERCIALE"
@@ -226,37 +222,57 @@ msgstr "L'inglese è la lingua commerciale più parlata a livello internazionale
 
 #: .\templates\index.html:158
 msgid "Also available in groups."
-msgstr "Disponibile anche gruppo."
+msgstr "Disponibile anche in gruppo."
 
 #: .\templates\index.html:158
 msgid "€32/60 mins"
 msgstr "€32/60 min"
 
-#: .\templates\index.html:164
-msgid "Book Now"
-msgstr "Prenota ora"
+#: templates/index.html:
+msgid "Looking for a creative way to improve your English? Or a different way to show your child how fun and limitless learning English can be?"
+msgstr "Cerchi un modo creativo per migliorare il tuo inglese? O un modo diverso per mostrare a tuo figlio quanto può essere divertente e illimitato imparare l'inglese?"
 
-#: templates/main/contact.html:XX
+#: templates/index.html:
+msgid "Come and try our workshops! At The English Studio, we work alongside other individual talents in the area to bring you some top tier bilingual laboratories."
+msgstr "Vieni a provare i nostri workshop! Presso The English Studio, collaboriamo con altri talenti della zona per offrirti laboratori bilingue di alto livello."
+
+#: templates/index.html:
+msgid "Spaces are limited so make sure to book in ASAP!"
+msgstr "I posti sono limitati, quindi assicurati di prenotare al più presto!"
+
+#: templates/index.html:
+msgid "Whether you want to rent our cozy space for a party, or if you want to work together to plan your child’s birthday party of their dreams, send us a message to see how you can make their dream your reality."
+msgstr "Che tu voglia affittare il nostro accogliente spazio per una festa o che tu voglia collaborare all'organizzazione della festa di compleanno dei sogni di tuo figlio, inviaci un messaggio per scoprire come possiamo trasformare il suo sogno in realtà."
+
+#: templates/index.html:
+msgid "Price discussed on request."
+msgstr "Prezzo da concordare su richiesta."
+
+#: .\templates\index.html:164
+msgid "VIEW THE SCHEDULE"
+msgstr "VISUALIZZA IL CALENDARIO"
+
+#: templates/main/contact.html:
 msgid "Contact Us"
 msgstr "Contattaci"
 
-#: templates/main/contact.html:XX
+#: templates/main/contact.html:
 msgid "Full Name"
 msgstr "Nome e Cognome"
 
-#: templates/main/contact.html:XX
+#: templates/main/contact.html:
 msgid "Subject"
 msgstr "Oggetto"
 
-#: templates/main/contact.html:XX
+#: templates/main/contact.html:
 msgid "Select an option"
 msgstr "Seleziona un'opzione"
 
-#: templates/main/contact.html:XX
+#: templates/main/contact.html:
 msgid "Private Lessons"
 msgstr "Lezioni Private"
 
-#: templates/main/contact.html:XX
+#: templates/main/contact.html:
 msgid "Business English Lessons"
 msgstr "Lezioni di Inglese Commerciale"
 
