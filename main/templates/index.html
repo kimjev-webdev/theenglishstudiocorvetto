@@ -126,38 +126,39 @@
           </div>
         </div>
       </div>
+    
 
-      <!-- Activities & Workshops -->
+     <!-- Workshops & Activities -->
       <div class="col-md-6" id="class">
         <div class="card h-100">
-          <img src="{% static 'compressed/chat.webp' %}" class="card-img-top alt-icon-preset mt-3" alt="...">
+          <img src="{% static 'compressed/crafts.webp' %}" class="card-img-top alt-icon-preset mt-3" alt="...">
           <div class="card-body">
-            <h3 class="card-title red body-text text-center">{% trans "ACTIVITIES & WORKSHOPS" %}</h3>
-            <p c <p class="card-text navy body-text">{% trans "Looking for a creative way to improve your English? Or a different way to show your child how fun and limitless learning English can be?" %}</p>
-      <p class="card-text navy body-text">{% trans "Come and try our workshops! At The English Studio, we work alongside other individual talents in the area to bring you some top tier bilingual laboratories." %}</p>
-      <p class="card-text red body-text"><b>{% trans "Spaces are limited so make sure to book in ASAP!" %}<br>{% trans "Price discussed on request." %}</b></p>
+            <h3 class="card-title red body-text text-center">{% trans "WORKSHOPS & ACTIVITIES" %}</h3>
+            <p class="card-text navy body-text">{% trans "Looking for a creative way to improve your English? Or a different way to show your child how fun and limitless learning English can be?" %}</p>
+            <p class="card-text body-text navy">{% trans "Come and try our workshops! At The English Studio, we work alongside other individual talents in the area to bring you some top tier bilingual laboratories." %}</p>
+            <p class="card-text body-text navy">{% trans "Spaces are limited so make sure to book in ASAP!" %}</p>
+            <br>
+            <p class="card-text red body-text"><b>{% trans "Price discussed on request." %}</b></p>
           </div>
         </div>
       </div>
 
-      <!-- Parties -->
-      <div class="col-md-6" id="classes2">
+       <!-- Parties -->
+      <div class="col-md-6" id="class">
         <div class="card h-100">
           <img src="{% static 'compressed/balloons.webp' %}" class="card-img-top alt-icon-preset mt-3" alt="...">
           <div class="card-body">
             <h3 class="card-title red body-text text-center">{% trans "PARTIES" %}</h3>
-            <p class="card-text navy body-text">{% trans "Whether you want to rent our cozy space for a party, or if you want to work together to plan your child’s birthday party of their dreams, send us a message to see how you can make their dream your reality." %}</p>
-      <p class="card-text red body-text"><b>{% trans "Price discussed on request." %}</b></p>
-    </div>
+            <p class="card-text navy body-text">{% trans "Whether you want to rent our cozy space for a party, or if you want to work together to plan your child’s birthday party of their dreams, send us a message to see how you can make their dream your reality." %}</p>   
+            <br>
+            <p class="card-text red body-text"><b>{% trans "Price discussed on request." %}</b></p>
           </div>
         </div>
       </div>
-
-
     </div>
 
     <div class="text-center headertext mt-4">
-      <a href="{% url 'calendar' %}" class="btn btn-red primaryfont">{% trans "VIEW THE SCHEDULE" %}</a>
+      <a href="{% url 'schedule' %}" class="btn btn-red primaryfont">{% trans "VIEW THE SCHEDULE" %}</a>
     </div>
   </section>
 

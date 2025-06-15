@@ -8,7 +8,7 @@ urlpatterns = [
     path('courses/', views.courses, name='courses'),
     path('about/', views.about, name='about'),
     path('events/', views.events, name='events'),
-    path('calendar/', views.calendar, name='calendar'),
+    path('calendar/', views.calendar, name='schedule'),
 ]
 
 if settings.DEBUG:
