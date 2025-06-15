@@ -23,3 +23,7 @@ def events(request):
 
 def calendar(request):
     return render(request, 'calendar.html')
+
+
+def contact(request):
+    return render(request, 'contact.html')
