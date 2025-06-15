@@ -19,3 +19,7 @@ def blog(request):
 
 def events(request):
     return render(request, 'events.html')
+
+
+def calendar(request):
+    return render(request, 'calendar.html')

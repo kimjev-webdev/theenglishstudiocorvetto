@@ -115,6 +115,32 @@
       </div>
 
       <!-- Business English -->
+      <div class="col-md-6" id="class">
+        <div class="card h-100">
+          <img src="{% static 'compressed/chat.webp' %}" class="card-img-top alt-icon-preset mt-3" alt="...">
+          <div class="card-body">
+            <h3 class="card-title red body-text text-center">{% trans "BUSINESS ENGLISH" %}</h3>
+            <p class="card-text navy body-text">{% trans "Available both online and in-person, finesse your Business English skills and get that promotion you’ve always dreamed of." %}</p>
+            <p class="card-text body-text navy">{% trans "English is THE most widely spoken international business language and you are missing out on the top opportunities if you cannot express yourself properly! Together with our teacher, we can put together a course tailored specifically for you and your needs." %}</p>
+            <p class="card-text red body-text"><b>{% trans "Also available in groups." %}<br>{% trans "€32/60 mins" %}</b></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activities & Workshops -->
+      <div class="col-md-6" id="class">
+        <div class="card h-100">
+          <img src="{% static 'compressed/chat.webp' %}" class="card-img-top alt-icon-preset mt-3" alt="...">
+          <div class="card-body">
+            <h3 class="card-title red body-text text-center">{% trans "BUSINESS ENGLISH" %}</h3>
+            <p class="card-text navy body-text">{% trans "Available both online and in-person, finesse your Business English skills and get that promotion you’ve always dreamed of." %}</p>
+            <p class="card-text body-text navy">{% trans "English is THE most widely spoken international business language and you are missing out on the top opportunities if you cannot express yourself properly! Together with our teacher, we can put together a course tailored specifically for you and your needs." %}</p>
+            <p class="card-text red body-text"><b>{% trans "Also available in groups." %}<br>{% trans "€32/60 mins" %}</b></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parties -->
       <div class="col-md-6" id="classes2">
         <div class="card h-100">
           <img src="{% static 'compressed/chat.webp' %}" class="card-img-top alt-icon-preset mt-3" alt="...">
@@ -126,9 +152,12 @@
           </div>
         </div>
       </div>
+
+
     </div>
+
     <div class="text-center headertext mt-4">
-      <a href="{% url 'contact' %}" class="btn btn-red primaryfont">{% trans "Book Now" %}</a>
+      <a href="{% url 'calendar' %}" class="btn btn-red primaryfont">{% trans "Take a look at our schedule" %}</a>
     </div>
   </section>
 

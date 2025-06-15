@@ -17,6 +17,10 @@ main {
 --bs-gutter-x: none !important;
 }
 
+h1 {
+  line-height: 0.8 !important;
+}
+
 /* color pallette */
 #about b {
   color: #B30000;
@@ -288,72 +292,6 @@ img.footerpic {
   border-top-left-radius: 11px;
   border-top-right-radius: 11px;
 }
-
-/*contact.html styles*/
-/*modal styles*/
-.modal-content {
-  width: 80%;
-}
-
-.modal-dialog-centered {
-  align-items: flex-start;
-  justify-content: center !important; 
-}
-
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0.5rem;
-}
-
-.weekday {
-  font-weight: bold;
-  text-align: center;
-  padding: 0.5rem 0;
-  background: #f0f0f0;
-  border-bottom: 1px solid #ccc;
-}
-
-.day {
-  position: relative;
-  border: 1px solid #ddd;
-  min-height: 100px;
-  padding: 0.5rem;
-  background: white;
-}
-
-.day.other-month {
-  background: #f9f9f9;
-  color: #bbb;
-}
-
-.date {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.emoji {
-  position: relative;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
-.tooltip {
-  display: none;
-  position: absolute;
-  background: white;
-  border: 1px solid #aaa;
-  padding: 0.3rem 0.5rem;
-  font-size: 0.8rem;
-  top: -1rem;
-  right: 2rem;
-  z-index: 10;
-}
-
-.emoji:hover .tooltip {
-  display: block;
-}
-
 
 /* media queries for responsive design */
 
