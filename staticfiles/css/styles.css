@@ -254,6 +254,14 @@ img.footerpic {
     height: 140px;   
 }
 
+.alt-icon-preset2 {
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+    width: auto;
+    height: 160px;   
+}
+
 .carousel-background-overlay {
   position: absolute;
   top: 0;
