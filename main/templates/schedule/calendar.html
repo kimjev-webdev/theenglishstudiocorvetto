@@ -9,12 +9,6 @@
 <main>
 <h1 class="red primaryfont">{{ month }}</h1>
 
-
-  <nav>
-    <a href="{% url 'calendar_by_date' prev_year prev_month %}">← {% trans "Previous" %}</a>
-    <a href="{% url 'calendar_by_date' next_year next_month %}">{% trans "Next" %} →</a>
-  </nav>
-
  <div class="calendar-grid">
   <div class="weekday navy-bg off-white primaryfont">{% trans "Mon" %}</div>
   <div class="weekday navy-bg off-white primaryfont">{% trans "Tue" %}</div>
@@ -32,7 +26,7 @@
           <div class="emoji"
      data-tippy-content="{{ '<div class=\'tippy-content\'>' }}{% if LANGUAGE_CODE == 'it' %}{{ event.class_instance.name_it }}{% else %}{{ event.class_instance.name_en }}{% endif %}{{ '<br>' }}{{ event.start_time }}–{{ event.end_time }}{{ '</div>' | safe }}">
   {{ event.class_instance.emoji }}
-</div>
+ </div>
 
         {% endfor %}
       </div>
@@ -40,6 +34,13 @@
   {% endfor %}
 </div>
 
+ <nav class="d-flex justify-content-center align-items-center mt-4">
+  <p class="navy primaryfont fs-4">
+    <a href="{% url 'calendar_by_date' prev_year prev_month %}" class="fs-3 red primaryfont">&lt;</a>
+    MONTH
+    <a href="{% url 'calendar_by_date' next_year next_month %}" class="fs-3 red primaryfont">&gt;</a>
+    </p>
+  </nav>
 </main>
 
 <script>
