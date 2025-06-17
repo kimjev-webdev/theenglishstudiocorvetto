@@ -142,7 +142,6 @@ msgid ""
 msgstr "Esponete i vostri bambini al mondo e aiutateli ad acquisire competenze"
 "linguistiche fondamentali fin da piccoli, preparandoli per il loro futuro migliore."
 
-
 #: .\templates\index.html:119
 msgid "Price from €22/90 mins."
 msgstr "Prezzo a partire da €22/90 min."
@@ -251,6 +250,10 @@ msgstr "Prezzo da concordare su richiesta."
 #: .\templates\index.html:164
 msgid "VIEW THE SCHEDULE"
 msgstr "VISUALIZZA IL CALENDARIO"
+
+#: .\templates\index.html
+msgid "Upcoming Events"
+msgstr "Eventi in Arrivo"
 
 #: templates/main/contact.html:
 msgid "Contact Us"
