@@ -8,7 +8,7 @@
 
 {% block content %}
 <main>
-  <h1 class="navy primaryfont text-center">SCHEDULE</h1>
+  <h1 class="navy primaryfont text-center">{% trans "Schedule" %}</h1>
   
   {% if not events %}
   {% endif %}
@@ -43,21 +43,26 @@
  <nav class="d-flex justify-content-center align-items-center mt-4">
   <p class="navy primaryfont fs-4">
     <a href="{% url 'calendar_by_date' prev_year prev_month %}" class="fs-3 red primaryfont">&lt;</a>
-    MONTH
+   {% trans "MONTH" %}
     <a href="{% url 'calendar_by_date' next_year next_month %}" class="fs-3 red primaryfont">&gt;</a>
     </p>
   </nav>
 
-  <br>
-  <p class="navy body-text">To explore what's happening at <b class="red">The English Studio</b> simply hover or tap any emoji on the calendar.</p>
-  <p class="navy body-text">We host regular group sessions as well as one-off event's on special dates throughout the year; from seasonal celebrations to creative workshops. Be sure to check back often, as new events are added regularly. Business English, IELTS test preperation and private lessons can be arranged on an individual basis, tailored to suit you.</p>
-<p class="red body-text"><b>Ready to join an event?</b></p>
-<p class="navy body-text">Use the form on our contact page to book your spot. We are happy to help with anything from bookings to general enquiries. 
+<br>
+<p class="navy body-text">
+  {% blocktrans %}To explore what's happening at <b class="red">The English Studio</b> simply hover or tap any emoji on the calendar.{% endblocktrans %}
+</p>
+<p class="navy body-text">
+  {% trans "We host regular group sessions as well as one-off event's on special dates throughout the year; from seasonal celebrations to creative workshops. Be sure to check back often, as new events are added regularly. Business English, IELTS test preperation and private lessons can be arranged on an individual basis, tailored to suit you." %}
+</p>
+<p class="red body-text"><b>{% trans "Ready to join an event?" %}</b></p>
+<p class="navy body-text">
+  {% trans "Use the form on our contact page to book your spot. We are happy to help with anything from bookings to general enquiries." %}
+</p>
 
- <div class="text-center headertext mt-4">
-      <a href="{% url 'contact' %}" class="btn btn-red primaryfont">{% trans "BOOK NOW" %}</a>
-    </div>
-</main>
+<div class="text-center headertext mt-4">
+  <a href="{% url 'contact' %}" class="btn btn-red primaryfont">{% trans "BOOK NOW" %}</a>
+</div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
