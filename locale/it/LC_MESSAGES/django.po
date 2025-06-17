@@ -342,3 +342,7 @@ msgstr "Politica sulla Privacy"
 #: templates/includes/footer.html:15
 msgid "Follow us on social media"
 msgstr "Seguici sui social media"
+
+#: templates/includes/footer.html:15
+msgid "Made with ♥ by Kim Piffy"
+msgstr "Fatto con ♥ da Kim Piffy"
