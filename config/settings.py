@@ -71,6 +71,9 @@ INSTALLED_APPS = [
     'portal',
 ]
 
+LOGIN_REDIRECT_URL = '/portal/'
+LOGIN_URL = '/portal/login/'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
