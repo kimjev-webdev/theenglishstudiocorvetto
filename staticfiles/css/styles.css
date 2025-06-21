@@ -382,11 +382,23 @@ blog-text a {
   color:#B30000
 }
 
-.emoji {
-  font-size: 1.2rem;
-  pointer-events: auto;
+.emoji-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  width: 100%;
+  justify-items: center;
+  align-items: center;
 }
 
+.emoji {
+  font-size: 1.2rem;
+  line-height: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
 
 .tooltip {
   display: none;
@@ -455,13 +467,13 @@ blog-text a {
   }
 
   .date {
-    font-size: 0.7rem;
+    font-size: 12px;
     line-height: 1;
     margin-bottom: 0.25rem;
   }
 
   .emoji {
-    font-size: 1rem;
+    font-size: 12px;
     max-width: 100%;
     word-break: break-word;
     line-height: 1;

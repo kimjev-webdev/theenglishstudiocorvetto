@@ -41,23 +41,23 @@
           {% with tooltip_text="" %}
             {% for event in day_events %}
               {% if LANGUAGE_CODE == 'it' %}
-                {% with tooltip_text=tooltip_text|add:event.class_instance.name_it|add:" ("|add:event.start_time|stringformat:"s"|add:"–"|add:event.end_time|stringformat:"s"|add:")<br>" %}
-                {% endwith %}
+                {% with tooltip_text=tooltip_text|add:event.class_instance.name_it|add:" ("|add:event.start_time|stringformat:"s"|add:"–"|add:event.end_time|stringformat:"s"|add:")<br>" %}{% endwith %}
               {% else %}
-                {% with tooltip_text=tooltip_text|add:event.class_instance.name_en|add:" ("|add:event.start_time|stringformat:"s"|add:"–"|add:event.end_time|stringformat:"s"|add:")<br>" %}
-                {% endwith %}
+                {% with tooltip_text=tooltip_text|add:event.class_instance.name_en|add:" ("|add:event.start_time|stringformat:"s"|add:"–"|add:event.end_time|stringformat:"s"|add:")<br>" %}{% endwith %}
               {% endif %}
             {% endfor %}
           {% endwith %}
         {% endif %}
-        <div class="day{% if day.month != month %} other-month{% endif %}" 
+        <div class="day{% if day.month != month %} other-month{% endif %}"
              {% if day_events %}
              data-tippy-content="{{ tooltip_text|safe }}"
              {% endif %}>
           <div class="date red primaryfont">{{ day.day }}</div>
-          {% for event in day_events %}
-            <div class="emoji">{{ event.class_instance.emoji }}</div>
-          {% endfor %}
+          <div class="emoji-wrapper">
+            {% for event in day_events %}
+              <div class="emoji">{{ event.class_instance.emoji }}</div>
+            {% endfor %}
+          </div>
         </div>
         {% endwith %}
       {% endfor %}
@@ -76,22 +76,21 @@
     <a href="{% url 'contact' %}" class="btn btn-red primaryfont">{% trans "BOOK NOW" %}</a>
   </div>
 
- <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    tippy('.emoji', {
-  placement: 'top',
-  animation: 'fade',
-  arrow: false,
-  delay: [100, 100],
-  allowHTML: true,
-  maxWidth: 240,
-  appendTo: () => document.body,
-  theme: 'custom',
-  interactive: true,
-  zIndex: 9999,
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      tippy('.day[data-tippy-content]', {
+        placement: 'top',
+        animation: 'fade',
+        arrow: false,
+        delay: [100, 100],
+        allowHTML: true,
+        maxWidth: 240,
+        appendTo: () => document.body,
+        theme: 'custom',
+        interactive: true,
+        zIndex: 9999,
+      });
     });
-  });
-</script>
-
+  </script>
 </main>
 {% endblock %}
