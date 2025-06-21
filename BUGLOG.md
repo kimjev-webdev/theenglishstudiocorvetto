@@ -100,6 +100,13 @@ Date        | Bug                                               | Focus         
 | 2025-06-14 | `permission denied for schema public`                                 | DB Permissions  | Granted `ALL PRIVILEGES ON DATABASE english_studio_dev TO kim;`                                  |
 | 2025-06-14 | No visible `recurrence_exceptions` field in Django admin              | Admin UI        | Updated `EventAdmin` to include the field; ensured fieldsets were correctly defined              |
 | 2025-06-14 | Exceptions ignored in calendar rendering                              | View Logic      | Updated `calendar_view` to check for and skip `recurrence_exceptions` in all recurrence modes    |
+| 2025-06-21 | `portal/login` form button did nothing on click                | Template Syntax | Discovered malformed `<form>`: opening and closing tag were separated. Fixed by removing incorrect `</form>` above CSRF token. |
+| 2025-06-21 | Superuser login not redirecting after form submission          | Auth/Redirect   | Confirmed login credentials were correct, verified user status in Render shell, fixed login template.                          |
+| 2025-06-21 | `portal/forms.py` crashed deploy due to invalid model fields   | Forms / Models  | Adjusted `BlogPostForm` to use correct translated field names: `title_en`, `body_en`, etc.                                     |
+| 2025-06-21 | Render deploy failed due to syntax error in `urls.py`          | Deployment      | Fixed unclosed bracket in `config/urls.py` caused by recent additions to `portal/urls.py`.                                     |
+| 2025-06-21 | Template error: `{% static %}` used before `{% load static %}` | Templates       | Ensured `{% load static %}` appears at the top of login and portal templates.                                                  |
+| 2025-06-21 | `NameError` for undefined `BlogListView` during deploy         | Routing / Views | Added correct import for `BlogListView` in `portal/urls.py`.                                                                   |
+| 2025-06-21 | Unable to log into `/portal` with superuser                    | Auth/Testing    | Used Django shell to confirm active superuser status; resolved after fixing login form tag.                                    |
 
 
 

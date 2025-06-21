@@ -71,7 +71,7 @@ INSTALLED_APPS = [
     'portal',
 ]
 
-LOGIN_REDIRECT_URL = '/portal/'
+LOGIN_REDIRECT_URL = 'portal_dashboard'
 LOGIN_URL = '/portal/login/'
 
 MIDDLEWARE = [
