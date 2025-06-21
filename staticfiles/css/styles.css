@@ -360,9 +360,14 @@ blog-text a {
 .day {
   position: relative;
   border: 1px solid #ddd;
-  min-height: 100px;
-  padding: 0.5rem;
   background: white;
+  aspect-ratio: 1 / 1; /* ✅ Ensures square shape */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0.3rem;
+  overflow: hidden;
 }
 
 .day.other-month {
@@ -377,9 +382,8 @@ blog-text a {
 }
 
 .emoji {
-  position: relative;
   font-size: 1.2rem;
-  cursor: pointer;
+  pointer-events: none; /* 👈 Prevents individual emoji tooltips */
 }
 
 .tooltip {
@@ -397,6 +401,22 @@ blog-text a {
 .emoji:hover .tooltip {
   display: block;
 }
+
+.tippy-trigger {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+  z-index: 5;
+}
+
+/* REMOVE the tooltip arrow entirely */
+.tippy-box[data-theme~='custom'] > .tippy-arrow {
+  display: none !important;
+}
+
 
 /* Custom Tippy.js tooltip theme */
 .tippy-box[data-theme~='custom'] {
