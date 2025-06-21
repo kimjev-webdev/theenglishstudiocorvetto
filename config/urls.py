@@ -25,7 +25,7 @@ from django.conf.urls.i18n import i18n_patterns
 urlpatterns = [
     # Language switching (keep this outside)
     path('i18n/', include('django.conf.urls.i18n')),
-    
+]
 
 urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
