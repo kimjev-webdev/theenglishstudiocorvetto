@@ -32,7 +32,7 @@ urlpatterns += i18n_patterns(
     path('', include('main.urls')),
     path('schedule/', include('schedule.urls')),
     path('portal/', include('portal.urls')),
-     path('blog/', include('blog.urls')),
+    path('blog/', include('blog.urls')),
 )
 
 # Serve media files in development
