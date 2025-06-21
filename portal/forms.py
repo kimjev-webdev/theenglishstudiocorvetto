@@ -1,7 +1,12 @@
 from django import forms
+from ckeditor.widgets import CKEditorWidget  # ✅ import CKEditorWidget
 from blog.models import BlogPost
 
 class BlogPostForm(forms.ModelForm):
+    # ✅ Use CKEditor for both language body fields
+    body_en = forms.CharField(widget=CKEditorWidget())
+    body_it = forms.CharField(widget=CKEditorWidget())
+
     class Meta:
         model = BlogPost
         fields = [
