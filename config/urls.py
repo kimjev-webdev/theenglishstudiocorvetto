@@ -25,13 +25,14 @@ from django.conf.urls.i18n import i18n_patterns
 urlpatterns = [
     # Language switching (keep this outside)
     path('i18n/', include('django.conf.urls.i18n')),
-]
+    
 
 urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
     path('blog/', include('blog.urls')),
     path('schedule/', include('schedule.urls')),
+    path('portal/', include('portal.urls')),
 )
 
 # Serve media files in development

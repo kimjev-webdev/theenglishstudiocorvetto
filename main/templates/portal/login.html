@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <img src="{% static 'compressed/logofull.webp' %}" alt="The English Studio Logo" class="mb-4" style="max-width: 300px; display: block; margin-left: auto; margin-right: auto;">
+  <h2>Staff Login</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-red">Login</button>
+  </form>
+</div>
+{% endblock %}

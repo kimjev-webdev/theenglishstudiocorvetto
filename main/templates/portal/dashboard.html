@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h2>Welcome, {{ user.username }}</h2>
+  <p>Select an area to manage:</p>
+  <ul class="list-group">
+    <li class="list-group-item"><a href="{% url 'blog_list' %}">📝 Blog Posts</a></li>
+    <li class="list-group-item"><a href="{% url 'event_list' %}">📅 Schedule</a></li>
+    <li class="list-group-item"><a href="{% url 'carousel_list' %}">🎠 Carousel</a></li>
+    <li class="list-group-item"><a href="{% url 'flyer_list' %}">📄 Upcoming Events Flyers</a></li>
+    <li class="list-group-item"><a href="{% url 'portal_logout' %}">🚪 Log Out</a></li>
+  </ul>
+</div>
+{% endblock %}
