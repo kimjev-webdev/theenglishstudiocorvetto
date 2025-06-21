@@ -107,6 +107,13 @@ Date        | Bug                                               | Focus         
 | 2025-06-21 | Template error: `{% static %}` used before `{% load static %}` | Templates       | Ensured `{% load static %}` appears at the top of login and portal templates.                                                  |
 | 2025-06-21 | `NameError` for undefined `BlogListView` during deploy         | Routing / Views | Added correct import for `BlogListView` in `portal/urls.py`.                                                                   |
 | 2025-06-21 | Unable to log into `/portal` with superuser                    | Auth/Testing    | Used Django shell to confirm active superuser status; resolved after fixing login form tag.                                    |
+| 2025-06-21 | Login form submitted but nothing happened                  | Frontend Template | Found stray `</form>` closing tag above `{{ form.as_p }}`; removed to fix flow                                                    |
+| 2025-06-21 | Login successful but redirected to undefined `/it/portal/` | Redirect Logic    | Identified incorrect locale-aware redirect; ensured fallback to dashboard                                                         |
+| 2025-06-21 | Login 500 error: unresolved `event_list` in dashboard      | Template Routing  | Commented out broken dashboard links (`event_list`, `carousel_list`, `flyer_list`) to prevent template crash                      |
+| 2025-06-21 | `Reverse for 'event_list' not found` after login           | Django URLs       | Confirmed missing `event_list` view; fixed by commenting out broken references                                                    |
+| 2025-06-21 | Superuser login failed                                     | Auth & Shell      | Verified correct superuser via Render shell (`leanne`); password confirmed valid                                                  |
+| 2025-06-21 | `LOGIN_REDIRECT_URL` in `settings.py` not respected        | Auth / Locale     | Determined locale-aware URL (`/en/portal/`) overrides base `LOGIN_REDIRECT_URL`; confirmed `next` param handles redirect properly |
+
 
 
 
