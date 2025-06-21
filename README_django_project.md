@@ -120,6 +120,19 @@ The `/portal/` route provides staff with a login-protected dashboard.
 - Custom mixins and `user_passes_test()` to protect all views
 - CSRF tokens and login protection enabled on all forms
 
+🔐 Authentication & Staff Access Control
+Secure staff-only login portal using Django's built-in LoginView and LogoutView.
+
+Only users with is_staff=True can access the portal dashboard and perform blog-related CRUD actions.
+
+Custom mixins and decorators restrict class-based and function-based views.
+
+Sessions and CSRF protection enabled by Django’s auth system.
+
+Superuser management via Django Admin interface.
+
+
+
 ---
 
 ## 🧪 Manual Testing
