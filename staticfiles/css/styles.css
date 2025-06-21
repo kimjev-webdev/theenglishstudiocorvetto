@@ -343,10 +343,11 @@ blog-text a {
 
 /*calendar.html  styles*/ 
 .calendar-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
   gap: 0.5rem;
 }
+
 
 .weekday {
   text-transform: uppercase;
@@ -383,8 +384,9 @@ blog-text a {
 
 .emoji {
   font-size: 1.2rem;
-  pointer-events: none; /* 👈 Prevents individual emoji tooltips */
+  pointer-events: auto;
 }
+
 
 .tooltip {
   display: none;
@@ -434,25 +436,36 @@ blog-text a {
 
 
 /* media queries for responsive design */
-
 @media (max-width: 576px) {
   .calendar-grid {
+    display: grid;
     grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
   }
 
   .day {
-    aspect-ratio: 1 / 1; /* ensures squares */
-    padding: 0.2rem;
-    overflow: visible; /* ensures tooltips aren’t clipped */
+    aspect-ratio: 1 / 1;
+    padding: 2px;
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    overflow: visible;
   }
 
   .date {
-    font-size: 0.7rem; /* smaller for tight space but still readable */
-    margin-bottom: 0.2rem;
+    font-size: 0.7rem;
+    line-height: 1;
+    margin-bottom: 0.25rem;
   }
 
   .emoji {
     font-size: 1rem;
+    max-width: 100%;
+    word-break: break-word;
+    line-height: 1;
+    pointer-events: auto; /* Re-enable for tooltip */
   }
 }
 

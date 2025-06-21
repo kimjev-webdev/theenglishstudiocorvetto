@@ -79,15 +79,16 @@
  <script>
   document.addEventListener('DOMContentLoaded', function () {
     tippy('.emoji', {
-      placement: 'top',
-      animation: 'fade',
-      arrow: false, // removes the arrow
-      delay: [100, 100],
-      allowHTML: true,
-      maxWidth: 240,
-      appendTo: () => document.body, // ensures it’s not clipped by overflow:hidden
-      theme: 'custom',
-      interactive: true,
+  placement: 'top',
+  animation: 'fade',
+  arrow: false,
+  delay: [100, 100],
+  allowHTML: true,
+  maxWidth: 240,
+  appendTo: () => document.body,
+  theme: 'custom',
+  interactive: true,
+  zIndex: 9999,
     });
   });
 </script>
