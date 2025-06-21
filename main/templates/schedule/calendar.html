@@ -76,19 +76,21 @@
     <a href="{% url 'contact' %}" class="btn btn-red primaryfont">{% trans "BOOK NOW" %}</a>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      tippy('.day[data-tippy-content]', {
-        placement: 'top',
-        animation: 'fade',
-        arrow: false,  // arrow removed
-        delay: [100, 100],
-        allowHTML: true,
-        maxWidth: 240,
-        appendTo: () => document.body,
-        theme: 'custom',
-      });
+ <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    tippy('.emoji', {
+      placement: 'top',
+      animation: 'fade',
+      arrow: false, // removes the arrow
+      delay: [100, 100],
+      allowHTML: true,
+      maxWidth: 240,
+      appendTo: () => document.body, // ensures it’s not clipped by overflow:hidden
+      theme: 'custom',
+      interactive: true,
     });
-  </script>
+  });
+</script>
+
 </main>
 {% endblock %}

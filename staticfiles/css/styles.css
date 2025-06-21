@@ -343,8 +343,8 @@ blog-text a {
 
 /*calendar.html  styles*/ 
 .calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 
@@ -412,34 +412,49 @@ blog-text a {
   z-index: 5;
 }
 
-/* REMOVE the tooltip arrow entirely */
-.tippy-box[data-theme~='custom'] > .tippy-arrow {
-  display: none !important;
-}
-
-
-/* Custom Tippy.js tooltip theme */
+/* Removes tooltip arrow and improves mobile visibility */
 .tippy-box[data-theme~='custom'] {
-  background-color: #37376B; /* .navy */
-  color: #fdfbf6; /* .off-white */
-  font-family: 'Cabin', sans-serif; /* .body-text */
+  background-color: #37376B;
+  color: #fdfbf6;
+  font-family: 'Cabin', sans-serif;
   font-weight: 400;
   line-height: 1.6;
   border-radius: 4px;
-  padding: 0.1rem 0.1rem;
-  font-size: 0.9rem;
+  padding: 0.5rem;
+  font-size: 0.85rem;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  text-align: center !important;
+  text-align: center;
+  z-index: 9999;
 }
 
-/* Optional: arrow match */
-.tippy-box[data-theme~='custom'][data-placement^='top'] > .tippy-arrow::before {
-  color: #37376B;
+.tippy-box[data-theme~='custom'] > .tippy-arrow {
+  display: none !important; /* remove the down arrow */
 }
 
 
 
 /* media queries for responsive design */
+
+@media (max-width: 576px) {
+  .calendar-grid {
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .day {
+    aspect-ratio: 1 / 1; /* ensures squares */
+    padding: 0.2rem;
+    overflow: visible; /* ensures tooltips aren’t clipped */
+  }
+
+  .date {
+    font-size: 0.7rem; /* smaller for tight space but still readable */
+    margin-bottom: 0.2rem;
+  }
+
+  .emoji {
+    font-size: 1rem;
+  }
+}
 
 @media (max-width: 768px) {
   .carouseloverlay {
