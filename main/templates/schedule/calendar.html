@@ -34,34 +34,24 @@
     <div class="weekday navy-bg off-white primaryfont">{% trans "Sat" %}</div>
     <div class="weekday navy-bg off-white primaryfont">{% trans "Sun" %}</div>
 
-    {% for week in weeks %}
-      {% for day in week %}
-        {% with day_events=events_by_day|get_item:day %}
-        {% if day_events %}
-          {% with tooltip_text="" %}
-            {% for event in day_events %}
-              {% if LANGUAGE_CODE == 'it' %}
-                {% with tooltip_text=tooltip_text|add:event.class_instance.name_it|add:" ("|add:event.start_time|stringformat:"s"|add:"–"|add:event.end_time|stringformat:"s"|add:")<br>" %}{% endwith %}
-              {% else %}
-                {% with tooltip_text=tooltip_text|add:event.class_instance.name_en|add:" ("|add:event.start_time|stringformat:"s"|add:"–"|add:event.end_time|stringformat:"s"|add:")<br>" %}{% endwith %}
-              {% endif %}
-            {% endfor %}
-          {% endwith %}
-        {% endif %}
-        <div class="day{% if day.month != month %} other-month{% endif %}"
-             {% if day_events %}
-             data-tippy-content="{{ tooltip_text|safe }}"
-             {% endif %}>
-          <div class="date red primaryfont">{{ day.day }}</div>
-          <div class="emoji-wrapper">
-            {% for event in day_events %}
-              <div class="emoji">{{ event.class_instance.emoji }}</div>
-            {% endfor %}
-          </div>
+   {% for week in weeks %}
+  {% for day in week %}
+    {% with day_events=events_by_day|get_item:day %}
+      <div class="day{% if day.month != month %} other-month{% endif %}"
+           {% if day_events %}
+           data-tippy-content="{% for event in day_events %}{% if LANGUAGE_CODE == 'it' %}{{ event.class_instance.name_it }}{% else %}{{ event.class_instance.name_en }}<br>{% endif %} ({{ event.start_time }}–{{ event.end_time }})<br>{% endfor %}"
+           {% endif %}>
+        <div class="date red primaryfont">{{ day.day }}</div>
+        <div class="emoji-wrapper">
+          {% for event in day_events %}
+            <div class="emoji">{{ event.class_instance.emoji }}</div>
+          {% endfor %}
         </div>
-        {% endwith %}
-      {% endfor %}
-    {% endfor %}
+      </div>
+    {% endwith %}
+  {% endfor %}
+{% endfor %}
+
   </div>
 
   <nav class="d-flex justify-content-center align-items-center mt-4">
