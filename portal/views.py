@@ -12,6 +12,7 @@ from .forms import BlogPostForm
 def staff_check(user):
     return user.is_authenticated and user.is_staff
 
+
 @login_required
 @user_passes_test(staff_check)
 def portal_dashboard(request):
@@ -32,22 +33,25 @@ class BlogListView(LoginRequiredMixin, StaffRequiredMixin, ListView):
     template_name = 'blog/list.html'  # ✅ updated path
     context_object_name = 'posts'
 
+
 # Create new post
 class BlogCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     model = BlogPost
     form_class = BlogPostForm
     template_name = 'blog/form.html'  # ✅ updated path
-    success_url = reverse_lazy('blog_list')
+    success_url = reverse_lazy('blog_edit')
+
 
 # Edit post
 class BlogUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     model = BlogPost
     form_class = BlogPostForm
     template_name = 'blog/form.html'  # ✅ updated path
-    success_url = reverse_lazy('blog_list')
+    success_url = reverse_lazy('blog_edit')
+
 
 # Delete post
 class BlogDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     model = BlogPost
     template_name = 'blog/confirm_delete.html'  # ✅ updated path
-    success_url = reverse_lazy('blog_list')
+    success_url = reverse_lazy('blog_edit')

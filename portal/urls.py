@@ -9,13 +9,35 @@ from .views import (
 )
 
 urlpatterns = [
-    path('login/', LoginView.as_view(template_name='portal/login.html'), name='portal_login'),
-    path('logout/', LogoutView.as_view(next_page='portal_login'), name='portal_logout'),
-    path('', views.portal_dashboard, name='portal_dashboard'),
+    path(
+        'login/',
+        LoginView.as_view(
+            template_name='portal/login.html'
+        ),
+        name='portal_login'
+    ),
+    path(
+        'logout/',
+        LogoutView.as_view(next_page='portal_login'),
+        name='portal_logout'
+    ),
+    path(
+        '',
+        views.portal_dashboard,
+        name='portal_dashboard'
+    ),
 
     # Blog CRUD routes
-    path('blog/', BlogListView.as_view(), name='blog_list'),
+    path('blog/', BlogListView.as_view(), name='blog_edit'),
     path('blog/create/', BlogCreateView.as_view(), name='blog_create'),
-    path('blog/edit/<int:pk>/', BlogUpdateView.as_view(), name='blog_edit'),
-    path('blog/delete/<int:pk>/', BlogDeleteView.as_view(), name='blog_delete'),
+    path(
+        'blog/edit/<int:pk>/',
+        BlogUpdateView.as_view(),
+        name='blog_edit'
+    ),
+    path(
+        'blog/delete/<int:pk>/',
+        BlogDeleteView.as_view(),
+        name='blog_delete'
+    ),
 ]
