@@ -568,6 +568,11 @@ blog-text a {
     margin-left: 50px !important;
     margin-right: 50px !important;
   }
+    
+  .day {
+    aspect-ratio: auto !important; /* Let it size naturally */
+    height: 120px; /* or whatever looks best */
+  }
 }
 
 @media (min-width: 1200px) {
@@ -576,3 +581,4 @@ blog-text a {
     margin-right: 100px !important;
   }
 }
+
