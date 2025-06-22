@@ -95,7 +95,8 @@ document.querySelector('#add-event-btn')?.addEventListener('click', () => {
   setTimeout(() => document.getElementById('event-class')?.focus(), 500);
 });
 
-function editEvent(id) {
+// ✅ Global function
+window.editEvent = function(id) {
   const row = document.querySelector(`tr[data-id='${id}']`);
   if (!row) return;
   document.getElementById('event-id').value = id;
@@ -107,9 +108,9 @@ function editEvent(id) {
   document.getElementById('event-days').value = row.dataset.days || '';
   document.getElementById('event-exceptions').value = row.dataset.exceptions || '';
   new bootstrap.Modal(document.getElementById('eventModal')).show();
-}
+};
 
-async function deleteEvent(id) {
+window.deleteEvent = async function(id) {
   if (!confirm('Delete this event?')) return;
   const res = await fetch(urls.deleteEvent(id), {
     method: 'POST',
@@ -120,7 +121,7 @@ async function deleteEvent(id) {
   if (res.ok) {
     document.querySelector(`tr[data-id='${id}']`)?.remove();
   }
-}
+};
 
 // CLASS HANDLERS
 const classForm = document.getElementById('class-form');
@@ -175,7 +176,8 @@ classForm?.addEventListener('submit', async (e) => {
   }
 });
 
-function editClass(id) {
+// ✅ Global function
+window.editClass = function(id) {
   const row = document.querySelector(`tr[data-id='${id}']`);
   if (!row) return;
   const cells = row.querySelectorAll('td');
@@ -183,9 +185,9 @@ function editClass(id) {
   document.getElementById('class-name-en').value = cells[1].textContent.trim();
   document.getElementById('class-name-it').value = cells[2].textContent.trim();
   document.getElementById('class-emoji').value = cells[0].textContent.trim();
-}
+};
 
-async function deleteClass(id) {
+window.deleteClass = async function(id) {
   if (!confirm('Delete this class?')) return;
   const res = await fetch(urls.deleteClass(id), {
     method: 'POST',
@@ -196,4 +198,4 @@ async function deleteClass(id) {
   if (res.ok) {
     document.querySelector(`tr[data-id='${id}']`)?.remove();
   }
-}
+};
