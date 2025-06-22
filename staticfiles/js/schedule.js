@@ -88,17 +88,22 @@ document.querySelector('#add-event-btn')?.addEventListener('click', () => {
   setTimeout(() => document.getElementById('event-class')?.focus(), 500);
 });
 
-window.editEvent = function(id) {
-  const row = document.querySelector(`tr[data-id='${id}']`);
+window.editEvent = function (id) {
+  // Select the specific row using data-id attribute
+  const row = document.querySelector(`tr[data-id="${id}"]`);
   if (!row) return;
+
+  // Populate modal fields from dataset
   document.getElementById('event-id').value = id;
-  document.getElementById('event-class').value = row.dataset.classId || '';
-  document.getElementById('event-date').value = row.dataset.date || '';
-  document.getElementById('event-start').value = row.dataset.start || '';
-  document.getElementById('event-end').value = row.dataset.end || '';
-  document.getElementById('event-recurrence').value = row.dataset.recurrence || '';
+  document.getElementById('event-class').value = row.dataset.classId;
+  document.getElementById('event-date').value = row.dataset.date;
+  document.getElementById('event-start').value = row.dataset.start;
+  document.getElementById('event-end').value = row.dataset.end;
+  document.getElementById('event-recurrence').value = row.dataset.recurrence || 'none';
   document.getElementById('event-days').value = row.dataset.days || '';
   document.getElementById('event-exceptions').value = row.dataset.exceptions || '';
+
+  // Show modal
   new bootstrap.Modal(document.getElementById('eventModal')).show();
 };
 
