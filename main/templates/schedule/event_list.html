@@ -2,10 +2,67 @@
 {% load static %}
 {% block content %}
 <div class="container my-5">
-  <h2 class="mb-4">📅 Manage Events</h2>
 
-  <button class="btn btn-primary mb-3" onclick="toggleEventForm()">➕ Add Event</button>
-  <form id="event-form" class="row g-3 mb-4 d-none">
+    <h2 class ="primaryfont red mb-4">📅 How to use the Schedule</h2>
+<p class ="body-text navy mb-4"> Here you can manage classes and events for the schedule. 
+<ol>
+ <li>Create a class - this is the emoji and name that will eventually be displayed in the schedule.</li>
+ <li>Create an event - this is the actual time slot that will be displayed in the schedule, generated from the class. Here you can set the date, time and recurrence of the event.</li>
+  </ol>
+  </p>
+
+<h3 class="mb-4 primaryfont red">🏫 Manage Classes</h2>
+
+  <form id="class-form body-text navy" class="row g-3 mb-4">
+    <input type="hidden" id="class-id">
+    <div class="col-md-4">
+      <label class="form-label">Name (EN)</label>
+      <input type="text" id="class-name-en" class="form-control">
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Name (IT)</label>
+      <input type="text" id="class-name-it" class="form-control">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Emoji</label>
+      <input type="text" id="class-emoji" class="form-control">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">&nbsp;</label>
+      <button type="submit" class="btn btn-success w-100">Save</button>
+    </div>
+  </form>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Emoji</th>
+        <th>Name (EN)</th>
+        <th>Name (IT)</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="class-list">
+      {% for cls in classes %}
+      <tr data-id="{{ cls.id }}">
+        <td>{{ cls.emoji }}</td>
+        <td>{{ cls.name_en }}</td>
+        <td>{{ cls.name_it }}</td>
+        <td>
+          <button class="btn btn-sm btn-red" onclick="editClass('{{ cls.id }}')">Edit</button>
+          <button class="btn btn-sm btn-red" onclick="deleteClass('{{ cls.id }}')">Delete</button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+     <hr class="my-5">
+  
+    <h2 class="mb-4 primaryfont red">📅 Manage Events</h2>
+
+  <button class="btn btn-red mb-3" onclick="toggleEventForm()">➕ Add Event</button>
+  <form id="event-form body-text navy" class="row g-3 mb-4 d-none">
     <input type="hidden" id="event-id">
     <div class="col-md-3">
       <label class="form-label">Class</label>
@@ -46,7 +103,7 @@
     </div>
   </form>
 
-  <table class="table table-bordered">
+  <table class="table table-bordered body-text navy">
     <thead>
       <tr>
         <th>Class</th>
@@ -66,60 +123,14 @@
         <td>{{ event.end_time }}</td>
         <td>{{ event.recurrence }}</td>
         <td>
-          <button class="btn btn-sm btn-warning" onclick="editEvent('{{ event.id }}')">Edit</button>
-          <button class="btn btn-sm btn-danger" onclick="deleteEvent('{{ event.id }}')">Delete</button>
+          <button class="btn btn-sm btn-red" onclick="editEvent('{{ event.id }}')">Edit</button>
+          <button class="btn btn-sm btn-red" onclick="deleteEvent('{{ event.id }}')">Delete</button>
         </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 
-  <hr class="my-5">
-  <h2 class="mb-4">🏫 Manage Classes</h2>
-
-  <form id="class-form" class="row g-3 mb-4">
-    <input type="hidden" id="class-id">
-    <div class="col-md-4">
-      <label class="form-label">Name (EN)</label>
-      <input type="text" id="class-name-en" class="form-control">
-    </div>
-    <div class="col-md-4">
-      <label class="form-label">Name (IT)</label>
-      <input type="text" id="class-name-it" class="form-control">
-    </div>
-    <div class="col-md-2">
-      <label class="form-label">Emoji</label>
-      <input type="text" id="class-emoji" class="form-control">
-    </div>
-    <div class="col-md-2">
-      <label class="form-label">&nbsp;</label>
-      <button type="submit" class="btn btn-success w-100">Save</button>
-    </div>
-  </form>
-
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>Emoji</th>
-        <th>Name (EN)</th>
-        <th>Name (IT)</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="class-list">
-      {% for cls in classes %}
-      <tr data-id="{{ cls.id }}">
-        <td>{{ cls.emoji }}</td>
-        <td>{{ cls.name_en }}</td>
-        <td>{{ cls.name_it }}</td>
-        <td>
-          <button class="btn btn-sm btn-warning" onclick="editClass('{{ cls.id }}')">Edit</button>
-          <button class="btn btn-sm btn-danger" onclick="deleteClass('{{ cls.id }}')">Delete</button>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
 </div>
 
 <script src="{% static 'js/schedule.js' %}"></script>
