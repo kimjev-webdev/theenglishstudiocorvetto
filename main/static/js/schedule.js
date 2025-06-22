@@ -46,14 +46,34 @@ eventForm?.addEventListener('submit', async (e) => {
     });
 
     if (res.ok) {
-      location.reload();
+      const data = await res.json();
+
+      // If editing, update row in place
+      if (id) {
+        const row = document.querySelector(`tr[data-id='${id}']`);
+        if (row) {
+          row.dataset.classId = payload.class_id;
+          row.dataset.date = payload.date;
+          row.dataset.start = payload.start_time;
+          row.dataset.end = payload.end_time;
+          row.dataset.recurrence = payload.recurrence;
+          row.dataset.days = payload.days_of_week;
+          row.dataset.exceptions = payload.recurrence_exceptions;
+        }
+      } else {
+        location.reload(); // reload on new event
+      }
+
+      eventForm.reset();
+      document.getElementById('event-id').value = '';
+      bootstrap.Modal.getInstance(document.getElementById('eventModal'))?.hide();
     } else {
       alert('Failed to save event. Please check your inputs.');
-      saveBtn.disabled = false;
     }
   } catch (err) {
     console.error('Error submitting form:', err);
     alert('Unexpected error. Please try again.');
+  } finally {
     saveBtn.disabled = false;
   }
 });
@@ -105,6 +125,7 @@ classForm?.addEventListener('submit', async (e) => {
   };
   const id = document.getElementById('class-id').value;
   const url = id ? urls.updateClass(id) : urls.createClass;
+
   const res = await fetch(url, {
     method: 'POST',
     headers: {
@@ -113,8 +134,25 @@ classForm?.addEventListener('submit', async (e) => {
     },
     body: JSON.stringify(payload)
   });
+
   if (res.ok) {
-    location.reload();
+    const data = await res.json();
+
+    if (id) {
+      const row = document.querySelector(`tr[data-id='${id}']`);
+      if (row) {
+        row.querySelector('td:nth-child(1)').textContent = data.emoji;
+        row.querySelector('td:nth-child(2)').textContent = data.name_en;
+        row.querySelector('td:nth-child(3)').textContent = data.name_it;
+      }
+    } else {
+      location.reload();
+    }
+
+    classForm.reset();
+    document.getElementById('class-id').value = '';
+  } else {
+    alert('Something went wrong while saving the class.');
   }
 });
 
