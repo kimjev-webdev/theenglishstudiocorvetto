@@ -3,17 +3,16 @@
 {% block content %}
 <div class="container my-5">
 
-<p class ="body-text navy mb-4"> Here you can manage classes and events for the schedule calendar.. 
-
 <h3 class="mb-4 primaryfont red">Manage Classes</h2>
     <p class="navy body-text">This is the name of a class or special event that will eventually be displayed in the calendar. 
-        <br>
-    1. Add the event name in both English and Italian. 
-    2. Choose a single emoji to represent the class.
-    3. Click "Save" to add the class to the list below.
-    4. You can edit or delete classes using the buttons in the Actions column - this will repopulate the form above, after which you can simply click "Save" to update the class.
-    5. Classes are used to create events, so make sure to add all the classes you need before creating events.
-    6. Continue to the Events section to create actual time slots for these classes.
+        <br><ol>
+            <li>Add the event name in both English and Italian.</li>
+            <li>Choose a single emoji to represent the class.</li>
+            <li>Click "Save" to add the class to the list below.</li>
+            <li>You can edit or delete classes using the buttons in the Actions column - this will repopulate the form above, after which you can simply click "Save" to update the class.</li>
+            <li>Classes are used to create events, so make sure to add all the classes you need before creating events.</li>
+            <li>Continue to the Events section to create actual time slots for these classes.</li>
+        </ol>
     </p>
 
   <form id="class-form body-text navy" class="row g-3 mb-4">
@@ -28,7 +27,7 @@
     </div>
     <div class="col-md-2">
       <label class="form-label primaryfont navy">Emoji</label>
-      <input type="text" id="class-emoji" class="form-control body-text navy">
+      <input type="text" id="class-emoji" class="form-control body-text  navy">
     </div>
     <div class="col-md-2">
       <label class="form-label">&nbsp;</label>
@@ -36,7 +35,7 @@
     </div>
   </form>
 
-  <table class="table table-bordered primaryfont navy">
+  <table class="table table-bordered">
     <thead>
       <tr>
         <th class="primaryfont red">Emoji</th>
@@ -52,8 +51,8 @@
         <td class="body-text navy">{{ cls.name_en }}</td>
         <td class="body-text navy">{{ cls.name_it }}</td>
         <td>
-          <button class="btn btn-sm btn-navy" onclick="editClass('{{ cls.id }}')">Edit</button>
-          <button class="btn btn-sm btn-red" onclick="deleteClass('{{ cls.id }}')">Delete</button>
+          <button class="btn btn-sm btn-navy" onclick="editClass('{{ cls.id }}')">EDIT</button>
+          <button class="btn btn-sm btn-red" onclick="deleteClass('{{ cls.id }}')">DELETE</button>
         </td>
       </tr>
       {% endfor %}
@@ -126,8 +125,8 @@
         <td>{{ event.end_time }}</td>
         <td>{{ event.recurrence }}</td>
         <td>
-          <button class="btn btn-sm btn-red" onclick="editEvent('{{ event.id }}')">Edit</button>
-          <button class="btn btn-sm btn-red" onclick="deleteEvent('{{ event.id }}')">Delete</button>
+          <button class="btn btn-sm btn-navy" onclick="editEvent('{{ event.id }}')">EDIT</button>
+          <button class="btn btn-sm btn-red" onclick="deleteEvent('{{ event.id }}')">DELETE</button>
         </td>
       </tr>
       {% endfor %}
