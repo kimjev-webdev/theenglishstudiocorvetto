@@ -89,12 +89,11 @@ document.querySelector('#add-event-btn')?.addEventListener('click', () => {
 });
 
 window.editEvent = function (id) {
-  const row = document.querySelector(`tr[data-id='${id}']`);
+  // Select the specific row using data-id attribute
+  const row = document.querySelector(`tr[data-id="${id}"]`);
   if (!row) return;
 
-  // Debug: see all data attributes in console
-  console.log("Loaded event row data:", row.dataset);
-
+  // Populate modal fields from dataset
   document.getElementById('event-id').value = id;
   document.getElementById('event-class').value = row.dataset.classId;
   document.getElementById('event-date').value = row.dataset.date;
@@ -104,11 +103,9 @@ window.editEvent = function (id) {
   document.getElementById('event-days').value = row.dataset.days || '';
   document.getElementById('event-exceptions').value = row.dataset.exceptions || '';
 
-  // Open the modal
+  // Show modal
   new bootstrap.Modal(document.getElementById('eventModal')).show();
 };
-
-
 
 window.deleteEvent = async function(id) {
   if (!confirm('Delete this event?')) return;
