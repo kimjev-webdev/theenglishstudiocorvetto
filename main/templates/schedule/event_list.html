@@ -66,7 +66,6 @@
   <h2 class="mb-4 primaryfont red">Manage Events</h2>
   <button class="btn btn-red mb-3" id="add-event-btn">➕ Add Event</button>
 
-
   <table class="table table-bordered">
     <thead>
       <tr>
@@ -81,15 +80,15 @@
     <tbody id="event-list">
       {% for event in events %}
       <tr data-id="{{ event.id }}"
-    data-class-id="{{ event.class_instance.id }}"
-    data-date="{{ event.date }}"
-    data-start="{{ event.start_time }}"
-    data-end="{{ event.end_time }}"
-    data-recurrence="{{ event.recurrence }}"
-    data-days="{{ event.days_of_week }}"
-    data-exceptions="{{ event.recurrence_exceptions }}">
+          data-class-id="{{ event.class_instance.id }}"
+          data-date="{{ event.date }}"
+          data-start="{{ event.start_time }}"
+          data-end="{{ event.end_time }}"
+          data-recurrence="{{ event.recurrence }}"
+          data-days="{{ event.days_of_week }}"
+          data-exceptions="{{ event.recurrence_exceptions|join:',' }}">
 
-        <td data-class-id="{{ event.class_instance.id }}">{{ event.class_instance }}</td>
+        <td data-class-id="{{ event.class_instance.id }}">{{ event.class_instance.name_en }}</td>
         <td>{{ event.date }}</td>
         <td>{{ event.start_time }}</td>
         <td>{{ event.end_time }}</td>
@@ -171,6 +170,17 @@
     updateClass: (id) => `/schedule/classes/${id}/edit/`,
     deleteClass: (id) => `/schedule/classes/${id}/delete/`,
   };
+
+  // Optional: Autofocus class dropdown on modal open
+  document.getElementById('add-event-btn')?.addEventListener('click', () => {
+    document.getElementById('event-id').value = '';
+    document.getElementById('event-form').reset();
+    const modal = new bootstrap.Modal(document.getElementById('eventModal'));
+    modal.show();
+    setTimeout(() => {
+      document.getElementById('event-class')?.focus();
+    }, 300);
+  });
 </script>
 
 <script src="{% static 'js/schedule.js' %}"></script>

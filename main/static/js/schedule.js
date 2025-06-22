@@ -69,6 +69,7 @@ document.querySelector('#add-event-btn')?.addEventListener('click', () => {
 
 function editEvent(id) {
   const row = document.querySelector(`tr[data-id='${id}']`);
+  if (!row) return;
   document.getElementById('event-id').value = id;
   document.getElementById('event-class').value = row.dataset.classId || '';
   document.getElementById('event-date').value = row.dataset.date || '';
@@ -88,7 +89,9 @@ async function deleteEvent(id) {
       'X-CSRFToken': csrftoken,
     },
   });
-  if (res.ok) location.reload();
+  if (res.ok) {
+    document.querySelector(`tr[data-id='${id}']`)?.remove();
+  }
 }
 
 // CLASS HANDLERS
@@ -110,11 +113,14 @@ classForm?.addEventListener('submit', async (e) => {
     },
     body: JSON.stringify(payload)
   });
-  if (res.ok) location.reload();
+  if (res.ok) {
+    location.reload();
+  }
 });
 
 function editClass(id) {
   const row = document.querySelector(`tr[data-id='${id}']`);
+  if (!row) return;
   const cells = row.querySelectorAll('td');
   document.getElementById('class-id').value = id;
   document.getElementById('class-name-en').value = cells[1].textContent.trim();
@@ -130,5 +136,7 @@ async function deleteClass(id) {
       'X-CSRFToken': csrftoken,
     },
   });
-  if (res.ok) location.reload();
+  if (res.ok) {
+    document.querySelector(`tr[data-id='${id}']`)?.remove();
+  }
 }

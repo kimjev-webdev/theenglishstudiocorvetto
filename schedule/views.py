@@ -7,9 +7,9 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.forms.models import model_to_dict
+from django.utils.formats import date_format
 
 from .models import Event, Class
-from django.utils.formats import date_format
 
 
 def get_adjacent_month(year, month, offset):
@@ -41,28 +41,28 @@ def calendar_view(request, year=None, month=None):
                 first_day <= event.date <= last_day
                 and event.date not in exceptions
             ):
-                events_by_day.setdefault(
-                    event.date, []
-                ).append(event)
+                events_by_day.setdefault(event.date, []).append(event)
 
         elif event.recurrence == 'weekly':
             current = event.date
             while current <= last_day:
                 if (
-                    current >= first_day
-                    and current.weekday() == event.date.weekday()
-                    and current not in exceptions
+                    current >= first_day and
+                    current.weekday() == event.date.weekday() and
+                    current not in exceptions
                 ):
-                    events_by_day.setdefault(current, []).append(event)
+                    events_by_day.setdefault(
+                        current, []
+                    ).append(event)
                 current += timedelta(weeks=1)
 
         elif event.recurrence == 'biweekly':
             current = event.date
             while current <= last_day:
                 if (
-                    current >= first_day
-                    and current.weekday() == event.date.weekday()
-                    and current not in exceptions
+                    current >= first_day and
+                    current.weekday() == event.date.weekday() and
+                    current not in exceptions
                 ):
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(weeks=2)
@@ -76,7 +76,7 @@ def calendar_view(request, year=None, month=None):
                 ):
                     events_by_day.setdefault(recur_date, []).append(event)
             except ValueError:
-                pass
+                pass  # e.g. no Feb 30
 
         elif event.recurrence == 'custom_days':
             if not event.days_of_week:
@@ -92,11 +92,9 @@ def calendar_view(request, year=None, month=None):
             ]
             current = first_day
             while current <= last_day:
-                if (
-                    current.weekday() in selected_days
-                    and current >= event.date
-                    and current not in exceptions
-                ):
+                if (current.weekday() in selected_days and
+                        current >= event.date and
+                        current not in exceptions):
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(days=1)
 
@@ -106,6 +104,7 @@ def calendar_view(request, year=None, month=None):
     context = {
         'year': year,
         'month': date_format(date(year, month, 1), "F", use_l10n=True),
+        'month_number': month,  # ✅ added for frontend logic if needed
         'weeks': weeks,
         'events_by_day': events_by_day,
         'prev_year': prev_year,
@@ -138,6 +137,7 @@ def create_event(request):
         end_time=data['end_time'],
         recurrence=data.get('recurrence', 'none'),
         days_of_week=data.get('days_of_week', ''),
+        recurrence_exceptions=data.get('recurrence_exceptions', [])
     )
     return JsonResponse(model_to_dict(event))
 
@@ -153,6 +153,7 @@ def update_event(request, event_id):
     event.end_time = data['end_time']
     event.recurrence = data.get('recurrence', 'none')
     event.days_of_week = data.get('days_of_week', '')
+    event.recurrence_exceptions = data.get('recurrence_exceptions', [])
     event.save()
     return JsonResponse(model_to_dict(event))
 
