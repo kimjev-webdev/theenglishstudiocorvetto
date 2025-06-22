@@ -61,7 +61,7 @@
   
      <hr class="my-5">
   
-    <h2 class="mb-4 primaryfont red">📅 Manage Events</h2>
+    <h2 class="mb-4 primaryfont red">Manage Events</h2>
 
   <button class="btn btn-red mb-3" onclick="toggleEventForm()">➕ Add Event</button>
   <form id="event-form body-text navy" class="row g-3 mb-4 d-none">
@@ -75,20 +75,20 @@
       </select>
     </div>
     <div class="col-md-2">
-      <label class="form-label body-text navy">Date</label>
+      <label class="form-label primaryfont red">Date</label>
       <input type="date" id="event-date" class="form-control">
     </div>
     <div class="col-md-2">
-      <label class="form-label body-text navy">Start</label>
+      <label class="form-label primaryfont red">Start</label>
       <input type="time" id="event-start" class="form-control">
     </div>
     <div class="col-md-2">
-      <label class="form-label body-text navy">End</label>
+      <label class="form-label primaryfont red">End</label>
       <input type="time" id="event-end" class="form-control">
     </div>
     <div class="col-md-2">
-      <label class="form-label">Recurrence</label>
-      <select id="event-recurrence" class="form-select">
+      <label class="form-label primaryfont red">Recurrence</label>
+      <select id="event-recurrence" class="form-select body-text navy">
         <option value="none">None</option>
         <option value="weekly">Weekly</option>
         <option value="biweekly">Biweekly</option>
@@ -97,23 +97,23 @@
       </select>
     </div>
     <div class="col-md-1">
-      <label class="form-label">Days</label>
-      <input type="text" id="event-days" class="form-control" placeholder="Mon,Wed">
+      <label class="form-label primaryfont red">Days</label>
+      <input type="text" id="event-days" class="form-control body-text navy" placeholder="Mon,Wed">
     </div>
     <div class="col-12">
-      <button type="submit" class="btn btn-success">Save</button>
+      <button type="submit" class="btn btn-red">Save</button>
     </div>
   </form>
 
-  <table class="table table-bordered body-text navy">
+  <table class="table table-bordered">
     <thead>
       <tr>
-        <th>Class</th>
-        <th>Date</th>
-        <th>Start</th>
-        <th>End</th>
-        <th>Repeat</th>
-        <th>Actions</th>
+        <th class="primaryfont red">Class</th>
+        <th class="primaryfont red">Date</th>
+        <th class="primaryfont red">Start</th>
+        <th class="primaryfont red">End</th>
+        <th class="primaryfont red">Repeat</th>
+        <th class="primaryfont red">Actions</th>
       </tr>
     </thead>
     <tbody id="event-list">
@@ -134,6 +134,17 @@
   </table>
 
 </div>
+
+<script>
+  const urls = {
+    createEvent: "{% url 'create_event' %}",
+    updateEvent: (id) => `/schedule/events/${id}/edit/`,
+    deleteEvent: (id) => `/schedule/events/${id}/delete/`,
+    createClass: "{% url 'create_class' %}",
+    updateClass: (id) => `/schedule/classes/${id}/edit/`,
+    deleteClass: (id) => `/schedule/classes/${id}/delete/`,
+  };
+</script>
 
 <script src="{% static 'js/schedule.js' %}"></script>
 "></script>

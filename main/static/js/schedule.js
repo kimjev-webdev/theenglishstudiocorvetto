@@ -33,7 +33,7 @@ eventForm?.addEventListener('submit', async (e) => {
     days_of_week: document.getElementById('event-days').value,
   };
   const id = document.getElementById('event-id').value;
-  const url = id ? `/events/${id}/edit/` : '/events/create/';
+  const url = id ? urls.updateEvent(id) : urls.createEvent;
   const res = await fetch(url, {
     method: 'POST',
     headers: {
@@ -59,7 +59,7 @@ function editEvent(id) {
 
 async function deleteEvent(id) {
   if (!confirm('Delete this event?')) return;
-  const res = await fetch(`/events/${id}/delete/`, {
+  const res = await fetch(urls.deleteEvent(id), {
     method: 'POST',
     headers: {
       'X-CSRFToken': csrftoken,
@@ -78,7 +78,7 @@ classForm?.addEventListener('submit', async (e) => {
     emoji: document.getElementById('class-emoji').value,
   };
   const id = document.getElementById('class-id').value;
-  const url = id ? `/classes/${id}/edit/` : '/classes/create/';
+  const url = id ? urls.updateClass(id) : urls.createClass;
   const res = await fetch(url, {
     method: 'POST',
     headers: {
@@ -101,7 +101,7 @@ function editClass(id) {
 
 async function deleteClass(id) {
   if (!confirm('Delete this class?')) return;
-  const res = await fetch(`/classes/${id}/delete/`, {
+  const res = await fetch(urls.deleteClass(id), {
     method: 'POST',
     headers: {
       'X-CSRFToken': csrftoken,
