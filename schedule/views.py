@@ -47,22 +47,20 @@ def calendar_view(request, year=None, month=None):
             current = event.date
             while current <= last_day:
                 if (
-                    current >= first_day and
-                    current.weekday() == event.date.weekday() and
-                    current not in exceptions
+                    current >= first_day
+                    and current.weekday() == event.date.weekday()
+                    and current not in exceptions
                 ):
-                    events_by_day.setdefault(
-                        current, []
-                    ).append(event)
+                    events_by_day.setdefault(current, []).append(event)
                 current += timedelta(weeks=1)
 
         elif event.recurrence == 'biweekly':
             current = event.date
             while current <= last_day:
                 if (
-                    current >= first_day and
-                    current.weekday() == event.date.weekday() and
-                    current not in exceptions
+                    current >= first_day
+                    and current.weekday() == event.date.weekday()
+                    and current not in exceptions
                 ):
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(weeks=2)
@@ -92,9 +90,11 @@ def calendar_view(request, year=None, month=None):
             ]
             current = first_day
             while current <= last_day:
-                if (current.weekday() in selected_days and
-                        current >= event.date and
-                        current not in exceptions):
+                if (
+                    current.weekday() in selected_days
+                    and current >= event.date
+                    and current not in exceptions
+                ):
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(days=1)
 
@@ -104,7 +104,7 @@ def calendar_view(request, year=None, month=None):
     context = {
         'year': year,
         'month': date_format(date(year, month, 1), "F", use_l10n=True),
-        'month_number': month,  # ✅ added for frontend logic if needed
+        'month_number': month,
         'weeks': weeks,
         'events_by_day': events_by_day,
         'prev_year': prev_year,
@@ -130,6 +130,10 @@ def event_list_view(request):
 def create_event(request):
     data = json.loads(request.body)
     cls = get_object_or_404(Class, id=data['class_id'])
+
+    exceptions_str = data.get('recurrence_exceptions', '')
+    exceptions = [d.strip() for d in exceptions_str.split(',') if d.strip()]
+
     event = Event.objects.create(
         class_instance=cls,
         date=data['date'],
@@ -137,7 +141,7 @@ def create_event(request):
         end_time=data['end_time'],
         recurrence=data.get('recurrence', 'none'),
         days_of_week=data.get('days_of_week', ''),
-        recurrence_exceptions=data.get('recurrence_exceptions', [])
+        recurrence_exceptions=exceptions
     )
     return JsonResponse(model_to_dict(event))
 
@@ -153,7 +157,10 @@ def update_event(request, event_id):
     event.end_time = data['end_time']
     event.recurrence = data.get('recurrence', 'none')
     event.days_of_week = data.get('days_of_week', '')
-    event.recurrence_exceptions = data.get('recurrence_exceptions', [])
+    exceptions_str = data.get('recurrence_exceptions', '')
+    event.recurrence_exceptions = [
+        d.strip() for d in exceptions_str.split(',') if d.strip()
+    ]
     event.save()
     return JsonResponse(model_to_dict(event))
 
