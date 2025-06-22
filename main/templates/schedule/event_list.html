@@ -80,14 +80,14 @@
     <tbody id="event-list">
       {% for event in events %}
       <tr data-id="{{ event.id }}"
-          data-class-id="{{ event.class_instance.id }}"
-          data-date="{{ event.date }}"
-          data-start="{{ event.start_time }}"
-          data-end="{{ event.end_time }}"
-          data-recurrence="{{ event.recurrence }}"
-          data-days="{{ event.days_of_week }}"
-          data-exceptions="{{ event.recurrence_exceptions|join:',' }}">
-
+    data-class-id="{{ event.class_instance.id|default_if_none:'' }}"
+    data-date="{{ event.date|date:'Y-m-d' }}"
+    data-start="{{ event.start_time|time:'H:i' }}"
+    data-end="{{ event.end_time|time:'H:i' }}"
+    data-recurrence="{{ event.recurrence|default_if_none:'' }}"
+    data-days="{{ event.days_of_week|default_if_none:'' }}"
+    data-exceptions="{{ event.recurrence_exceptions|default_if_none:''|join:',' }}">
+    
         <td data-class-id="{{ event.class_instance.id }}">{{ event.class_instance.name_en }}</td>
         <td>{{ event.date }}</td>
         <td>{{ event.start_time }}</td>
