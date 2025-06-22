@@ -15,15 +15,8 @@ function getCookie(name) {
 }
 const csrftoken = getCookie('csrftoken');
 
-// ✅ Absolute URLs with Django reversing
-const urls = {
-  createEvent: "{% url 'create_event' %}",
-  updateEvent: (id) => "{% url 'update_event' 0 %}".replace('0', id),
-  deleteEvent: (id) => "{% url 'delete_event' 0 %}".replace('0', id),
-  createClass: "{% url 'create_class' %}",
-  updateClass: (id) => "{% url 'update_class' 0 %}".replace('0', id),
-  deleteClass: (id) => "{% url 'delete_class' 0 %}".replace('0', id),
-};
+// Use window.urls injected via template
+const urls = window.urls;
 
 // EVENT HANDLERS
 const eventForm = document.getElementById('event-form');
@@ -95,7 +88,6 @@ document.querySelector('#add-event-btn')?.addEventListener('click', () => {
   setTimeout(() => document.getElementById('event-class')?.focus(), 500);
 });
 
-// ✅ Global function
 window.editEvent = function(id) {
   const row = document.querySelector(`tr[data-id='${id}']`);
   if (!row) return;
@@ -176,7 +168,6 @@ classForm?.addEventListener('submit', async (e) => {
   }
 });
 
-// ✅ Global function
 window.editClass = function(id) {
   const row = document.querySelector(`tr[data-id='${id}']`);
   if (!row) return;
