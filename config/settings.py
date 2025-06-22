@@ -68,7 +68,13 @@ INSTALLED_APPS = [
     'cloudinary',
     'cloudinary_storage',
     'ckeditor',
+    'portal',
 ]
+
+LOGIN_REDIRECT_URL = 'portal_dashboard'
+LOGIN_URL = '/portal/login/'
+LOGOUT_REDIRECT_URL = 'portal_login'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -234,3 +240,6 @@ CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
 
 
 logger = logging.getLogger(__name__)
+
+# settings.py
+APPEND_SLASH = True  # should be True by default

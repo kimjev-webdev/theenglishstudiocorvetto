@@ -13,14 +13,6 @@ def about(request):
     return render(request, 'about.html')
 
 
-def blog(request):
-    return render(request, 'blog.html')
-
-
-def events(request):
-    return render(request, 'events.html')
-
-
 def calendar(request):
     return render(request, 'calendar.html')
 

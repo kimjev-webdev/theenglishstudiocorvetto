@@ -22,7 +22,7 @@
         <img src="{% static 'compressed/businessandgeneral.webp' %}" class="d-block w-100 cimage" alt="...">
         <div class="position-absolute top-0 start-0 text-white p-4 carouseloverlay">
           <h3 class="primaryfont smallerheader">{% trans "Business English" %}</h3>
-          <p class="body-text text-center smallertext">{% trans "Study to access a world of great opportunities." %}</p>
+          <p class="body-text smallertext">{% trans "Study to access a world of great opportunities." %}</p>
           <a href="#classes2" class="btn smallerbtn btn-red primaryfont">{% trans "Learn More" %}</a>
         </div>
       </div>
@@ -30,7 +30,7 @@
         <img src="{% static 'compressed/privatelessons.webp' %}" class="d-block w-100 cimage" alt="...">
         <div class="position-absolute top-0 start-0 text-white p-4 carouseloverlay">
           <h3 class="primaryfont smallerheader">{% trans "Private Tutoring" %}</h3>
-          <p class="body-text text-center smallertext">{% trans "Personalized support to help you reach your goals." %}</p>
+          <p class="body-text smallertext">{% trans "Personalized support to help you reach your goals." %}</p>
           <a href="#classes3" class="btn smallerbtn btn-red primaryfont">{% trans "Learn More" %}</a>
         </div>
       </div>
@@ -38,7 +38,7 @@
         <img src="{% static 'compressed/studyenglish.webp' %}" class="d-block w-100 cimage" alt="...">
         <div class="position-absolute top-0 start-0 text-white p-4 carouseloverlay" style="max-width: 40%;">
           <h3 class="primaryfont smallerheader">{% trans "IELTS Test Preps" %}</h3>
-          <p class="body-text text-center smallertext">{% trans "Feel prepared to reach your highest potential." %}</p>
+          <p class="body-text smallertext">{% trans "Feel prepared to reach your highest potential." %}</p>
           <a href="#classes4" class="btn smallerbtn btn-red primaryfont">{% trans "Learn More" %}</a>
         </div>
       </div>
@@ -162,5 +162,8 @@
     </div>
   </section>
 
+  <section class="container-fluid mt-3" id="upcoming">
+    <h2 class="text-center head-navy primaryfont mb-3 indexheader w-100">{% trans "Upcoming Events" %}</h2>
+</section>
 {% endblock %}
 

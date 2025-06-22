@@ -142,7 +142,6 @@ msgid ""
 msgstr "Esponete i vostri bambini al mondo e aiutateli ad acquisire competenze"
 "linguistiche fondamentali fin da piccoli, preparandoli per il loro futuro migliore."
 
-
 #: .\templates\index.html:119
 msgid "Price from €22/90 mins."
 msgstr "Prezzo a partire da €22/90 min."
@@ -252,6 +251,10 @@ msgstr "Prezzo da concordare su richiesta."
 msgid "VIEW THE SCHEDULE"
 msgstr "VISUALIZZA IL CALENDARIO"
 
+#: .\templates\index.html
+msgid "Upcoming Events"
+msgstr "Eventi in Arrivo"
+
 #: templates/main/contact.html:
 msgid "Contact Us"
 msgstr "Contattaci"
@@ -308,6 +311,30 @@ msgstr "Telefono"
 msgid "Email"
 msgstr "Email"
 
+#: main/templates/schedule/calendar.html:XX
+msgid "MONTH"
+msgstr "MESE"
+
+#: main/templates/schedule/calendar.html:XX
+msgid "To explore what's happening at <b class=\"red\">The English Studio</b> simply hover or tap any emoji on the calendar."
+msgstr "Per scoprire cosa succede a <b class=\"red\">The English Studio</b>, passa il mouse o tocca una qualsiasi emoji nel calendario."
+
+#: main/templates/schedule/calendar.html:XX
+msgid "We host regular group sessions as well as one-off event's on special dates throughout the year; from seasonal celebrations to creative workshops. Be sure to check back often, as new events are added regularly. Business English, IELTS test preperation and private lessons can be arranged on an individual basis, tailored to suit you."
+msgstr "Organizziamo sessioni di gruppo regolari e eventi speciali durante tutto l'anno: dalle celebrazioni stagionali ai laboratori creativi. Torna spesso a controllare: nuovi eventi vengono aggiunti regolarmente. Corsi di Business English, preparazione IELTS e lezioni private possono essere organizzati su misura per te."
+
+#: main/templates/schedule/calendar.html:XX
+msgid "Ready to join an event?"
+msgstr "Pronto a partecipare a un evento?"
+
+#: main/templates/schedule/calendar.html:XX
+msgid "Use the form on our contact page to book your spot. We are happy to help with anything from bookings to general enquiries."
+msgstr "Usa il modulo nella nostra pagina dei contatti per prenotare il tuo posto. Siamo felici di aiutarti sia per le prenotazioni che per domande generiche."
+
+#: main/templates/schedule/calendar.html:XX
+msgid "BOOK NOW"
+msgstr "PRENOTA ORA"
+
 #: templates/includes/footer.html:14
 msgid "Privacy Policy"
 msgstr "Politica sulla Privacy"
@@ -315,3 +342,7 @@ msgstr "Politica sulla Privacy"
 #: templates/includes/footer.html:15
 msgid "Follow us on social media"
 msgstr "Seguici sui social media"
+
+#: templates/includes/footer.html:15
+msgid "Made with ♥ by Kim Piffy"
+msgstr "Fatto con ♥ da Kim Piffy"
