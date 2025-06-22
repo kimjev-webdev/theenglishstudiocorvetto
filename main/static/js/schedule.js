@@ -15,11 +15,6 @@ function getCookie(name) {
 }
 const csrftoken = getCookie('csrftoken');
 
-// Toggle event form
-function toggleEventForm() {
-  document.getElementById('event-form').classList.toggle('d-none');
-}
-
 // EVENT HANDLERS
 const eventForm = document.getElementById('event-form');
 eventForm?.addEventListener('submit', async (e) => {
@@ -31,6 +26,7 @@ eventForm?.addEventListener('submit', async (e) => {
     end_time: document.getElementById('event-end').value,
     recurrence: document.getElementById('event-recurrence').value,
     days_of_week: document.getElementById('event-days').value,
+    recurrence_exceptions: document.getElementById('event-exceptions').value,
   };
   const id = document.getElementById('event-id').value;
   const url = id ? urls.updateEvent(id) : urls.createEvent;
@@ -45,17 +41,26 @@ eventForm?.addEventListener('submit', async (e) => {
   if (res.ok) location.reload();
 });
 
+// Open empty modal
+document.querySelector('#add-event-btn')?.addEventListener('click', () => {
+  document.getElementById('event-id').value = '';
+  document.getElementById('event-form').reset();
+  new bootstrap.Modal(document.getElementById('eventModal')).show();
+});
+
 function editEvent(id) {
   const row = document.querySelector(`tr[data-id='${id}']`);
-  const cells = row.querySelectorAll('td');
   document.getElementById('event-id').value = id;
-  document.getElementById('event-class').value = cells[0].dataset.classId || '';
-  document.getElementById('event-date').value = cells[1].textContent.trim();
-  document.getElementById('event-start').value = cells[2].textContent.trim();
-  document.getElementById('event-end').value = cells[3].textContent.trim();
-  document.getElementById('event-recurrence').value = cells[4].textContent.trim();
-  toggleEventForm();
+  document.getElementById('event-class').value = row.dataset.classId || '';
+  document.getElementById('event-date').value = row.dataset.date || '';
+  document.getElementById('event-start').value = row.dataset.start || '';
+  document.getElementById('event-end').value = row.dataset.end || '';
+  document.getElementById('event-recurrence').value = row.dataset.recurrence || '';
+  document.getElementById('event-days').value = row.dataset.days || '';
+  document.getElementById('event-exceptions').value = row.dataset.exceptions || '';
+  new bootstrap.Modal(document.getElementById('eventModal')).show();
 }
+
 
 async function deleteEvent(id) {
   if (!confirm('Delete this event?')) return;

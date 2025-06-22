@@ -3,19 +3,21 @@
 {% block content %}
 <div class="container my-5">
 
-<h3 class="mb-4 primaryfont red">Manage Classes</h2>
-    <p class="navy body-text">This is the name of a class or special event that will eventually be displayed in the calendar. 
-        <br><ol>
-            <li>Add the event name in both English and Italian.</li>
-            <li>Choose a single emoji to represent the class.</li>
-            <li>Click "Save" to add the class to the list below.</li>
-            <li>You can edit or delete classes using the buttons in the Actions column - this will repopulate the form above, after which you can simply click "Save" to update the class.</li>
-            <li>Classes are used to create events, so make sure to add all the classes you need before creating events.</li>
-            <li>Continue to the Events section to create actual time slots for these classes.</li>
-        </ol>
-    </p>
+  <h2 class="mb-4 primaryfont red">Manage Classes</h2>
+  <p class="navy body-text">
+    This is the name of a class or special event that will eventually be displayed in the calendar. 
+    <br>
+    <ol>
+      <li>Add the event name in both English and Italian.</li>
+      <li>Choose a single emoji to represent the class.</li>
+      <li>Click "Save" to add the class to the list below.</li>
+      <li>You can edit or delete classes using the buttons in the Actions column - this will repopulate the form above, after which you can simply click "Save" to update the class.</li>
+      <li>Classes are used to create events, so make sure to add all the classes you need before creating events.</li>
+      <li>Continue to the Events section to create actual time slots for these classes.</li>
+    </ol>
+  </p>
 
-  <form id="class-form body-text navy" class="row g-3 mb-4">
+  <form id="class-form" class="row g-3 mb-4 body-text navy">
     <input type="hidden" id="class-id">
     <div class="col-md-4">
       <label class="form-label primaryfont navy">Name (EN)</label>
@@ -27,7 +29,7 @@
     </div>
     <div class="col-md-2">
       <label class="form-label primaryfont navy">Emoji</label>
-      <input type="text" id="class-emoji" class="form-control body-text  navy">
+      <input type="text" id="class-emoji" class="form-control body-text navy">
     </div>
     <div class="col-md-2">
       <label class="form-label">&nbsp;</label>
@@ -58,52 +60,12 @@
       {% endfor %}
     </tbody>
   </table>
-  
-     <hr class="my-5">
-  
-    <h2 class="mb-4 primaryfont red">Manage Events</h2>
 
-  <button class="btn btn-red mb-3" onclick="toggleEventForm()">➕ Add Event</button>
-  <form id="event-form body-text navy" class="row g-3 mb-4 d-none">
-    <input type="hidden" id="event-id">
-    <div class="col-md-3">
-      <label class="form-label primaryfont navy">Class</label>
-      <select id="event-class" class="form-select body-text navy">
-        {% for cls in classes %}
-          <option value="{{ cls.id }}">{{ cls }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="col-md-2">
-      <label class="form-label primaryfont red">Date</label>
-      <input type="date" id="event-date" class="form-control">
-    </div>
-    <div class="col-md-2">
-      <label class="form-label primaryfont red">Start</label>
-      <input type="time" id="event-start" class="form-control">
-    </div>
-    <div class="col-md-2">
-      <label class="form-label primaryfont red">End</label>
-      <input type="time" id="event-end" class="form-control">
-    </div>
-    <div class="col-md-2">
-      <label class="form-label primaryfont red">Recurrence</label>
-      <select id="event-recurrence" class="form-select body-text navy">
-        <option value="none">None</option>
-        <option value="weekly">Weekly</option>
-        <option value="biweekly">Biweekly</option>
-        <option value="monthly">Monthly</option>
-        <option value="custom_days">Custom Days</option>
-      </select>
-    </div>
-    <div class="col-md-1">
-      <label class="form-label primaryfont red">Days</label>
-      <input type="text" id="event-days" class="form-control body-text navy" placeholder="Mon,Wed">
-    </div>
-    <div class="col-12">
-      <button type="submit" class="btn btn-red">Save</button>
-    </div>
-  </form>
+  <hr class="my-5">
+
+  <h2 class="mb-4 primaryfont red">Manage Events</h2>
+  <button class="btn btn-red mb-3" id="add-event-btn">➕ Add Event</button>
+
 
   <table class="table table-bordered">
     <thead>
@@ -118,8 +80,16 @@
     </thead>
     <tbody id="event-list">
       {% for event in events %}
-      <tr data-id="{{ event.id }}">
-        <td>{{ event.class_instance }}</td>
+      <tr data-id="{{ event.id }}"
+    data-class-id="{{ event.class_instance.id }}"
+    data-date="{{ event.date }}"
+    data-start="{{ event.start_time }}"
+    data-end="{{ event.end_time }}"
+    data-recurrence="{{ event.recurrence }}"
+    data-days="{{ event.days_of_week }}"
+    data-exceptions="{{ event.recurrence_exceptions }}">
+
+        <td data-class-id="{{ event.class_instance.id }}">{{ event.class_instance }}</td>
         <td>{{ event.date }}</td>
         <td>{{ event.start_time }}</td>
         <td>{{ event.end_time }}</td>
@@ -132,7 +102,64 @@
       {% endfor %}
     </tbody>
   </table>
+</div>
 
+<!-- Event Modal -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content bg-light border border-dark rounded-3">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="eventModalLabel">Add/Edit Event</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="event-form" class="p-3">
+        <div class="modal-body row g-3">
+          <input type="hidden" id="event-id">
+          <div class="col-md-6">
+            <label for="event-class" class="form-label">Class</label>
+            <select class="form-select" id="event-class" required>
+              {% for c in classes %}
+                <option value="{{ c.id }}">{{ c.emoji }} {{ c.name_en }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="event-date" class="form-label">Date</label>
+            <input type="date" class="form-control" id="event-date" required>
+          </div>
+          <div class="col-md-6">
+            <label for="event-start" class="form-label">Start Time</label>
+            <input type="time" class="form-control" id="event-start" required>
+          </div>
+          <div class="col-md-6">
+            <label for="event-end" class="form-label">End Time</label>
+            <input type="time" class="form-control" id="event-end" required>
+          </div>
+          <div class="col-md-6">
+            <label for="event-recurrence" class="form-label">Repeats</label>
+            <select class="form-select" id="event-recurrence">
+              <option value="none">One-time only</option>
+              <option value="weekly">Weekly</option>
+              <option value="biweekly">Every 2 weeks</option>
+              <option value="monthly">Monthly</option>
+              <option value="custom">Custom weekdays</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="event-days" class="form-label">Days of the Week</label>
+            <input type="text" class="form-control" id="event-days" placeholder="Mon,Wed,Fri">
+          </div>
+          <div class="col-12">
+            <label for="event-exceptions" class="form-label">Recurrence Exceptions</label>
+            <input type="text" class="form-control" id="event-exceptions" placeholder="YYYY-MM-DD, YYYY-MM-DD">
+          </div>
+        </div>
+        <div class="modal-footer mt-3">
+          <button type="submit" class="btn btn-primary">Save Event</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -147,5 +174,4 @@
 </script>
 
 <script src="{% static 'js/schedule.js' %}"></script>
-"></script>
 {% endblock %}
