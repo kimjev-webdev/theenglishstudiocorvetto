@@ -15,6 +15,16 @@ function getCookie(name) {
 }
 const csrftoken = getCookie('csrftoken');
 
+// ✅ Absolute URLs with Django reversing
+const urls = {
+  createEvent: "{% url 'create_event' %}",
+  updateEvent: (id) => "{% url 'update_event' 0 %}".replace('0', id),
+  deleteEvent: (id) => "{% url 'delete_event' 0 %}".replace('0', id),
+  createClass: "{% url 'create_class' %}",
+  updateClass: (id) => "{% url 'update_class' 0 %}".replace('0', id),
+  deleteClass: (id) => "{% url 'delete_class' 0 %}".replace('0', id),
+};
+
 // EVENT HANDLERS
 const eventForm = document.getElementById('event-form');
 eventForm?.addEventListener('submit', async (e) => {
