@@ -240,3 +240,6 @@ CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
 
 
 logger = logging.getLogger(__name__)
+
+# settings.py
+APPEND_SLASH = True  # should be True by default
