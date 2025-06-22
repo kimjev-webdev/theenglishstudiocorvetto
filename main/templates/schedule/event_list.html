@@ -163,13 +163,14 @@
 
 <script>
   window.urls = {
-    createEvent: "{% url 'create_event' %}",
-    updateEvent: (id) => "{% url 'update_event' 0 %}".replace('0', id),
-    deleteEvent: (id) => "{% url 'delete_event' 0 %}".replace('0', id),
-    createClass: "{% url 'create_class' %}",
-    updateClass: (id) => "{% url 'update_class' 0 %}".replace('0', id),
-    deleteClass: (id) => "{% url 'delete_class' 0 %}".replace('0', id),
+    createEvent: "/portal/schedule/events/create/",
+    updateEvent: (id) => `/portal/schedule/events/${id}/edit/`,
+    deleteEvent: (id) => `/portal/schedule/events/${id}/delete/`,
+    createClass: "/portal/schedule/classes/create/",
+    updateClass: (id) => `/portal/schedule/classes/${id}/edit/`,
+    deleteClass: (id) => `/portal/schedule/classes/${id}/delete/`,
   };
 </script>
+
 <script src="{% static 'js/schedule.js' %}"></script>
 {% endblock %}
