@@ -113,6 +113,16 @@ Date        | Bug                                               | Focus         
 | 2025-06-21 | `Reverse for 'event_list' not found` after login           | Django URLs       | Confirmed missing `event_list` view; fixed by commenting out broken references                                                    |
 | 2025-06-21 | Superuser login failed                                     | Auth & Shell      | Verified correct superuser via Render shell (`leanne`); password confirmed valid                                                  |
 | 2025-06-21 | `LOGIN_REDIRECT_URL` in `settings.py` not respected        | Auth / Locale     | Determined locale-aware URL (`/en/portal/`) overrides base `LOGIN_REDIRECT_URL`; confirmed `next` param handles redirect properly |
+| 2025-06-22 | `POST /schedule/events/create/` returned 500 error on submission         | Event Creation  | Identified backend validation error. Ensured `recurrence_exceptions` defaults to list.              |
+| 2025-06-22 | Editing a class prefilled form but didn’t update table or reset form     | Class Editing   | Updated JS to detect `id`, send correct request to `updateClass`, update DOM row, and reset form.   |
+| 2025-06-22 | Editing an event via modal didn't persist changes or close/reset modal   | Event Editing   | Updated JS to detect edit vs. create, patch row data in-place, close modal, and reset form fields.  |
+| 2025-06-22 | Clicking "Save" always reloaded page, even for edits                     | UX & Efficiency | Differentiated between `create` and `update` logic; now only reloads on new entries.                |
+| 2025-06-22 | Inconsistent event modal focus + missing autofocus on new entries        | Event UX        | Added timeout and focus logic on `#add-event-btn` click for better form accessibility.              |
+| 2025-06-22 | Class deletion and event deletion worked but lacked graceful DOM updates | Deletion UX     | Ensured both `deleteClass` and `deleteEvent` remove the correct row from DOM after server confirms. |
+| 2025-06-22 | `POST /events/create/` returned 500 Internal Server Error | Events  | Reviewed payload and backend view; confirmed data structure; fixed server-side handling. |
+| 2025-06-22 | Event edit modal did not update UI after saving           | Events  | Added `location.reload()` and fixed update logic to use `fetch()` properly.              |
+| 2025-06-22 | Class edit populated form but did not save                | Classes | Fixed JS to correctly use `fetch()` POST to `/update/` endpoint.                         |
+| 2025-06-22 | Saving class showed 405 (Method Not Allowed) error        | Classes | Replaced wrong `GET` to `/edit/` with correct POST request to `/update/`.                |
 
 
 

@@ -48,7 +48,6 @@ eventForm?.addEventListener('submit', async (e) => {
     if (res.ok) {
       const data = await res.json();
 
-      // If editing, update row in place
       if (id) {
         const row = document.querySelector(`tr[data-id='${id}']`);
         if (row) {
@@ -61,7 +60,7 @@ eventForm?.addEventListener('submit', async (e) => {
           row.dataset.exceptions = payload.recurrence_exceptions;
         }
       } else {
-        location.reload(); // reload on new event
+        location.reload();
       }
 
       eventForm.reset();
@@ -78,7 +77,6 @@ eventForm?.addEventListener('submit', async (e) => {
   }
 });
 
-// Open empty modal with autofocus
 document.querySelector('#add-event-btn')?.addEventListener('click', () => {
   document.getElementById('event-id').value = '';
   eventForm.reset();
@@ -118,41 +116,52 @@ async function deleteEvent(id) {
 const classForm = document.getElementById('class-form');
 classForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
+  const saveBtn = classForm.querySelector('button[type="submit"]');
+  saveBtn.disabled = true;
+
   const payload = {
     name_en: document.getElementById('class-name-en').value,
     name_it: document.getElementById('class-name-it').value,
     emoji: document.getElementById('class-emoji').value,
   };
+
   const id = document.getElementById('class-id').value;
   const url = id ? urls.updateClass(id) : urls.createClass;
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': csrftoken,
-    },
-    body: JSON.stringify(payload)
-  });
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken,
+      },
+      body: JSON.stringify(payload)
+    });
 
-  if (res.ok) {
-    const data = await res.json();
+    if (res.ok) {
+      const data = await res.json();
 
-    if (id) {
-      const row = document.querySelector(`tr[data-id='${id}']`);
-      if (row) {
-        row.querySelector('td:nth-child(1)').textContent = data.emoji;
-        row.querySelector('td:nth-child(2)').textContent = data.name_en;
-        row.querySelector('td:nth-child(3)').textContent = data.name_it;
+      if (id) {
+        const row = document.querySelector(`tr[data-id='${id}']`);
+        if (row) {
+          row.querySelector('td:nth-child(1)').textContent = data.emoji;
+          row.querySelector('td:nth-child(2)').textContent = data.name_en;
+          row.querySelector('td:nth-child(3)').textContent = data.name_it;
+        }
+      } else {
+        location.reload();
       }
-    } else {
-      location.reload();
-    }
 
-    classForm.reset();
-    document.getElementById('class-id').value = '';
-  } else {
-    alert('Something went wrong while saving the class.');
+      classForm.reset();
+      document.getElementById('class-id').value = '';
+    } else {
+      alert('Something went wrong while saving the class.');
+    }
+  } catch (err) {
+    console.error('Error saving class:', err);
+    alert('Unexpected error. Please try again.');
+  } finally {
+    saveBtn.disabled = false;
   }
 });
 
