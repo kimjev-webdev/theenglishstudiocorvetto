@@ -162,14 +162,16 @@
 </div>
 
 <script>
- window.urls = {
-  createEvent: "/portal/schedule/events/create/",
-  updateEvent: (id) => `/portal/schedule/events/${id}/edit/`,
-  deleteEvent: (id) => `/portal/schedule/events/${id}/delete/`,
-  createClass: "/portal/schedule/classes/create/",
-  updateClass: (id) => `/portal/schedule/classes/${id}/edit/`,
-  deleteClass: (id) => `/portal/schedule/classes/${id}/delete/`,
-};
+  const langPrefix = "/{{ LANGUAGE_CODE }}";  // grabs "en", "it", etc.
+
+  window.urls = {
+    createEvent: `${langPrefix}/portal/schedule/events/create/`,
+    updateEvent: (id) => `${langPrefix}/portal/schedule/events/${id}/edit/`,
+    deleteEvent: (id) => `${langPrefix}/portal/schedule/events/${id}/delete/`,
+    createClass: `${langPrefix}/portal/schedule/classes/create/`,
+    updateClass: (id) => `${langPrefix}/portal/schedule/classes/${id}/edit/`,
+    deleteClass: (id) => `${langPrefix}/portal/schedule/classes/${id}/delete/`,
+  };
 </script>
 
 <script src="{% static 'js/schedule.js' %}"></script>
