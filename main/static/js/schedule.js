@@ -19,6 +19,9 @@ const csrftoken = getCookie('csrftoken');
 const eventForm = document.getElementById('event-form');
 eventForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
+  const saveBtn = eventForm.querySelector('button[type="submit"]');
+  saveBtn.disabled = true;
+
   const payload = {
     class_id: document.getElementById('event-class').value,
     date: document.getElementById('event-date').value,
@@ -28,24 +31,40 @@ eventForm?.addEventListener('submit', async (e) => {
     days_of_week: document.getElementById('event-days').value,
     recurrence_exceptions: document.getElementById('event-exceptions').value,
   };
+
   const id = document.getElementById('event-id').value;
   const url = id ? urls.updateEvent(id) : urls.createEvent;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': csrftoken,
-    },
-    body: JSON.stringify(payload)
-  });
-  if (res.ok) location.reload();
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken,
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      location.reload();
+    } else {
+      alert('Failed to save event. Please check your inputs.');
+      saveBtn.disabled = false;
+    }
+  } catch (err) {
+    console.error('Error submitting form:', err);
+    alert('Unexpected error. Please try again.');
+    saveBtn.disabled = false;
+  }
 });
 
-// Open empty modal
+// Open empty modal with autofocus
 document.querySelector('#add-event-btn')?.addEventListener('click', () => {
   document.getElementById('event-id').value = '';
-  document.getElementById('event-form').reset();
-  new bootstrap.Modal(document.getElementById('eventModal')).show();
+  eventForm.reset();
+  const modal = new bootstrap.Modal(document.getElementById('eventModal'));
+  modal.show();
+  setTimeout(() => document.getElementById('event-class')?.focus(), 500);
 });
 
 function editEvent(id) {
@@ -60,7 +79,6 @@ function editEvent(id) {
   document.getElementById('event-exceptions').value = row.dataset.exceptions || '';
   new bootstrap.Modal(document.getElementById('eventModal')).show();
 }
-
 
 async function deleteEvent(id) {
   if (!confirm('Delete this event?')) return;
