@@ -8,6 +8,7 @@
 {% block content %}
 <main>
   <h1 class="navy primaryfont text-center">{% trans "Schedule" %}</h1>
+   <h2 class="red primaryfont text-center">{{ month }}</h2>
   <br>
   <p class="navy body-text">
     {% blocktrans %}To explore what's happening at <b class="red">The English Studio</b> simply hover or tap any emoji on the calendar.{% endblocktrans %}
@@ -23,7 +24,6 @@
   {% if not events %}
   {% endif %}
 
-  <h2 class="red primaryfont text-center">{{ month }}</h2>
 
   <div class="calendar-grid">
     <div class="weekday navy-bg off-white primaryfont">{% trans "Mon" %}</div>
