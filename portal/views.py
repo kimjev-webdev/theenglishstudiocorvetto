@@ -7,16 +7,28 @@ from django.urls import reverse_lazy
 from blog.models import BlogPost
 from .forms import BlogPostForm
 
+from django.contrib import messages
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
 
 # 🔐 Function-based staff access check for dashboard
 def staff_check(user):
     return user.is_authenticated and user.is_staff
 
 
+# Portal LOGIN views
 @login_required
 @user_passes_test(staff_check)
 def portal_dashboard(request):
     return render(request, 'portal/dashboard.html')
+
+
+# Portal LOGOUT view
+def portal_logout_view(request):
+    logout(request)
+    messages.success(request, "You have been safely logged out.")
+    return redirect('portal_login')
 
 
 # 🔐 Mixin for class-based staff-only views

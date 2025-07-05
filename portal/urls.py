@@ -1,29 +1,28 @@
 from django.urls import path
-from django.contrib.auth.views import LoginView, LogoutView
-from . import views
 from .views import (
+    portal_dashboard,
+    portal_logout_view,
     BlogListView,
     BlogCreateView,
     BlogUpdateView,
     BlogDeleteView,
 )
+from django.contrib.auth.views import LoginView
 
 urlpatterns = [
     path(
         'login/',
-        LoginView.as_view(
-            template_name='portal/login.html'
-        ),
+        LoginView.as_view(template_name='portal/login.html'),
         name='portal_login'
     ),
     path(
         'logout/',
-        LogoutView.as_view(next_page='portal_login'),
+        portal_logout_view,
         name='portal_logout'
     ),
     path(
         '',
-        views.portal_dashboard,
+        portal_dashboard,
         name='portal_dashboard'
     ),
 
