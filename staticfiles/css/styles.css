@@ -282,6 +282,13 @@ img.footerpic {
   height: 10rem;
 }
 
+.flyer-img {
+  width: 70%;
+  aspect-ratio: 1 / 1.414; /* ISO 216 A-series */
+  object-fit: cover;
+  cursor: pointer;
+}
+
 /*blog styles*/
 /*blog card styles*/
 .blog-card {

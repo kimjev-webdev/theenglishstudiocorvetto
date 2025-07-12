@@ -13,10 +13,6 @@ main {
   padding: 1.5rem 20px;
 }
 
-.vh-100 {
-  min-height: 75vh !important;
-}
-
 .container-fluid {
 --bs-gutter-x: none !important;
 }
@@ -286,6 +282,13 @@ img.footerpic {
   height: 10rem;
 }
 
+.flyer-img {
+  width: 70%;
+  aspect-ratio: 1 / 1.414; /* ISO 216 A-series */
+  object-fit: cover;
+  cursor: pointer;
+}
+
 /*blog styles*/
 /*blog card styles*/
 .blog-card {
@@ -352,6 +355,7 @@ blog-text a {
   gap: 0.5rem;
 }
 
+
 .weekday {
   text-transform: uppercase;
   font-weight: bold;
@@ -364,9 +368,14 @@ blog-text a {
 .day {
   position: relative;
   border: 1px solid #ddd;
-  min-height: 100px;
-  padding: 0.5rem;
   background: white;
+  aspect-ratio: 1 / 1; /* ✅ Ensures square shape */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0.3rem;
+  overflow: hidden;
 }
 
 .day.other-month {
@@ -380,10 +389,22 @@ blog-text a {
   color:#B30000
 }
 
+.emoji-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  width: 100%;
+  justify-items: center;
+  align-items: center;
+}
+
 .emoji {
-  position: relative;
   font-size: 1.2rem;
-  cursor: pointer;
+  line-height: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
 }
 
 .tooltip {
@@ -402,28 +423,70 @@ blog-text a {
   display: block;
 }
 
-/* Custom Tippy.js tooltip theme */
+.tippy-trigger {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+  z-index: 5;
+}
+
+/* Removes tooltip arrow and improves mobile visibility */
 .tippy-box[data-theme~='custom'] {
-  background-color: #37376B; /* .navy */
-  color: #fdfbf6; /* .off-white */
-  font-family: 'Cabin', sans-serif; /* .body-text */
+  background-color: #37376B;
+  color: #fdfbf6;
+  font-family: 'Cabin', sans-serif;
   font-weight: 400;
   line-height: 1.6;
   border-radius: 4px;
-  padding: 0.1rem 0.1rem;
-  font-size: 0.9rem;
+  padding: 0.5rem;
+  font-size: 0.85rem;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  text-align: center !important;
+  text-align: center;
+  z-index: 9999;
 }
 
-/* Optional: arrow match */
-.tippy-box[data-theme~='custom'][data-placement^='top'] > .tippy-arrow::before {
-  color: #37376B;
+.tippy-box[data-theme~='custom'] > .tippy-arrow {
+  display: none !important; /* remove the down arrow */
 }
 
 
 
 /* media queries for responsive design */
+@media (max-width: 576px) {
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+
+  .day {
+    aspect-ratio: 1 / 1;
+    padding: 2px;
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    overflow: visible;
+  }
+
+  .date {
+    font-size: 12px;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .emoji {
+    font-size: 12px;
+    max-width: 100%;
+    word-break: break-word;
+    line-height: 1;
+    pointer-events: auto; /* Re-enable for tooltip */
+  }
+}
 
 @media (max-width: 768px) {
   .carouseloverlay {
@@ -509,14 +572,20 @@ blog-text a {
   }
 
   .aboutp {
-    margin-left: 100px !important;
-    margin-right: 100px !important;
+    margin-left: 50px !important;
+    margin-right: 50px !important;
+  }
+    
+  .day {
+    aspect-ratio: auto !important; /* Let it size naturally */
+    height: 120px; /* or whatever looks best */
   }
 }
 
 @media (min-width: 1200px) {
   .aboutp {
-    margin-left: 200px !important;
-    margin-right: 200px !important;
+    margin-left: 100px !important;
+    margin-right: 100px !important;
   }
 }
+

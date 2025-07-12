@@ -164,6 +164,45 @@
 
   <section class="container-fluid mt-3" id="upcoming">
     <h2 class="text-center head-navy primaryfont mb-3 indexheader w-100">{% trans "Upcoming Events" %}</h2>
+    <p class="text-center navy body-text mb-4">{% trans "Click on a flyer to find out more." %}</p>
+    <div class="row g-4">
+  {% for flyer in flyers %}
+    <div class="col-12 col-md-6 col-lg-4 col-xxl-3 text-center">
+      <img src="{{ flyer.image.url }}" class="flyer-img shadow-sm rounded" data-bs-toggle="modal" data-bs-target="#flyerModal{{ flyer.id }}" alt="{{ flyer.title_en }}">
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="flyerModal{{ flyer.id }}" tabindex="-1" aria-labelledby="flyerModalLabel{{ flyer.id }}" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content p-4">
+          <div class="modal-header">
+            <h5 class="modal-title primaryfont" id="flyerModalLabel{{ flyer.id }}">
+              {% get_current_language as LANGUAGE_CODE %}
+              {% if LANGUAGE_CODE == 'it' %}
+                {{ flyer.title_it }}
+              {% else %}
+                {{ flyer.title_en }}
+              {% endif %}
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
+          </div>
+          <div class="modal-body body-text navy">
+            {% if LANGUAGE_CODE == 'it' %}
+              {{ flyer.description_it|linebreaks }}
+              <p class="mt-4 red"><strong>{{ flyer.extra_info_it }}</strong></p>
+            {% else %}
+              {{ flyer.description_en|linebreaks }}
+              <p class="mt-4 red"><strong>{{ flyer.extra_info_en }}</strong></p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p class="text-center navy">{% trans "No upcoming events at the moment." %}</p>
+  {% endfor %}
+</div>
+
 </section>
 {% endblock %}
 
