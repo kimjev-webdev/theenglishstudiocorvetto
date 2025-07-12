@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'ckeditor',
     'portal',
+    'flyers',
 ]
 
 LOGIN_REDIRECT_URL = 'portal_dashboard'

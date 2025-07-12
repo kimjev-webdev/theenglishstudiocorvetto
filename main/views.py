@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .models import Flyer  # ✅ Import the Flyer model
 from django.utils import timezone
+from flyers.models import Flyer  # ✅ Corrected import from the new app
 
 
 def home(request):
