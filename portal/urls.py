@@ -6,6 +6,10 @@ from .views import (
     BlogCreateView,
     BlogUpdateView,
     BlogDeleteView,
+    FlyerListView,        # ✅ updated: using class-based list view
+    FlyerCreateView,
+    FlyerUpdateView,
+    FlyerDeleteView,
 )
 from django.contrib.auth.views import LoginView
 
@@ -38,5 +42,19 @@ urlpatterns = [
         'blog/delete/<int:pk>/',
         BlogDeleteView.as_view(),
         name='blog_delete'
+    ),
+
+    # Flyer CRUD routes
+    path('flyers/', FlyerListView.as_view(), name='flyer_list'),  # ✅ updated
+    path('flyers/new/', FlyerCreateView.as_view(), name='flyer_create'),
+    path(
+        'flyers/<int:pk>/edit/',
+        FlyerUpdateView.as_view(),
+        name='flyer_update'
+    ),
+    path(
+        'flyers/<int:pk>/delete/',
+        FlyerDeleteView.as_view(),
+        name='flyer_delete'
     ),
 ]

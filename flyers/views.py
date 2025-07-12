@@ -9,6 +9,6 @@ def flyer_list(request):
     ).order_by('event_date')
     return render(
         request,
-        'flyers/flyer_list.html',
+        'flyers/flyers_list.html',
         {'flyers': flyers}
     )

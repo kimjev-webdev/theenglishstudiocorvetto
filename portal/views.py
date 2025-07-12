@@ -11,6 +11,9 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 
+from flyers.models import Flyer
+from .forms import FlyerForm
+
 
 # 🔐 Function-based staff access check for dashboard
 def staff_check(user):
@@ -67,3 +70,30 @@ class BlogDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     model = BlogPost
     template_name = 'blog/confirm_delete.html'  # ✅ updated path
     success_url = reverse_lazy('blog_edit')
+
+
+# Flyers views
+class FlyerListView(LoginRequiredMixin, StaffRequiredMixin, ListView):
+    model = Flyer
+    template_name = 'flyers/flyers_list.html'
+    context_object_name = 'flyers'
+
+
+class FlyerCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
+    model = Flyer
+    form_class = FlyerForm
+    template_name = 'flyers/flyer_form.html'
+    success_url = reverse_lazy('portal:flyer_list')
+
+
+class FlyerUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
+    model = Flyer
+    form_class = FlyerForm
+    template_name = 'flyers/flyer_form.html'
+    success_url = reverse_lazy('portal:flyer_list')
+
+
+class FlyerDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
+    model = Flyer
+    template_name = 'flyers/flyer_confirm_delete.html'
+    success_url = reverse_lazy('portal:flyer_list')

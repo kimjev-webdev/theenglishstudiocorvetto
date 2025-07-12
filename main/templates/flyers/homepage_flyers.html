@@ -1,0 +1,64 @@
+ <section class="container-fluid mt-3" id="upcoming">
+    <h2 class="text-center head-navy primaryfont mb-3 indexheader w-100">{% trans "Upcoming Events" %}</h2>
+     <h2 class="text-center primaryfont red mb-4">{% trans "Click on a flyer to find out more" %}</h2>
+
+  {% if flyers|length >= 3 %}
+  <!-- Carousel for tablets and larger -->
+  <div id="flyerCarousel" class="carousel slide d-none d-md-block" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      {% for flyer in flyers %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <div class="d-flex justify-content-center">
+          <img src="{{ flyer.image.url }}" class="img-fluid" style="max-height: 70vh; aspect-ratio: 1/1.414;">
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#flyerCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#flyerCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+  {% endif %}
+
+  <!-- Grid view for all screen sizes -->
+  <div class="row mt-4">
+    {% for flyer in flyers %}
+    <div class="col-12 col-sm-6 col-md-4 col-xl-3 mb-4">
+      <div class="card h-100 shadow-sm flyer-card" role="button" data-bs-toggle="modal" data-bs-target="#flyerModal{{ flyer.id }}">
+        <img src="{{ flyer.image.url }}" class="card-img-top" style="aspect-ratio: 1/1.414;" alt="{{ flyer.title_en }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ flyer.title_en }}</h5>
+          <p class="card-text small text-muted">{{ flyer.event_date }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="flyerModal{{ flyer.id }}" tabindex="-1" aria-labelledby="flyerModalLabel{{ flyer.id }}" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="flyerModalLabel{{ flyer.id }}">{{ flyer.title_en }} / {{ flyer.title_it }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <img src="{{ flyer.image.url }}" class="img-fluid w-100 mb-3" style="aspect-ratio: 1/1.414;" alt="{{ flyer.title_en }}">
+            </div>
+            <div class="body-text mb-2">{{ flyer.description_en|safe }}</div>
+            <div class="body-text italic mb-2">{{ flyer.description_it|safe }}</div>
+            <div class="fw-bold mt-3">
+              {{ flyer.extra_info_en }}<br>{{ flyer.extra_info_it }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+     {% empty %}
+    <p class="text-center navy">{% trans "No upcoming events at the moment." %}</p>
+    {% endfor %}
+</div>
+  </section>
