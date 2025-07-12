@@ -1,4 +1,5 @@
 from django.db import models
+from cloudinary.models import CloudinaryField   
 
 
 class Flyer(models.Model):
@@ -8,7 +9,7 @@ class Flyer(models.Model):
     description_it = models.TextField()
     extra_info_en = models.CharField(max_length=200, blank=True)
     extra_info_it = models.CharField(max_length=200, blank=True)
-    image = models.ImageField(upload_to='flyers/')
+    image = CloudinaryField('image')
     event_date = models.DateField()
 
     def __str__(self):
