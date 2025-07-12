@@ -1,8 +1,14 @@
 from django.shortcuts import render
+from .models import Flyer  # ✅ Import the Flyer model
 
 
 def home(request):
-    return render(request, 'index.html')
+    flyers = Flyer.objects.order_by('-event_date')[:6]
+    return render(
+        request,
+        'index.html',
+        {'flyers': flyers}
+    )
 
 
 def courses(request):
