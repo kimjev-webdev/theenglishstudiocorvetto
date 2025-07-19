@@ -30,73 +30,36 @@ eventForm?.addEventListener('submit', async (e) => {
   const recurrence = document.getElementById('event-recurrence').value;
   const daysOfWeekRaw = document.getElementById('event-days').value;
   const exceptions = document.getElementById('event-exceptions').value;
-  const repeatUntilStr = document.getElementById('event-end-date').value;
-  const repeatUntil = repeatUntilStr ? new Date(repeatUntilStr) : null;
+  const repeatUntilStr = document.getElementById('event-repeat-until').value;
   const eventId = document.getElementById('event-id').value;
   const url = eventId ? urls.updateEvent(eventId) : urls.createEvent;
 
-  const dayNameToIndex = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
-  const daysOfWeek = daysOfWeekRaw.split(',').map(d => dayNameToIndex[d.trim()]).filter(d => !isNaN(d));
-
-  const eventsToCreate = [];
-
-  if (recurrence === 'none' || eventId) {
-    eventsToCreate.push(startDate.toISOString().split('T')[0]);
-  } else {
-    let current = new Date(startDate);
-    const endLimit = repeatUntil || new Date(current.setMonth(current.getMonth() + 3));
-
-    while (current <= endLimit) {
-      if (
-        recurrence === 'weekly' || recurrence === 'biweekly' || recurrence === 'monthly'
-      ) {
-        eventsToCreate.push(current.toISOString().split('T')[0]);
-        if (recurrence === 'weekly') {
-          current.setDate(current.getDate() + 7);
-        } else if (recurrence === 'biweekly') {
-          current.setDate(current.getDate() + 14);
-        } else if (recurrence === 'monthly') {
-          current.setMonth(current.getMonth() + 1);
-        }
-      } else if (recurrence === 'custom_days') {
-        if (daysOfWeek.includes(current.getDay())) {
-          eventsToCreate.push(current.toISOString().split('T')[0]);
-        }
-        current.setDate(current.getDate() + 1);
-      } else {
-        break;
-      }
-    }
-  }
-
   try {
-    const responses = await Promise.all(eventsToCreate.map(date =>
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrftoken,
-        },
-        body: JSON.stringify({
-          class_id: classId,
-          date: date,
-          start_time: startTime,
-          end_time: endTime,
-          recurrence: recurrence,
-          days_of_week: daysOfWeekRaw,
-          recurrence_exceptions: exceptions,
-          repeat_until: repeatUntilStr,
-        })
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken,
+      },
+      body: JSON.stringify({
+        class_id: classId,
+        date: startDate.toISOString().split('T')[0],
+        start_time: startTime,
+        end_time: endTime,
+        recurrence: recurrence,
+        days_of_week: daysOfWeekRaw,
+        recurrence_exceptions: exceptions,
+        repeat_until: repeatUntilStr,
       })
-    ));
+    });
 
-    if (responses.every(res => res.ok)) {
+    if (res.ok) {
       eventForm.reset();
       document.getElementById('event-id').value = '';
       bootstrap.Modal.getInstance(document.getElementById('eventModal'))?.hide();
       location.reload();
     } else {
-      alert('Some events failed to save.');
+      alert('Error saving event.');
     }
   } catch (err) {
     console.error('Error submitting form:', err);
@@ -126,7 +89,7 @@ window.editEvent = function (id) {
   document.getElementById('event-recurrence').value = row.dataset.recurrence || 'none';
   document.getElementById('event-days').value = row.dataset.days || '';
   document.getElementById('event-exceptions').value = row.dataset.exceptions || '';
-  document.getElementById('event-end-date').value = row.dataset.repeatUntil || '';
+  document.getElementById('event-repeat-until').value = row.dataset.repeatUntil || '';
   new bootstrap.Modal(document.getElementById('eventModal')).show();
 };
 

@@ -131,6 +131,11 @@ Date        | Bug                                               | Focus         
 | 2025-07-19 | `repeat_until` value was not being saved               | Backend Views | Updated `create_event` and `update_event` views to parse and store `repeat_until` from POSTed JSON data.        |
 | 2025-07-19 | Recurring events still showed after `repeat_until`     | Calendar View | Modified all recurrence logic (`weekly`, `biweekly`, `monthly`, `custom_days`) to break loop at `repeat_until`. |
 | 2025-07-19 | Frontend form was missing a way to pass `repeat_until` | JS / Frontend | Added `event-end-date` field in modal form and passed it in AJAX request payload to match backend expectations. |
+| 2025-07-19 | Recurring events displayed indefinitely, ignoring `repeat_until`    | `calendar_view()` | Adjusted view logic to enforce `repeat_until` cut-off for all recurrence types                 |
+| 2025-07-19 | JavaScript was creating multiple event entries for recurring events | `schedule.js`     | Refactored JS to send only one POST request per event, passing recurrence data properly        |
+| 2025-07-19 | `repeat_until` date was not being picked up in the modal form       | HTML/JS frontend  | Fixed ID mismatch: changed `event-end-date` to `event-repeat-until` in modal and JS references |
+| 2025-07-19 | `repeat_until` wasn't passed from modal to backend correctly        | JS/Backend Sync   | Updated `schedule.js` to ensure `repeat_until` is posted as a string in the payload            |
+| 2025-07-19 | Duplicate events rendered if looped in JS and also handled in views | Logic conflict    | Removed frontend recurrence loop entirely — recurrence is now 100% server-side                 |
 
 
 

@@ -1,6 +1,9 @@
 import calendar
 import json
 from datetime import date, timedelta
+from dateutil.relativedelta import (
+    relativedelta  # ✅ needed for monthly increments
+)
 
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
@@ -31,10 +34,12 @@ def calendar_view(request, year=None, month=None):
     last_day = date(year, month, calendar.monthrange(year, month)[1])
 
     events = (
-        Event.objects
-        .filter(date__lte=last_day)
-        .select_related(
-            'class_instance'
+        (
+            (
+                Event.objects
+                .filter(date__lte=last_day)
+                .select_related('class_instance')
+            )
         )
     )
     events_by_day = {}
@@ -76,33 +81,21 @@ def calendar_view(request, year=None, month=None):
                 current += timedelta(weeks=2)
 
         elif event.recurrence == 'monthly':
-            try:
-                current = event.date
-                while current <= end_boundary:
-                    if (
-                        first_day <= current <= end_boundary
-                        and current not in exceptions
-                    ):
-                        events_by_day.setdefault(current, []).append(event)
-                    month_increment = (current.month % 12) + 1
-                    year_increment = current.year + (current.month // 12)
-                    current = current.replace(
-                        year=year_increment, month=month_increment
-                    )
-            except ValueError:
-                continue
+            current = event.date
+            while current <= end_boundary:
+                if current >= first_day and current not in exceptions:
+                    events_by_day.setdefault(current, []).append(event)
+                try:
+                    current = current + relativedelta(months=1)
+                except ValueError:
+                    break
 
         elif event.recurrence == 'custom_days':
             if not event.days_of_week:
                 continue
             weekday_map = {
-                'mon': 0,
-                'tue': 1,
-                'wed': 2,
-                'thu': 3,
-                'fri': 4,
-                'sat': 5,
-                'sun': 6
+                'mon': 0, 'tue': 1, 'wed': 2,
+                'thu': 3, 'fri': 4, 'sat': 5, 'sun': 6
             }
             selected_days = [
                 weekday_map[d.strip().lower()]
@@ -118,9 +111,10 @@ def calendar_view(request, year=None, month=None):
                 ):
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(days=1)
-
+    # Calculate previous and next month/year
     prev_year, prev_month = get_adjacent_month(year, month, -1)
     next_year, next_month = get_adjacent_month(year, month, 1)
+
     return render(
         request,
         'schedule/calendar.html',
@@ -145,14 +139,10 @@ def calendar_view(request, year=None, month=None):
 def event_list_view(request):
     classes = Class.objects.all()
     events = Event.objects.all().select_related('class_instance')
-    return render(
-        request,
-        'schedule/event_list.html',
-        {
-            'classes': classes,
-            'events': events
-        }
-    )
+    return render(request, 'schedule/event_list.html', {
+        'classes': classes,
+        'events': events
+    })
 
 
 @csrf_exempt
@@ -190,9 +180,7 @@ def update_event(request, event_id):
     event.days_of_week = data.get('days_of_week', '')
     exceptions_str = data.get('recurrence_exceptions', '')
     event.recurrence_exceptions = [
-        d.strip()
-        for d in exceptions_str.split(',')
-        if d.strip()
+        d.strip() for d in exceptions_str.split(',') if d.strip()
     ]
     event.repeat_until = data.get('repeat_until') or None
     event.save()
