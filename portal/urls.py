@@ -30,18 +30,19 @@ urlpatterns = [
     path('', portal_dashboard, name='portal_dashboard'),
 
     # Blog CRUD
-    path('blog/', BlogListView.as_view(), name='blog_edit'),
-    path('blog/create/', BlogCreateView.as_view(), name='blog_create'),
     path(
-        'blog/edit/<int:pk>/',
-        BlogUpdateView.as_view(),
-        name='blog_edit'
+        'blog/',
+        BlogListView.as_view(),
+        name='blog_list'
     ),
+    path('blog/create/', BlogCreateView.as_view(), name='blog_create'),
+    path('blog/edit/<int:pk>/', BlogUpdateView.as_view(), name='blog_edit'),
     path(
         'blog/delete/<int:pk>/',
         BlogDeleteView.as_view(),
         name='blog_delete'
     ),
+
 
     # Flyer CRUD
     path('flyers/', FlyerListView.as_view(), name='flyer_list'),

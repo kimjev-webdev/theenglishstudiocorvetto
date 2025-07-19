@@ -124,6 +124,7 @@ Date        | Bug                                               | Focus         
 | 2025-06-22 | Script errors caused by JS file trying to parse `{% url %}`       | Templating issue            | Moved the `urls` constant into a `<script>` block inside the Django template instead of defining it in the static JS file.                                                                           |
 2025-07-05 | Logout link on /portal caused HTTP 405 error on live site | Auth / Logout | Replaced <a> logout link with a POST form using CSRF token. Django logout only accepts POST in production.
 2025-07-19 | Login on deployed site caused 500 error due to unresolved redirect URL 'portal_dashboard' | Auth / Login | Added 'portal' namespace prefix to LOGIN_REDIRECT_URL and LOGOUT_REDIRECT_URL in settings.py. Confirmed 'portal_dashboard' view is correctly named in portal.urls. Explicitly set success_url in LoginView using reverse_lazy.
+2025-07-19 | Dashboard page caused 500 error due to duplicate URL name 'blog_edit' | Portal / Blog | Renamed BlogListView URL to 'blog_list' in portal/urls.py and updated template reverse call to 'portal:blog_list' to avoid NoReverseMatch.
 
 
 
