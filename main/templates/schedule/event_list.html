@@ -88,7 +88,6 @@
     data-days="{{ event.days_of_week|default_if_none:'' }}"
     data-exceptions="{{ event.recurrence_exceptions|default_if_none:''|join:',' }}"
     data-repeatuntil="{{ event.repeat_until|date:'Y-m-d' }}">
-
         <td>{{ event.class_instance.name_en }}</td>
         <td>{{ event.date }}</td>
         <td>{{ event.start_time }}</td>

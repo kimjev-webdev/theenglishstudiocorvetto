@@ -12,15 +12,22 @@ def get_item(dictionary, key):
 
 @register.filter
 def clean_paragraphs(value):
+    """
+    Convert text with multiple line breaks into <p> tags,
+    removing single newlines.
+    """
+    if not value:
+        return ''
+
     # Normalize line endings
-    value = value.replace('\r\n', '\n').replace('\r', '\n')
+    value = value.replace('\r\n', '\n')
+    value = value.replace('\r', '\n')
+    paragraphs = re.split(r'\n{2,}', value)  # Split on 2+ line breaks
 
-    # Split into paragraphs by two or more line breaks
-    paragraphs = re.split(r'\n{2,}', value)
-
-    # Wrap each paragraph in <p> tags and remove single line breaks
     html_paragraphs = [
-        '<p>{}</p>'.format(re.sub(r'\n+', ' ', p.strip()))
+        '<p>{}</p>'.format(
+            re.sub(r'\n+', ' ', p.strip())
+        )  # Remove single breaks
         for p in paragraphs if p.strip()
     ]
 
