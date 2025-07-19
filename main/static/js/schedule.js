@@ -70,27 +70,23 @@ eventForm?.addEventListener('submit', async (e) => {
   }
 });
 
+// Modal open, edit, delete handlers remain the same
 document.querySelector('#add-event-btn')?.addEventListener('click', () => {
   document.getElementById('event-id').value = '';
   eventForm.reset();
-  const modal = new bootstrap.Modal(document.getElementById('eventModal'));
-  modal.show();
+  new bootstrap.Modal(document.getElementById('eventModal')).show();
   setTimeout(() => document.getElementById('event-class')?.focus(), 500);
 });
 
 window.editEvent = function (id) {
   const row = document.querySelector(`tr[data-id="${id}"]`);
   if (!row) return;
-
+  ['class', 'date', 'start', 'end', 'recurrence', 'days', 'exceptions', 'repeat-until']
+    .forEach(field => {
+      const el = document.getElementById(`event-${field}`);
+      if (el) el.value = row.dataset[field.replace('-', '')] || '';
+    });
   document.getElementById('event-id').value = id;
-  document.getElementById('event-class').value = row.dataset.classId;
-  document.getElementById('event-date').value = row.dataset.date;
-  document.getElementById('event-start').value = row.dataset.start;
-  document.getElementById('event-end').value = row.dataset.end;
-  document.getElementById('event-recurrence').value = row.dataset.recurrence || 'none';
-  document.getElementById('event-days').value = row.dataset.days || '';
-  document.getElementById('event-exceptions').value = row.dataset.exceptions || '';
-  document.getElementById('event-repeat-until').value = row.dataset.repeatUntil || '';
   new bootstrap.Modal(document.getElementById('eventModal')).show();
 };
 
@@ -100,9 +96,7 @@ window.deleteEvent = async function(id) {
     method: 'POST',
     headers: { 'X-CSRFToken': csrftoken },
   });
-  if (res.ok) {
-    document.querySelector(`tr[data-id='${id}']`)?.remove();
-  }
+  if (res.ok) document.querySelector(`tr[data-id='${id}']`)?.remove();
 };
 
 // CLASS HANDLERS
