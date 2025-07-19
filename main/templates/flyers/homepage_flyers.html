@@ -30,7 +30,7 @@
   <!-- Grid view for all screen sizes -->
   <div class="row mt-4">
     {% for flyer in flyers %}
-    <div class="col-12 col-sm-6 col-md-4 col-xl-3 mb-4">
+    <div class="col-12 col-md-6 col-xl-4 mb-4">
       <div class="card h-100 shadow-sm flyer-card" role="button" data-bs-toggle="modal" data-bs-target="#flyerModal{{ flyer.id }}">
         <img src="{{ flyer.image.url }}" class="card-img-top" style="aspect-ratio: 1/1.414;" alt="{{ flyer.title_en }}">
       </div>

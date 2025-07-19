@@ -3,7 +3,7 @@ from django.utils.translation import get_language
 from django.utils import formats
 from django.db import models
 from datetime import time
-from django.contrib.postgres.fields import ArrayField  # ✅ NEW import
+from django.contrib.postgres.fields import ArrayField
 
 
 class Class(models.Model):
@@ -24,9 +24,12 @@ class Class(models.Model):
 
     def __str__(self):
         lang = get_language()
-        if lang == 'it' and self.name_it:
-            return f"{self.emoji} {self.name_it}"
-        return f"{self.emoji} {self.name_en}"
+        name = (
+            self.name_it
+            if lang == 'it' and self.name_it
+            else self.name_en
+        )
+        return f"{self.emoji} {name}"
 
     class Meta:
         verbose_name = "Class"
@@ -75,9 +78,17 @@ class Event(models.Model):
         verbose_name=_("Recurrence Exceptions"),
         help_text=_("Dates on which this recurring event should be skipped")
     )
+    repeat_until = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name=_("Repeat Until"),
+        help_text=_("Last day this event should occur")
+    )
 
     def __str__(self):
-        date_str = formats.date_format(self.date, "DATE_FORMAT")
-        start_str = formats.time_format(self.start_time, "TIME_FORMAT")
-        end_str = formats.time_format(self.end_time, "TIME_FORMAT")
-        return f"{self.class_instance} – {date_str}, {start_str} to {end_str}"
+        return (
+            f"{self.class_instance} – "
+            f"{formats.date_format(self.date, 'DATE_FORMAT')}, "
+            f"{formats.time_format(self.start_time, 'TIME_FORMAT')} to "
+            f"{formats.time_format(self.end_time, 'TIME_FORMAT')}"
+        )

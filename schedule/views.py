@@ -31,13 +31,20 @@ def calendar_view(request, year=None, month=None):
     last_day = date(year, month, calendar.monthrange(year, month)[1])
 
     events = (
-        Event.objects.filter(date__lte=last_day)
-        .select_related('class_instance')
+        Event.objects
+        .filter(date__lte=last_day)
+        .select_related(
+            'class_instance'
+        )
     )
     events_by_day = {}
 
     for event in events:
         exceptions = set(event.recurrence_exceptions or [])
+        if event.repeat_until:
+            end_boundary = min(last_day, event.repeat_until)
+        else:
+            end_boundary = last_day
 
         if event.recurrence == 'none':
             if (
@@ -48,7 +55,7 @@ def calendar_view(request, year=None, month=None):
 
         elif event.recurrence == 'weekly':
             current = event.date
-            while current <= last_day:
+            while current <= end_boundary:
                 if (
                     current >= first_day
                     and current.weekday() == event.date.weekday()
@@ -59,7 +66,7 @@ def calendar_view(request, year=None, month=None):
 
         elif event.recurrence == 'biweekly':
             current = event.date
-            while current <= last_day:
+            while current <= end_boundary:
                 if (
                     current >= first_day
                     and current.weekday() == event.date.weekday()
@@ -70,21 +77,32 @@ def calendar_view(request, year=None, month=None):
 
         elif event.recurrence == 'monthly':
             try:
-                recur_date = date(year, month, event.date.day)
-                if (
-                    first_day <= recur_date <= last_day
-                    and recur_date not in exceptions
-                ):
-                    events_by_day.setdefault(recur_date, []).append(event)
+                current = event.date
+                while current <= end_boundary:
+                    if (
+                        first_day <= current <= end_boundary
+                        and current not in exceptions
+                    ):
+                        events_by_day.setdefault(current, []).append(event)
+                    month_increment = (current.month % 12) + 1
+                    year_increment = current.year + (current.month // 12)
+                    current = current.replace(
+                        year=year_increment, month=month_increment
+                    )
             except ValueError:
-                pass  # handle Feb 30 etc
+                continue
 
         elif event.recurrence == 'custom_days':
             if not event.days_of_week:
                 continue
             weekday_map = {
-                'mon': 0, 'tue': 1, 'wed': 2, 'thu': 3,
-                'fri': 4, 'sat': 5, 'sun': 6
+                'mon': 0,
+                'tue': 1,
+                'wed': 2,
+                'thu': 3,
+                'fri': 4,
+                'sat': 5,
+                'sun': 6
             }
             selected_days = [
                 weekday_map[d.strip().lower()]
@@ -92,40 +110,49 @@ def calendar_view(request, year=None, month=None):
                 if d.strip().lower() in weekday_map
             ]
             current = first_day
-            while current <= last_day:
+            while current <= end_boundary:
                 if (
-                    current.weekday() in selected_days and
-                    current >= event.date and
-                    current not in exceptions
+                    current.weekday() in selected_days
+                    and current >= event.date
+                    and current not in exceptions
                 ):
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(days=1)
 
     prev_year, prev_month = get_adjacent_month(year, month, -1)
     next_year, next_month = get_adjacent_month(year, month, 1)
-
-    context = {
-        'year': year,
-        'month': date_format(date(year, month, 1), "F", use_l10n=True),
-        'month_number': month,
-        'weeks': weeks,
-        'events_by_day': events_by_day,
-        'prev_year': prev_year,
-        'prev_month': prev_month,
-        'next_year': next_year,
-        'next_month': next_month,
-    }
-
-    return render(request, 'schedule/calendar.html', context)
+    return render(
+        request,
+        'schedule/calendar.html',
+        {
+            'year': year,
+            'month': date_format(
+                date(year, month, 1),
+                "F",
+                use_l10n=True
+            ),
+            'month_number': month,
+            'weeks': weeks,
+            'events_by_day': events_by_day,
+            'prev_year': prev_year,
+            'prev_month': prev_month,
+            'next_year': next_year,
+            'next_month': next_month,
+        }
+    )
 
 
 def event_list_view(request):
     classes = Class.objects.all()
     events = Event.objects.all().select_related('class_instance')
-    return render(request, 'schedule/event_list.html', {
-        'classes': classes,
-        'events': events,
-    })
+    return render(
+        request,
+        'schedule/event_list.html',
+        {
+            'classes': classes,
+            'events': events
+        }
+    )
 
 
 @csrf_exempt
@@ -133,12 +160,10 @@ def event_list_view(request):
 def create_event(request):
     data = json.loads(request.body)
     cls = get_object_or_404(Class, id=data['class_id'])
-
-    # Process recurrence_exceptions string into list
     exceptions_str = data.get('recurrence_exceptions', '')
     exceptions = [d.strip() for d in exceptions_str.split(',') if d.strip()]
+    repeat_until = data.get('repeat_until') or None
 
-    # Create single recurring event instance
     event = Event.objects.create(
         class_instance=cls,
         date=data['date'],
@@ -146,7 +171,8 @@ def create_event(request):
         end_time=data['end_time'],
         recurrence=data.get('recurrence', 'none'),
         days_of_week=data.get('days_of_week', ''),
-        recurrence_exceptions=exceptions
+        recurrence_exceptions=exceptions,
+        repeat_until=repeat_until
     )
     return JsonResponse(model_to_dict(event))
 
@@ -156,7 +182,6 @@ def create_event(request):
 def update_event(request, event_id):
     data = json.loads(request.body)
     event = get_object_or_404(Event, id=event_id)
-
     event.class_instance = get_object_or_404(Class, id=data['class_id'])
     event.date = data['date']
     event.start_time = data['start_time']
@@ -165,8 +190,11 @@ def update_event(request, event_id):
     event.days_of_week = data.get('days_of_week', '')
     exceptions_str = data.get('recurrence_exceptions', '')
     event.recurrence_exceptions = [
-        d.strip() for d in exceptions_str.split(',') if d.strip()
+        d.strip()
+        for d in exceptions_str.split(',')
+        if d.strip()
     ]
+    event.repeat_until = data.get('repeat_until') or None
     event.save()
     return JsonResponse(model_to_dict(event))
 

@@ -113,6 +113,8 @@
       <form id="event-form" class="p-3">
         <div class="modal-body row g-3">
           <input type="hidden" id="event-id">
+
+          <!-- Class -->
           <div class="col-md-6">
             <label for="event-class" class="form-label">Class</label>
             <select class="form-select" id="event-class" required>
@@ -121,22 +123,26 @@
               {% endfor %}
             </select>
           </div>
+
+          <!-- Date -->
           <div class="col-md-6">
-            <label for="event-date" class="form-label">Date</label>
+            <label for="event-date" class="form-label">Start Date</label>
             <input type="date" class="form-control" id="event-date" required>
           </div>
-          <div class="col-md-6">
-            <label for="event-end-date" class="form-label">Repeat Until</label>
-            <input type="date" class="form-control" id="event-end-date">
-          </div>
+
+          <!-- Start Time -->
           <div class="col-md-6">
             <label for="event-start" class="form-label">Start Time</label>
             <input type="time" class="form-control" id="event-start" required>
           </div>
+
+          <!-- End Time -->
           <div class="col-md-6">
             <label for="event-end" class="form-label">End Time</label>
             <input type="time" class="form-control" id="event-end" required>
           </div>
+
+          <!-- Repeats -->
           <div class="col-md-6">
             <label for="event-recurrence" class="form-label">Repeats</label>
             <select class="form-select" id="event-recurrence">
@@ -144,18 +150,29 @@
               <option value="weekly">Weekly</option>
               <option value="biweekly">Every 2 weeks</option>
               <option value="monthly">Monthly</option>
-              <option value="custom">Custom weekdays</option>
+              <option value="custom_days">Custom weekdays</option>
             </select>
           </div>
+
+          <!-- Repeat Until -->
+          <div class="col-md-6">
+            <label for="event-repeat-until" class="form-label">Repeat Until</label>
+            <input type="date" class="form-control" id="event-repeat-until">
+          </div>
+
+          <!-- Days of Week (for custom) -->
           <div class="col-md-6">
             <label for="event-days" class="form-label">Days of the Week</label>
             <input type="text" class="form-control" id="event-days" placeholder="Mon,Wed,Fri">
           </div>
+
+          <!-- Exceptions -->
           <div class="col-12">
             <label for="event-exceptions" class="form-label">Recurrence Exceptions</label>
             <input type="text" class="form-control" id="event-exceptions" placeholder="YYYY-MM-DD, YYYY-MM-DD">
           </div>
         </div>
+
         <div class="modal-footer mt-3">
           <button type="submit" class="btn btn-primary">Save Event</button>
         </div>
@@ -163,6 +180,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Dynamic URLs -->
 <script>

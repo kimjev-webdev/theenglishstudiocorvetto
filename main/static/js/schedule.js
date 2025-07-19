@@ -30,6 +30,8 @@ eventForm?.addEventListener('submit', async (e) => {
   const recurrence = document.getElementById('event-recurrence').value;
   const daysOfWeekRaw = document.getElementById('event-days').value;
   const exceptions = document.getElementById('event-exceptions').value;
+  const repeatUntilStr = document.getElementById('event-end-date').value;
+  const repeatUntil = repeatUntilStr ? new Date(repeatUntilStr) : null;
   const eventId = document.getElementById('event-id').value;
   const url = eventId ? urls.updateEvent(eventId) : urls.createEvent;
 
@@ -42,14 +44,28 @@ eventForm?.addEventListener('submit', async (e) => {
     eventsToCreate.push(startDate.toISOString().split('T')[0]);
   } else {
     let current = new Date(startDate);
-    const endLimit = new Date(current);
-    endLimit.setMonth(endLimit.getMonth() + 3); // 3-month cap
+    const endLimit = repeatUntil || new Date(current.setMonth(current.getMonth() + 3));
 
     while (current <= endLimit) {
-      if (daysOfWeek.includes(current.getDay())) {
+      if (
+        recurrence === 'weekly' || recurrence === 'biweekly' || recurrence === 'monthly'
+      ) {
         eventsToCreate.push(current.toISOString().split('T')[0]);
+        if (recurrence === 'weekly') {
+          current.setDate(current.getDate() + 7);
+        } else if (recurrence === 'biweekly') {
+          current.setDate(current.getDate() + 14);
+        } else if (recurrence === 'monthly') {
+          current.setMonth(current.getMonth() + 1);
+        }
+      } else if (recurrence === 'custom_days') {
+        if (daysOfWeek.includes(current.getDay())) {
+          eventsToCreate.push(current.toISOString().split('T')[0]);
+        }
+        current.setDate(current.getDate() + 1);
+      } else {
+        break;
       }
-      current.setDate(current.getDate() + 1);
     }
   }
 
@@ -69,6 +85,7 @@ eventForm?.addEventListener('submit', async (e) => {
           recurrence: recurrence,
           days_of_week: daysOfWeekRaw,
           recurrence_exceptions: exceptions,
+          repeat_until: repeatUntilStr,
         })
       })
     ));
@@ -109,6 +126,7 @@ window.editEvent = function (id) {
   document.getElementById('event-recurrence').value = row.dataset.recurrence || 'none';
   document.getElementById('event-days').value = row.dataset.days || '';
   document.getElementById('event-exceptions').value = row.dataset.exceptions || '';
+  document.getElementById('event-end-date').value = row.dataset.repeatUntil || '';
   new bootstrap.Modal(document.getElementById('eventModal')).show();
 };
 
