@@ -31,6 +31,7 @@ eventForm?.addEventListener('submit', async (e) => {
   const daysOfWeekRaw = document.getElementById('event-days').value;
   const exceptions = document.getElementById('event-exceptions').value;
   const repeatUntilStr = document.getElementById('event-repeat-until').value;
+  const repeatUntil = repeatUntilStr ? new Date(repeatUntilStr).toISOString().split('T')[0] : null;
   const eventId = document.getElementById('event-id').value;
   const url = eventId ? urls.updateEvent(eventId) : urls.createEvent;
 
@@ -49,7 +50,7 @@ eventForm?.addEventListener('submit', async (e) => {
         recurrence: recurrence,
         days_of_week: daysOfWeekRaw,
         recurrence_exceptions: exceptions,
-        repeat_until: repeatUntilStr,
+        repeat_until: repeatUntil,
       })
     });
 
