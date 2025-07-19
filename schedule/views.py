@@ -1,6 +1,6 @@
 import calendar
 import json
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from dateutil.relativedelta import relativedelta
 
 from django.shortcuts import render, get_object_or_404
@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.forms.models import model_to_dict
 from django.utils.formats import date_format
-from django.db.models import Q  # ✅ required for combined query logic
+from django.db.models import Q
 
 from .models import Event, Class
 
@@ -53,18 +53,10 @@ def calendar_view(request, year=None, month=None):
         print("📅 Repeat until:", event.repeat_until)
 
         exceptions = set(event.recurrence_exceptions or [])
-        if event.repeat_until:
-            end_boundary = min(last_day, event.repeat_until)
-        else:
-            end_boundary = (
-                last_day
-            )
+        end_boundary = min(last_day, event.repeat_until) if event.repeat_until else last_day
 
         if event.recurrence == 'none':
-            if (
-                first_day <= event.date <= last_day
-                and event.date not in exceptions
-            ):
+            if first_day <= event.date <= last_day and event.date not in exceptions:
                 print("✅ Adding one-time event on:", event.date)
                 events_by_day.setdefault(event.date, []).append(event)
 
@@ -72,11 +64,7 @@ def calendar_view(request, year=None, month=None):
             current = event.date
             while current <= end_boundary:
                 print("🔄 Weekly check:", current)
-                if (
-                    current >= first_day
-                    and current.weekday() == event.date.weekday()
-                    and current not in exceptions
-                ):
+                if current >= first_day and current.weekday() == event.date.weekday() and current not in exceptions:
                     print("✅ Adding weekly event on:", current)
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(weeks=1)
@@ -85,11 +73,7 @@ def calendar_view(request, year=None, month=None):
             current = event.date
             while current <= end_boundary:
                 print("🔄 Biweekly check:", current)
-                if (
-                    current >= first_day
-                    and current.weekday() == event.date.weekday()
-                    and current not in exceptions
-                ):
+                if current >= first_day and current.weekday() == event.date.weekday() and current not in exceptions:
                     print("✅ Adding biweekly event on:", current)
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(weeks=2)
@@ -112,42 +96,29 @@ def calendar_view(request, year=None, month=None):
                 print("⚠️ Skipping custom_days with no days defined")
                 continue
             weekday_map = {
-                'mon': 0,
-                'tue': 1,
-                'wed': 2,
-                'thu': 3,
-                'fri': 4,
-                'sat': 5,
-                'sun': 6
+                'mon': 0, 'tue': 1, 'wed': 2, 'thu': 3,
+                'fri': 4, 'sat': 5, 'sun': 6
             }
             selected_days = [
                 weekday_map[d.strip().lower()]
-                for d in event.days_of_week.split(',')
-                if d.strip().lower() in weekday_map
+                for d in event.days_of_week.split(',') if d.strip().lower() in weekday_map
             ]
             current = first_day
             while current <= end_boundary:
-                if (
-                    current.weekday() in selected_days
-                    and current >= event.date
-                    and current not in exceptions
-                ):
+                if current.weekday() in selected_days and current >= event.date and current not in exceptions:
                     print("✅ Adding custom-day event on:", current)
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(days=1)
 
     prev_year, prev_month = get_adjacent_month(year, month, -1)
     next_year, next_month = get_adjacent_month(year, month, 1)
+
     return render(
         request,
         'schedule/calendar.html',
         {
             'year': year,
-            'month': date_format(
-                date(year, month, 1),
-                "F",
-                use_l10n=True
-            ),
+            'month': date_format(date(year, month, 1), "F", use_l10n=True),
             'month_number': month,
             'weeks': weeks,
             'events_by_day': events_by_day,
@@ -173,9 +144,13 @@ def event_list_view(request):
 def create_event(request):
     data = json.loads(request.body)
     cls = get_object_or_404(Class, id=data['class_id'])
+
     exceptions_str = data.get('recurrence_exceptions', '')
     exceptions = [d.strip() for d in exceptions_str.split(',') if d.strip()]
-    repeat_until = data.get('repeat_until') or None
+
+    repeat_until_str = data.get('repeat_until')
+    repeat_until = datetime.strptime(repeat_until_str, '%Y-%m-%d').date() if repeat_until_str else None
+    print(f"🌒 Parsed repeat_until from POST: {repeat_until}")
 
     event = Event.objects.create(
         class_instance=cls,
@@ -201,11 +176,15 @@ def update_event(request, event_id):
     event.end_time = data['end_time']
     event.recurrence = data.get('recurrence', 'none')
     event.days_of_week = data.get('days_of_week', '')
+
     exceptions_str = data.get('recurrence_exceptions', '')
-    event.recurrence_exceptions = [
-        d.strip() for d in exceptions_str.split(',') if d.strip()
-    ]
-    event.repeat_until = data.get('repeat_until') or None
+    event.recurrence_exceptions = [d.strip() for d in exceptions_str.split(',') if d.strip()]
+
+    repeat_until_str = data.get('repeat_until')
+    repeat_until = datetime.strptime(repeat_until_str, '%Y-%m-%d').date() if repeat_until_str else None
+    print(f"🌒 Parsed repeat_until from POST (update): {repeat_until}")
+    event.repeat_until = repeat_until
+
     event.save()
     return JsonResponse(model_to_dict(event))
 
