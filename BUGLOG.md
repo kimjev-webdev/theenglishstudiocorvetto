@@ -126,6 +126,7 @@ Date        | Bug                                               | Focus         
 2025-07-19 | Login on deployed site caused 500 error due to unresolved redirect URL 'portal_dashboard' | Auth / Login | Added 'portal' namespace prefix to LOGIN_REDIRECT_URL and LOGOUT_REDIRECT_URL in settings.py. Confirmed 'portal_dashboard' view is correctly named in portal.urls. Explicitly set success_url in LoginView using reverse_lazy.
 2025-07-19 | Dashboard page caused 500 error due to duplicate URL name 'blog_edit' | Portal / Blog | Renamed BlogListView URL to 'blog_list' in portal/urls.py and updated template reverse call to 'portal:blog_list' to avoid NoReverseMatch.
 2025-07-19 | Dashboard raised 500 error due to unresolved URL 'portal_logout' | Portal / Logout | Updated template tag from 'portal_logout' to 'portal:portal_logout' to match namespace. All portal URLs must be reversed with 'portal:' prefix.
+2025-07-19 | Modal displayed both languages and repeated image inside flyer modal | Flyers / Homepage | Removed modal flyer image duplication. Wrapped modal content in LANGUAGE_CODE logic using {% get_current_language %} to show only selected language with fallback to English.
 
 
 
