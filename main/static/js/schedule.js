@@ -70,7 +70,7 @@ eventForm?.addEventListener('submit', async (e) => {
   }
 });
 
-// Modal open, edit, delete handlers remain the same
+// Modal open, edit, delete handlers
 document.querySelector('#add-event-btn')?.addEventListener('click', () => {
   document.getElementById('event-id').value = '';
   eventForm.reset();
@@ -81,11 +81,25 @@ document.querySelector('#add-event-btn')?.addEventListener('click', () => {
 window.editEvent = function (id) {
   const row = document.querySelector(`tr[data-id="${id}"]`);
   if (!row) return;
-  ['class', 'date', 'start', 'end', 'recurrence', 'days', 'exceptions', 'repeat-until']
-    .forEach(field => {
-      const el = document.getElementById(`event-${field}`);
-      if (el) el.value = row.dataset[field.replace('-', '')] || '';
-    });
+
+  const fieldMap = {
+    class: 'class',
+    date: 'date',
+    start: 'start',
+    end: 'end',
+    recurrence: 'recurrence',
+    days: 'daysofweek',
+    exceptions: 'recurrenceexceptions',
+    'repeat-until': 'repeatuntil'
+  };
+
+  Object.entries(fieldMap).forEach(([field, dataKey]) => {
+    const el = document.getElementById(`event-${field}`);
+    if (el && row.dataset[dataKey] !== undefined) {
+      el.value = row.dataset[dataKey];
+    }
+  });
+
   document.getElementById('event-id').value = id;
   new bootstrap.Modal(document.getElementById('eventModal')).show();
 };
