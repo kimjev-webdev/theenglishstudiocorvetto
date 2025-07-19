@@ -33,70 +33,63 @@ def calendar_view(request, year=None, month=None):
     first_day = date(year, month, 1)
     last_day = date(year, month, calendar.monthrange(year, month)[1])
 
-    events = (
-        (
-            (
-                Event.objects
-                .filter(date__lte=last_day)
-                .select_related('class_instance')
-            )
-        )
-    )
+    events = Event.objects.filter(date__lte=last_day).select_related('class_instance')
     events_by_day = {}
 
+    print("📆 CALENDAR VIEW:", first_day, "to", last_day)
+
     for event in events:
+        print("\n🧠 Processing Event ID:", event.id)
+        print("📘 Class:", event.class_instance.name_en)
+        print("🗓️ Date:", event.date)
+        print("🔁 Recurrence:", event.recurrence)
+        print("⛔ Exceptions:", event.recurrence_exceptions)
+        print("📅 Repeat until:", event.repeat_until)
+
         exceptions = set(event.recurrence_exceptions or [])
-        if event.repeat_until:
-            end_boundary = min(last_day, event.repeat_until)
-        else:
-            end_boundary = last_day
+        end_boundary = min(last_day, event.repeat_until) if event.repeat_until else last_day
 
         if event.recurrence == 'none':
-            if (
-                first_day <= event.date <= last_day
-                and event.date not in exceptions
-            ):
+            if first_day <= event.date <= last_day and event.date not in exceptions:
+                print("✅ Adding one-time event on:", event.date)
                 events_by_day.setdefault(event.date, []).append(event)
 
         elif event.recurrence == 'weekly':
             current = event.date
             while current <= end_boundary:
-                if (
-                    current >= first_day
-                    and current.weekday() == event.date.weekday()
-                    and current not in exceptions
-                ):
+                print("🔄 Weekly check:", current)
+                if current >= first_day and current.weekday() == event.date.weekday() and current not in exceptions:
+                    print("✅ Adding weekly event on:", current)
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(weeks=1)
 
         elif event.recurrence == 'biweekly':
             current = event.date
             while current <= end_boundary:
-                if (
-                    current >= first_day
-                    and current.weekday() == event.date.weekday()
-                    and current not in exceptions
-                ):
+                print("🔄 Biweekly check:", current)
+                if current >= first_day and current.weekday() == event.date.weekday() and current not in exceptions:
+                    print("✅ Adding biweekly event on:", current)
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(weeks=2)
 
         elif event.recurrence == 'monthly':
             current = event.date
             while current <= end_boundary:
+                print("🔄 Monthly check:", current)
                 if current >= first_day and current not in exceptions:
+                    print("✅ Adding monthly event on:", current)
                     events_by_day.setdefault(current, []).append(event)
                 try:
-                    current = current + relativedelta(months=1)
+                    current += relativedelta(months=1)
                 except ValueError:
+                    print("❌ Error incrementing monthly")
                     break
 
         elif event.recurrence == 'custom_days':
             if not event.days_of_week:
+                print("⚠️ Skipping custom_days with no days defined")
                 continue
-            weekday_map = {
-                'mon': 0, 'tue': 1, 'wed': 2,
-                'thu': 3, 'fri': 4, 'sat': 5, 'sun': 6
-            }
+            weekday_map = {'mon': 0, 'tue': 1, 'wed': 2, 'thu': 3, 'fri': 4, 'sat': 5, 'sun': 6}
             selected_days = [
                 weekday_map[d.strip().lower()]
                 for d in event.days_of_week.split(',')
@@ -104,14 +97,11 @@ def calendar_view(request, year=None, month=None):
             ]
             current = first_day
             while current <= end_boundary:
-                if (
-                    current.weekday() in selected_days
-                    and current >= event.date
-                    and current not in exceptions
-                ):
+                if current.weekday() in selected_days and current >= event.date and current not in exceptions:
+                    print("✅ Adding custom-day event on:", current)
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(days=1)
-    # Calculate previous and next month/year
+
     prev_year, prev_month = get_adjacent_month(year, month, -1)
     next_year, next_month = get_adjacent_month(year, month, 1)
 
@@ -120,11 +110,7 @@ def calendar_view(request, year=None, month=None):
         'schedule/calendar.html',
         {
             'year': year,
-            'month': date_format(
-                date(year, month, 1),
-                "F",
-                use_l10n=True
-            ),
+            'month': date_format(date(year, month, 1), "F", use_l10n=True),
             'month_number': month,
             'weeks': weeks,
             'events_by_day': events_by_day,
