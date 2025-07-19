@@ -30,7 +30,10 @@ def calendar_view(request, year=None, month=None):
     first_day = date(year, month, 1)
     last_day = date(year, month, calendar.monthrange(year, month)[1])
 
-    events = Event.objects.filter(date__lte=last_day)
+    events = (
+        Event.objects.filter(date__lte=last_day)
+        .select_related('class_instance')
+    )
     events_by_day = {}
 
     for event in events:
@@ -74,7 +77,7 @@ def calendar_view(request, year=None, month=None):
                 ):
                     events_by_day.setdefault(recur_date, []).append(event)
             except ValueError:
-                pass  # e.g. no Feb 30
+                pass  # handle Feb 30 etc
 
         elif event.recurrence == 'custom_days':
             if not event.days_of_week:
@@ -91,9 +94,9 @@ def calendar_view(request, year=None, month=None):
             current = first_day
             while current <= last_day:
                 if (
-                    current.weekday() in selected_days
-                    and current >= event.date
-                    and current not in exceptions
+                    current.weekday() in selected_days and
+                    current >= event.date and
+                    current not in exceptions
                 ):
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(days=1)
@@ -131,9 +134,11 @@ def create_event(request):
     data = json.loads(request.body)
     cls = get_object_or_404(Class, id=data['class_id'])
 
+    # Process recurrence_exceptions string into list
     exceptions_str = data.get('recurrence_exceptions', '')
     exceptions = [d.strip() for d in exceptions_str.split(',') if d.strip()]
 
+    # Create single recurring event instance
     event = Event.objects.create(
         class_instance=cls,
         date=data['date'],
@@ -151,6 +156,7 @@ def create_event(request):
 def update_event(request, event_id):
     data = json.loads(request.body)
     event = get_object_or_404(Event, id=event_id)
+
     event.class_instance = get_object_or_404(Class, id=data['class_id'])
     event.date = data['date']
     event.start_time = data['start_time']

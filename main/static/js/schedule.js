@@ -14,8 +14,6 @@ function getCookie(name) {
   return cookieValue;
 }
 const csrftoken = getCookie('csrftoken');
-
-// Use window.urls injected via template
 const urls = window.urls;
 
 // EVENT HANDLERS
@@ -25,52 +23,63 @@ eventForm?.addEventListener('submit', async (e) => {
   const saveBtn = eventForm.querySelector('button[type="submit"]');
   saveBtn.disabled = true;
 
-  const payload = {
-    class_id: document.getElementById('event-class').value,
-    date: document.getElementById('event-date').value,
-    start_time: document.getElementById('event-start').value,
-    end_time: document.getElementById('event-end').value,
-    recurrence: document.getElementById('event-recurrence').value,
-    days_of_week: document.getElementById('event-days').value,
-    recurrence_exceptions: document.getElementById('event-exceptions').value,
-  };
+  const classId = document.getElementById('event-class').value;
+  const startDate = new Date(document.getElementById('event-date').value);
+  const startTime = document.getElementById('event-start').value;
+  const endTime = document.getElementById('event-end').value;
+  const recurrence = document.getElementById('event-recurrence').value;
+  const daysOfWeekRaw = document.getElementById('event-days').value;
+  const exceptions = document.getElementById('event-exceptions').value;
+  const eventId = document.getElementById('event-id').value;
+  const url = eventId ? urls.updateEvent(eventId) : urls.createEvent;
 
-  const id = document.getElementById('event-id').value;
-  const url = id ? urls.updateEvent(id) : urls.createEvent;
+  const dayNameToIndex = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  const daysOfWeek = daysOfWeekRaw.split(',').map(d => dayNameToIndex[d.trim()]).filter(d => !isNaN(d));
+
+  const eventsToCreate = [];
+
+  if (recurrence === 'none' || eventId) {
+    eventsToCreate.push(startDate.toISOString().split('T')[0]);
+  } else {
+    let current = new Date(startDate);
+    const endLimit = new Date(current);
+    endLimit.setMonth(endLimit.getMonth() + 3); // 3-month cap
+
+    while (current <= endLimit) {
+      if (daysOfWeek.includes(current.getDay())) {
+        eventsToCreate.push(current.toISOString().split('T')[0]);
+      }
+      current.setDate(current.getDate() + 1);
+    }
+  }
 
   try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrftoken,
-      },
-      body: JSON.stringify(payload)
-    });
+    const responses = await Promise.all(eventsToCreate.map(date =>
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken,
+        },
+        body: JSON.stringify({
+          class_id: classId,
+          date: date,
+          start_time: startTime,
+          end_time: endTime,
+          recurrence: recurrence,
+          days_of_week: daysOfWeekRaw,
+          recurrence_exceptions: exceptions,
+        })
+      })
+    ));
 
-    if (res.ok) {
-      const data = await res.json();
-
-      if (id) {
-        const row = document.querySelector(`tr[data-id='${id}']`);
-        if (row) {
-          row.dataset.classId = payload.class_id;
-          row.dataset.date = payload.date;
-          row.dataset.start = payload.start_time;
-          row.dataset.end = payload.end_time;
-          row.dataset.recurrence = payload.recurrence;
-          row.dataset.days = payload.days_of_week;
-          row.dataset.exceptions = payload.recurrence_exceptions;
-        }
-      } else {
-        location.reload();
-      }
-
+    if (responses.every(res => res.ok)) {
       eventForm.reset();
       document.getElementById('event-id').value = '';
       bootstrap.Modal.getInstance(document.getElementById('eventModal'))?.hide();
+      location.reload();
     } else {
-      alert('Failed to save event. Please check your inputs.');
+      alert('Some events failed to save.');
     }
   } catch (err) {
     console.error('Error submitting form:', err);
@@ -89,11 +98,9 @@ document.querySelector('#add-event-btn')?.addEventListener('click', () => {
 });
 
 window.editEvent = function (id) {
-  // Select the specific row using data-id attribute
   const row = document.querySelector(`tr[data-id="${id}"]`);
   if (!row) return;
 
-  // Populate modal fields from dataset
   document.getElementById('event-id').value = id;
   document.getElementById('event-class').value = row.dataset.classId;
   document.getElementById('event-date').value = row.dataset.date;
@@ -102,8 +109,6 @@ window.editEvent = function (id) {
   document.getElementById('event-recurrence').value = row.dataset.recurrence || 'none';
   document.getElementById('event-days').value = row.dataset.days || '';
   document.getElementById('event-exceptions').value = row.dataset.exceptions || '';
-
-  // Show modal
   new bootstrap.Modal(document.getElementById('eventModal')).show();
 };
 
@@ -111,9 +116,7 @@ window.deleteEvent = async function(id) {
   if (!confirm('Delete this event?')) return;
   const res = await fetch(urls.deleteEvent(id), {
     method: 'POST',
-    headers: {
-      'X-CSRFToken': csrftoken,
-    },
+    headers: { 'X-CSRFToken': csrftoken },
   });
   if (res.ok) {
     document.querySelector(`tr[data-id='${id}']`)?.remove();
@@ -148,7 +151,6 @@ classForm?.addEventListener('submit', async (e) => {
 
     if (res.ok) {
       const data = await res.json();
-
       if (id) {
         const row = document.querySelector(`tr[data-id='${id}']`);
         if (row) {
@@ -187,9 +189,7 @@ window.deleteClass = async function(id) {
   if (!confirm('Delete this class?')) return;
   const res = await fetch(urls.deleteClass(id), {
     method: 'POST',
-    headers: {
-      'X-CSRFToken': csrftoken,
-    },
+    headers: { 'X-CSRFToken': csrftoken },
   });
   if (res.ok) {
     document.querySelector(`tr[data-id='${id}']`)?.remove();

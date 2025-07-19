@@ -79,7 +79,14 @@
     </thead>
     <tbody id="event-list">
       {% for event in events %}
-<tr data-id="{{ event.id }}" data-class-id="{{ event.class_instance.id|default_if_none:'' }}" data-date="{{ event.date|date:'Y-m-d' }}" data-start="{{ event.start_time|time:'H:i' }}" data-end="{{ event.end_time|time:'H:i' }}" data-recurrence="{{ event.recurrence|default_if_none:'' }}" data-days="{{ event.days_of_week|default_if_none:'' }}" data-exceptions="{{ event.recurrence_exceptions|default_if_none:''|join:',' }}">
+      <tr data-id="{{ event.id }}"
+          data-class-id="{{ event.class_instance.id|default_if_none:'' }}"
+          data-date="{{ event.date|date:'Y-m-d' }}"
+          data-start="{{ event.start_time|time:'H:i' }}"
+          data-end="{{ event.end_time|time:'H:i' }}"
+          data-recurrence="{{ event.recurrence|default_if_none:'' }}"
+          data-days="{{ event.days_of_week|default_if_none:'' }}"
+          data-exceptions="{{ event.recurrence_exceptions|default_if_none:''|join:',' }}">
         <td>{{ event.class_instance.name_en }}</td>
         <td>{{ event.date }}</td>
         <td>{{ event.start_time }}</td>
@@ -119,6 +126,10 @@
             <input type="date" class="form-control" id="event-date" required>
           </div>
           <div class="col-md-6">
+            <label for="event-end-date" class="form-label">Repeat Until</label>
+            <input type="date" class="form-control" id="event-end-date">
+          </div>
+          <div class="col-md-6">
             <label for="event-start" class="form-label">Start Time</label>
             <input type="time" class="form-control" id="event-start" required>
           </div>
@@ -153,7 +164,7 @@
   </div>
 </div>
 
-<!-- Dynamic Django URL resolution -->
+<!-- Dynamic URLs -->
 <script>
   window.urls = {
     createClass: "{% url 'create_class' %}",
