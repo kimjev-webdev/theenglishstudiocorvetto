@@ -72,10 +72,9 @@ INSTALLED_APPS = [
     'flyers',
 ]
 
-LOGIN_REDIRECT_URL = 'portal_dashboard'
+LOGIN_REDIRECT_URL = 'portal:portal_dashboard'
 LOGIN_URL = '/portal/login/'
-LOGOUT_REDIRECT_URL = 'portal_login'
-
+LOGOUT_REDIRECT_URL = 'portal:portal_login'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
