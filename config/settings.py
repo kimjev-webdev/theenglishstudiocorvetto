@@ -76,6 +76,7 @@ LOGIN_REDIRECT_URL = 'portal:portal_dashboard'
 LOGIN_URL = '/portal/login/'
 LOGOUT_REDIRECT_URL = 'portal:portal_login'
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',

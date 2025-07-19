@@ -1,4 +1,6 @@
 from django.urls import path
+from django.contrib.auth.views import LoginView
+from django.urls import reverse_lazy
 from .views import (
     portal_dashboard,
     portal_logout_view,
@@ -6,31 +8,28 @@ from .views import (
     BlogCreateView,
     BlogUpdateView,
     BlogDeleteView,
-    FlyerListView,        # ✅ updated: using class-based list view
+    FlyerListView,
     FlyerCreateView,
     FlyerUpdateView,
     FlyerDeleteView,
 )
-from django.contrib.auth.views import LoginView
 
 urlpatterns = [
+    # Login + logout
     path(
         'login/',
-        LoginView.as_view(template_name='portal/login.html'),
+        LoginView.as_view(
+            template_name='portal/login.html',
+            success_url=reverse_lazy('portal:portal_dashboard')
+        ),
         name='portal_login'
     ),
-    path(
-        'logout/',
-        portal_logout_view,
-        name='portal_logout'
-    ),
-    path(
-        '',
-        portal_dashboard,
-        name='portal_dashboard'
-    ),
+    path('logout/', portal_logout_view, name='portal_logout'),
 
-    # Blog CRUD routes
+    # Dashboard
+    path('', portal_dashboard, name='portal_dashboard'),
+
+    # Blog CRUD
     path('blog/', BlogListView.as_view(), name='blog_edit'),
     path('blog/create/', BlogCreateView.as_view(), name='blog_create'),
     path(
@@ -44,8 +43,8 @@ urlpatterns = [
         name='blog_delete'
     ),
 
-    # Flyer CRUD routes
-    path('flyers/', FlyerListView.as_view(), name='flyer_list'),  # ✅ updated
+    # Flyer CRUD
+    path('flyers/', FlyerListView.as_view(), name='flyer_list'),
     path('flyers/new/', FlyerCreateView.as_view(), name='flyer_create'),
     path(
         'flyers/<int:pk>/edit/',
