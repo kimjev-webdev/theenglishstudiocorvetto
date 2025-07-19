@@ -127,6 +127,10 @@ Date        | Bug                                               | Focus         
 2025-07-19 | Dashboard page caused 500 error due to duplicate URL name 'blog_edit' | Portal / Blog | Renamed BlogListView URL to 'blog_list' in portal/urls.py and updated template reverse call to 'portal:blog_list' to avoid NoReverseMatch.
 2025-07-19 | Dashboard raised 500 error due to unresolved URL 'portal_logout' | Portal / Logout | Updated template tag from 'portal_logout' to 'portal:portal_logout' to match namespace. All portal URLs must be reversed with 'portal:' prefix.
 2025-07-19 | Modal displayed both languages and repeated image inside flyer modal | Flyers / Homepage | Removed modal flyer image duplication. Wrapped modal content in LANGUAGE_CODE logic using {% get_current_language %} to show only selected language with fallback to English.
+| 2025-07-19 | Recurring events continued infinitely                  | Recurrence    | Added `repeat_until` field to `Event` model and applied stop condition in calendar loop logic.                  |
+| 2025-07-19 | `repeat_until` value was not being saved               | Backend Views | Updated `create_event` and `update_event` views to parse and store `repeat_until` from POSTed JSON data.        |
+| 2025-07-19 | Recurring events still showed after `repeat_until`     | Calendar View | Modified all recurrence logic (`weekly`, `biweekly`, `monthly`, `custom_days`) to break loop at `repeat_until`. |
+| 2025-07-19 | Frontend form was missing a way to pass `repeat_until` | JS / Frontend | Added `event-end-date` field in modal form and passed it in AJAX request payload to match backend expectations. |
 
 
 
