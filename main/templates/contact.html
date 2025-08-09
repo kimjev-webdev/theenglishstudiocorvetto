@@ -105,14 +105,13 @@
 
 </main>
 
-<!--Maps javascript-->
+{% endblock %}
+
+{% block extra_js %}
+<!-- Custom Google Maps script loaded only on the contact page -->
 <script src="{% static 'js/maps.js' %}"></script>
 <script src="{% static 'js/contact.js' %}"></script>
 
-<!--Load the Google Maps script-->
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=maps,marker&callback=initMap"
-    async defer>
-</script>
-
+<!-- Load Google Maps API -->
+<script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=maps,marker&callback=initMap" async defer></script>
 {% endblock %}
