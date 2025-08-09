@@ -1,8 +1,8 @@
 from django.shortcuts import render
+from django.conf import settings
 from .forms import ContactForm
 from django.core.mail import EmailMessage
 import requests
-import os
 
 
 def contact_view(request):
@@ -34,21 +34,21 @@ def contact_view(request):
 
         # ✅ Subscribe to Mailchimp if opted-in
         if data.get("subscribe"):
-            mailchimp_api_key = os.getenv("MAILCHIMP_API_KEY")
-            mailchimp_list_id = os.getenv("MAILCHIMP_AUDIENCE_ID")
+            mailchimp_api_key = (
+                settings.MAILCHIMP_API_KEY  # Using settings for Mailchimp API
+            )
+            mailchimp_list_id = settings.MAILCHIMP_AUDIENCE_ID
             datacenter = mailchimp_api_key.split('-')[-1]
 
             url = (
-                f"https://{datacenter}.api.mailchimp.com/3.0/"
-                f"lists/{mailchimp_list_id}/members"
+                f"https://{datacenter}.api.mailchimp.com/3.0/lists/"
+                f"{mailchimp_list_id}/members"
             )
 
             payload = {
                 "email_address": data["email"],
                 "status": "subscribed",
-                "merge_fields": {
-                    "FNAME": data["full_name"]
-                }
+                "merge_fields": {"FNAME": data["full_name"]}
             }
 
             headers = {
@@ -69,7 +69,10 @@ def contact_view(request):
             {
                 "form": ContactForm(),
                 "show_modal": True,
-                "google_maps_api_key": os.getenv("GOOGLE_MAPS_API_KEY")
+                "google_maps_api_key": (
+                    settings.GOOGLE_MAPS_API_KEY
+                    # Use settings to fetch the key
+                )
             }
         )
 
@@ -79,6 +82,8 @@ def contact_view(request):
         "contact.html",
         {
             "form": form,
-            "google_maps_api_key": os.getenv("GOOGLE_MAPS_API_KEY")
+            "google_maps_api_key": (
+                settings.GOOGLE_MAPS_API_KEY  # Use settings to fetch the key
+            )
         }
     )
