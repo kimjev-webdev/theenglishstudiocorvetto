@@ -34,9 +34,7 @@ def contact_view(request):
 
         # ✅ Subscribe to Mailchimp if opted-in
         if data.get("subscribe"):
-            mailchimp_api_key = (
-                settings.MAILCHIMP_API_KEY  # Using settings for Mailchimp API
-            )
+            mailchimp_api_key = settings.MAILCHIMP_API_KEY
             mailchimp_list_id = settings.MAILCHIMP_AUDIENCE_ID
             datacenter = mailchimp_api_key.split('-')[-1]
 
@@ -44,13 +42,11 @@ def contact_view(request):
                 f"https://{datacenter}.api.mailchimp.com/3.0/lists/"
                 f"{mailchimp_list_id}/members"
             )
-
             payload = {
                 "email_address": data["email"],
                 "status": "subscribed",
                 "merge_fields": {"FNAME": data["full_name"]}
             }
-
             headers = {
                 "Authorization": f"apikey {mailchimp_api_key}"
             }
@@ -69,21 +65,20 @@ def contact_view(request):
             {
                 "form": ContactForm(),
                 "show_modal": True,
-                "google_maps_api_key": (
-                    settings.GOOGLE_MAPS_API_KEY
-                    # Use settings to fetch the key
-                )
+                "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY,
+                # Pass the API key to the template
             }
         )
 
-    # ❌ GET or invalid form
+    # ❌ GET or invalid form, render the form again
     return render(
         request,
         "contact.html",
         {
             "form": form,
             "google_maps_api_key": (
-                settings.GOOGLE_MAPS_API_KEY  # Use settings to fetch the key
-            )
+                settings.GOOGLE_MAPS_API_KEY
+                # Pass the API key to the template
+            ),
         }
     )
