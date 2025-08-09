@@ -32,6 +32,8 @@ def calendar_view(request, year=None, month=None):
     first_day = date(year, month, 1)
     last_day = date(year, month, calendar.monthrange(year, month)[1])
 
+    # Pull anything that could touch this month (starts before month ends OR
+    # ends after month starts)
     events = (
         Event.objects
         .filter(Q(date__lte=last_day) | Q(repeat_until__gte=first_day))
@@ -40,28 +42,26 @@ def calendar_view(request, year=None, month=None):
     )
     events_by_day = {}
 
-    print("📆 CALENDAR VIEW:", first_day, "to", last_day)
+    # ---- expand events into the month, clamped to repeat_until if set ----
     for event in events:
-        print(f"\n🧠 Processing Event ID: {event.id}")
-        print("📘 Class:", event.class_instance.name_en)
-        print("🗓️ Date:", event.date)
-        print("🔁 Recurrence:", event.recurrence)
-        print("⛔ Exceptions:", event.recurrence_exceptions)
-        print("📅 Repeat until:", event.repeat_until)
-
-        exceptions = set(event.recurrence_exceptions or [])
-        if event.repeat_until:
-            end_boundary = min(last_day, event.repeat_until)
-        else:
-            end_boundary = last_day
+        exceptions = set(
+            event.recurrence_exceptions or []
+        )
+        end_boundary = (
+            (
+                min(last_day, event.repeat_until)
+                if event.repeat_until else last_day
+            )
+        )
 
         if event.recurrence == 'none':
             if (
                 first_day <= event.date <= last_day
                 and event.date not in exceptions
             ):
-                print("✅ Adding one-time event on:", event.date)
-                events_by_day.setdefault(event.date, []).append(event)
+                events_by_day.setdefault(
+                    event.date, []
+                ).append(event)
 
         elif event.recurrence == 'weekly':
             current = event.date
@@ -71,7 +71,6 @@ def calendar_view(request, year=None, month=None):
                     and current.weekday() == event.date.weekday()
                     and current not in exceptions
                 ):
-                    print("✅ Adding weekly event on:", current)
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(weeks=1)
 
@@ -83,7 +82,6 @@ def calendar_view(request, year=None, month=None):
                     and current.weekday() == event.date.weekday()
                     and current not in exceptions
                 ):
-                    print("✅ Adding biweekly event on:", current)
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(weeks=2)
 
@@ -91,17 +89,14 @@ def calendar_view(request, year=None, month=None):
             current = event.date
             while current <= end_boundary:
                 if current >= first_day and current not in exceptions:
-                    print("✅ Adding monthly event on:", current)
                     events_by_day.setdefault(current, []).append(event)
                 try:
                     current += relativedelta(months=1)
                 except ValueError:
-                    print("❌ Error incrementing monthly")
                     break
 
         elif event.recurrence == 'custom_days':
             if not event.days_of_week:
-                print("⚠️ Skipping custom_days with no days defined")
                 continue
             weekdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
             weekday_map = dict(zip(weekdays, range(7)))
@@ -117,7 +112,6 @@ def calendar_view(request, year=None, month=None):
                     and current >= event.date
                     and current not in exceptions
                 ):
-                    print("✅ Adding custom-day event on:", current)
                     events_by_day.setdefault(current, []).append(event)
                 current += timedelta(days=1)
 
@@ -143,13 +137,11 @@ def event_list_view(request):
     return render(
         request,
         'schedule/event_list.html',
-        {
-            'classes': classes,
-            'events': events
-        }
+        {'classes': classes, 'events': events}
     )
 
 
+# ----------------------------- CREATE ---------------------------------
 @csrf_exempt
 @require_POST
 def create_event(request):
@@ -162,12 +154,12 @@ def create_event(request):
         if d.strip()
     ]
 
+    # Accept missing repeat_until as None; parse "YYYY-MM-DD" when provided
     repeat_until_str = data.get('repeat_until')
     repeat_until = (
         datetime.strptime(repeat_until_str, '%Y-%m-%d').date()
         if repeat_until_str else None
     )
-    print(f"🌒 Parsed repeat_until from POST: {repeat_until}")
 
     event = Event.objects.create(
         class_instance=cls,
@@ -177,37 +169,45 @@ def create_event(request):
         recurrence=data.get('recurrence', 'none'),
         days_of_week=data.get('days_of_week', ''),
         recurrence_exceptions=exceptions,
-        repeat_until=repeat_until
+        repeat_until=repeat_until,
     )
     return JsonResponse(model_to_dict(event))
 
 
+# ----------------------------- UPDATE ---------------------------------
 @csrf_exempt
 @require_POST
 def update_event(request, event_id):
     data = json.loads(request.body)
     ev = get_object_or_404(Event, id=event_id)
-    ev.class_instance = get_object_or_404(Class, id=data['class_id'])
-    ev.date = data['date']
-    ev.start_time = data['start_time']
-    ev.end_time = data['end_time']
-    ev.recurrence = data.get('recurrence', 'none')
-    ev.days_of_week = data.get('days_of_week', '')
 
-    ev.recurrence_exceptions = [
-        d.strip()
-        for d in data.get('recurrence_exceptions', '').split(',')
-        if d.strip()
-    ]
+    # Only update fields that were actually sent
+    if 'class_id' in data:
+        ev.class_instance = get_object_or_404(Class, id=data['class_id'])
+    if 'date' in data:
+        ev.date = data['date']
+    if 'start_time' in data:
+        ev.start_time = data['start_time']
+    if 'end_time' in data:
+        ev.end_time = data['end_time']
+    if 'recurrence' in data:
+        ev.recurrence = data['recurrence']
+    if 'days_of_week' in data:
+        ev.days_of_week = data['days_of_week']
 
-    repeat_until_str = data.get('repeat_until')
-    if repeat_until_str:
-        ev.repeat_until = datetime.strptime(
-            repeat_until_str, '%Y-%m-%d'
-        ).date()
-    else:
-        ev.repeat_until = None
-    print(f"🌒 Parsed repeat_until from POST (update): {ev.repeat_until}")
+    if 'recurrence_exceptions' in data:
+        ev.recurrence_exceptions = [
+            d.strip()
+            for d in data.get('recurrence_exceptions', '').split(',')
+            if d.strip()
+        ]
+
+    # Critical: only change repeat_until if the client sent the key
+    if 'repeat_until' in data:
+        ru = data['repeat_until']  # may be "", null, or "YYYY-MM-DD"
+        ev.repeat_until = (
+            datetime.strptime(ru, '%Y-%m-%d').date() if ru else None
+        )
 
     ev.save()
     return JsonResponse(model_to_dict(ev))
