@@ -16,24 +16,38 @@ function getCookie(name) {
 const csrftoken = getCookie('csrftoken');
 const urls = window.urls;
 
-// EVENT HANDLERS
+/* ------------------------------------------------------------------ *
+ * Helpers
+ * ------------------------------------------------------------------ */
+function buildEventPayloadFromForm() {
+  // IMPORTANT: take raw values from <input type="date"> and friends.
+  // Do NOT construct Date() or toISOString(), which can timezone-shift.
+  const repeatUntilStr = document.getElementById('event-repeat-until').value; // "YYYY-MM-DD" or ""
+
+  return {
+    class_id: document.getElementById('event-class').value,
+    date: document.getElementById('event-date').value,               // "YYYY-MM-DD"
+    start_time: document.getElementById('event-start').value,         // "HH:MM"
+    end_time: document.getElementById('event-end').value,             // "HH:MM"
+    recurrence: document.getElementById('event-recurrence').value,    // e.g. "weekly"
+    days_of_week: document.getElementById('event-days').value,        // e.g. "Mon,Wed,Fri"
+    recurrence_exceptions: document.getElementById('event-exceptions').value, // "YYYY-MM-DD, YYYY-MM-DD"
+    repeat_until: repeatUntilStr || null                              // null when empty
+  };
+}
+
+/* ------------------------------------------------------------------ *
+ * EVENT HANDLERS
+ * ------------------------------------------------------------------ */
 const eventForm = document.getElementById('event-form');
 eventForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const saveBtn = eventForm.querySelector('button[type="submit"]');
   saveBtn.disabled = true;
 
-  const classId = document.getElementById('event-class').value;
-  const startDate = new Date(document.getElementById('event-date').value);
-  const startTime = document.getElementById('event-start').value;
-  const endTime = document.getElementById('event-end').value;
-  const recurrence = document.getElementById('event-recurrence').value;
-  const daysOfWeekRaw = document.getElementById('event-days').value;
-  const exceptions = document.getElementById('event-exceptions').value;
-  const repeatUntilStr = document.getElementById('event-repeat-until').value;
-  const repeatUntil = repeatUntilStr ? new Date(repeatUntilStr).toISOString().split('T')[0] : null;
   const eventId = document.getElementById('event-id').value;
   const url = eventId ? urls.updateEvent(eventId) : urls.createEvent;
+  const payload = buildEventPayloadFromForm();
 
   try {
     const res = await fetch(url, {
@@ -42,22 +56,15 @@ eventForm?.addEventListener('submit', async (e) => {
         'Content-Type': 'application/json',
         'X-CSRFToken': csrftoken,
       },
-      body: JSON.stringify({
-        class_id: classId,
-        date: startDate.toISOString().split('T')[0],
-        start_time: startTime,
-        end_time: endTime,
-        recurrence: recurrence,
-        days_of_week: daysOfWeekRaw,
-        recurrence_exceptions: exceptions,
-        repeat_until: repeatUntil,
-      })
+      body: JSON.stringify(payload),
+      credentials: 'same-origin'
     });
 
     if (res.ok) {
       eventForm.reset();
       document.getElementById('event-id').value = '';
       bootstrap.Modal.getInstance(document.getElementById('eventModal'))?.hide();
+      // Reload so the table reflects changes immediately
       location.reload();
     } else {
       alert('Error saving event.');
@@ -70,7 +77,7 @@ eventForm?.addEventListener('submit', async (e) => {
   }
 });
 
-// Modal open, edit, delete handlers
+// Modal open (add)
 document.querySelector('#add-event-btn')?.addEventListener('click', () => {
   document.getElementById('event-id').value = '';
   eventForm.reset();
@@ -78,6 +85,7 @@ document.querySelector('#add-event-btn')?.addEventListener('click', () => {
   setTimeout(() => document.getElementById('event-class')?.focus(), 500);
 });
 
+// Modal open (edit)
 window.editEvent = function (id) {
   const row = document.querySelector(`tr[data-id="${id}"]`);
   if (!row) return;
@@ -104,16 +112,20 @@ window.editEvent = function (id) {
   new bootstrap.Modal(document.getElementById('eventModal')).show();
 };
 
+// Delete event
 window.deleteEvent = async function(id) {
   if (!confirm('Delete this event?')) return;
   const res = await fetch(urls.deleteEvent(id), {
     method: 'POST',
     headers: { 'X-CSRFToken': csrftoken },
+    credentials: 'same-origin'
   });
   if (res.ok) document.querySelector(`tr[data-id='${id}']`)?.remove();
 };
 
-// CLASS HANDLERS
+/* ------------------------------------------------------------------ *
+ * CLASS HANDLERS
+ * ------------------------------------------------------------------ */
 const classForm = document.getElementById('class-form');
 classForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -136,7 +148,8 @@ classForm?.addEventListener('submit', async (e) => {
         'Content-Type': 'application/json',
         'X-CSRFToken': csrftoken,
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      credentials: 'same-origin'
     });
 
     if (res.ok) {
@@ -180,6 +193,7 @@ window.deleteClass = async function(id) {
   const res = await fetch(urls.deleteClass(id), {
     method: 'POST',
     headers: { 'X-CSRFToken': csrftoken },
+    credentials: 'same-origin'
   });
   if (res.ok) {
     document.querySelector(`tr[data-id='${id}']`)?.remove();
