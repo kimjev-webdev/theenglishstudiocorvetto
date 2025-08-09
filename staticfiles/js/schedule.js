@@ -14,29 +14,40 @@ function getCookie(name) {
   return cookieValue;
 }
 const csrftoken = getCookie('csrftoken');
-
-// Use window.urls injected via template
 const urls = window.urls;
 
-// EVENT HANDLERS
+/* ------------------------------------------------------------------ *
+ * Helpers
+ * ------------------------------------------------------------------ */
+function buildEventPayloadFromForm() {
+  // IMPORTANT: take raw values from <input type="date"> and friends.
+  // Do NOT construct Date() or toISOString(), which can timezone-shift.
+  const repeatUntilStr = document.getElementById('event-repeat-until').value; // "YYYY-MM-DD" or ""
+
+  return {
+    class_id: document.getElementById('event-class').value,
+    date: document.getElementById('event-date').value,               // "YYYY-MM-DD"
+    start_time: document.getElementById('event-start').value,         // "HH:MM"
+    end_time: document.getElementById('event-end').value,             // "HH:MM"
+    recurrence: document.getElementById('event-recurrence').value,    // e.g. "weekly"
+    days_of_week: document.getElementById('event-days').value,        // e.g. "Mon,Wed,Fri"
+    recurrence_exceptions: document.getElementById('event-exceptions').value, // "YYYY-MM-DD, YYYY-MM-DD"
+    repeat_until: repeatUntilStr || null                              // null when empty
+  };
+}
+
+/* ------------------------------------------------------------------ *
+ * EVENT HANDLERS
+ * ------------------------------------------------------------------ */
 const eventForm = document.getElementById('event-form');
 eventForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const saveBtn = eventForm.querySelector('button[type="submit"]');
   saveBtn.disabled = true;
 
-  const payload = {
-    class_id: document.getElementById('event-class').value,
-    date: document.getElementById('event-date').value,
-    start_time: document.getElementById('event-start').value,
-    end_time: document.getElementById('event-end').value,
-    recurrence: document.getElementById('event-recurrence').value,
-    days_of_week: document.getElementById('event-days').value,
-    recurrence_exceptions: document.getElementById('event-exceptions').value,
-  };
-
-  const id = document.getElementById('event-id').value;
-  const url = id ? urls.updateEvent(id) : urls.createEvent;
+  const eventId = document.getElementById('event-id').value;
+  const url = eventId ? urls.updateEvent(eventId) : urls.createEvent;
+  const payload = buildEventPayloadFromForm();
 
   try {
     const res = await fetch(url, {
@@ -45,32 +56,18 @@ eventForm?.addEventListener('submit', async (e) => {
         'Content-Type': 'application/json',
         'X-CSRFToken': csrftoken,
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      credentials: 'same-origin'
     });
 
     if (res.ok) {
-      const data = await res.json();
-
-      if (id) {
-        const row = document.querySelector(`tr[data-id='${id}']`);
-        if (row) {
-          row.dataset.classId = payload.class_id;
-          row.dataset.date = payload.date;
-          row.dataset.start = payload.start_time;
-          row.dataset.end = payload.end_time;
-          row.dataset.recurrence = payload.recurrence;
-          row.dataset.days = payload.days_of_week;
-          row.dataset.exceptions = payload.recurrence_exceptions;
-        }
-      } else {
-        location.reload();
-      }
-
       eventForm.reset();
       document.getElementById('event-id').value = '';
       bootstrap.Modal.getInstance(document.getElementById('eventModal'))?.hide();
+      // Reload so the table reflects changes immediately
+      location.reload();
     } else {
-      alert('Failed to save event. Please check your inputs.');
+      alert('Error saving event.');
     }
   } catch (err) {
     console.error('Error submitting form:', err);
@@ -80,47 +77,55 @@ eventForm?.addEventListener('submit', async (e) => {
   }
 });
 
+// Modal open (add)
 document.querySelector('#add-event-btn')?.addEventListener('click', () => {
   document.getElementById('event-id').value = '';
   eventForm.reset();
-  const modal = new bootstrap.Modal(document.getElementById('eventModal'));
-  modal.show();
+  new bootstrap.Modal(document.getElementById('eventModal')).show();
   setTimeout(() => document.getElementById('event-class')?.focus(), 500);
 });
 
+// Modal open (edit)
 window.editEvent = function (id) {
-  // Select the specific row using data-id attribute
   const row = document.querySelector(`tr[data-id="${id}"]`);
   if (!row) return;
 
-  // Populate modal fields from dataset
-  document.getElementById('event-id').value = id;
-  document.getElementById('event-class').value = row.dataset.classId;
-  document.getElementById('event-date').value = row.dataset.date;
-  document.getElementById('event-start').value = row.dataset.start;
-  document.getElementById('event-end').value = row.dataset.end;
-  document.getElementById('event-recurrence').value = row.dataset.recurrence || 'none';
-  document.getElementById('event-days').value = row.dataset.days || '';
-  document.getElementById('event-exceptions').value = row.dataset.exceptions || '';
+  const fieldMap = {
+    class: 'class',
+    date: 'date',
+    start: 'start',
+    end: 'end',
+    recurrence: 'recurrence',
+    days: 'daysofweek',
+    exceptions: 'recurrenceexceptions',
+    'repeat-until': 'repeatuntil'
+  };
 
-  // Show modal
+  Object.entries(fieldMap).forEach(([field, dataKey]) => {
+    const el = document.getElementById(`event-${field}`);
+    if (el && row.dataset[dataKey] !== undefined) {
+      el.value = row.dataset[dataKey];
+    }
+  });
+
+  document.getElementById('event-id').value = id;
   new bootstrap.Modal(document.getElementById('eventModal')).show();
 };
 
+// Delete event
 window.deleteEvent = async function(id) {
   if (!confirm('Delete this event?')) return;
   const res = await fetch(urls.deleteEvent(id), {
     method: 'POST',
-    headers: {
-      'X-CSRFToken': csrftoken,
-    },
+    headers: { 'X-CSRFToken': csrftoken },
+    credentials: 'same-origin'
   });
-  if (res.ok) {
-    document.querySelector(`tr[data-id='${id}']`)?.remove();
-  }
+  if (res.ok) document.querySelector(`tr[data-id='${id}']`)?.remove();
 };
 
-// CLASS HANDLERS
+/* ------------------------------------------------------------------ *
+ * CLASS HANDLERS
+ * ------------------------------------------------------------------ */
 const classForm = document.getElementById('class-form');
 classForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -143,12 +148,12 @@ classForm?.addEventListener('submit', async (e) => {
         'Content-Type': 'application/json',
         'X-CSRFToken': csrftoken,
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      credentials: 'same-origin'
     });
 
     if (res.ok) {
       const data = await res.json();
-
       if (id) {
         const row = document.querySelector(`tr[data-id='${id}']`);
         if (row) {
@@ -187,9 +192,8 @@ window.deleteClass = async function(id) {
   if (!confirm('Delete this class?')) return;
   const res = await fetch(urls.deleteClass(id), {
     method: 'POST',
-    headers: {
-      'X-CSRFToken': csrftoken,
-    },
+    headers: { 'X-CSRFToken': csrftoken },
+    credentials: 'same-origin'
   });
   if (res.ok) {
     document.querySelector(`tr[data-id='${id}']`)?.remove();
