@@ -136,6 +136,11 @@ Date        | Bug                                               | Focus         
 | 2025-07-19 | `repeat_until` date was not being picked up in the modal form       | HTML/JS frontend  | Fixed ID mismatch: changed `event-end-date` to `event-repeat-until` in modal and JS references |
 | 2025-07-19 | `repeat_until` wasn't passed from modal to backend correctly        | JS/Backend Sync   | Updated `schedule.js` to ensure `repeat_until` is posted as a string in the payload            |
 | 2025-07-19 | Duplicate events rendered if looped in JS and also handled in views | Logic conflict    | Removed frontend recurrence loop entirely — recurrence is now 100% server-side                 |
+| 2025-08-09 | Static assets not rendering correctly on production | Forgot to push static files | Identified missing static files after deployment. Realized static files were not pushed during deployment. Fixed by pushing the static files to the server. |
+| 2025-08-09 | Incorrect date format displayed on calendar widget | Date parsing mismatch | The calendar widget displayed dates incorrectly. Tracked the issue to a frontend-backend date parsing mismatch. Fixed by aligning frontend date format with backend. |
+| 2025-08-09 | Images not showing after recent update | Frontend image path issue | After an update, images didn't load. Discovered that the image paths weren't updated. Fixed by correcting the image paths and redeployed. |
+| 2025-08-09 | Button text overlapping in mobile view | CSS styling conflict | Button text overlapped on small screens. Found conflicting media queries. Fixed by adjusting media query breakpoints to properly scale buttons for mobile. |
+| 2025-08-09 | Error thrown when submitting form without required fields | Validation error not caught | Form submission without required fields threw an error. Identified missing frontend validation checks. Fixed by adding proper validation checks to prevent submission without required fields. |
 
 
 
