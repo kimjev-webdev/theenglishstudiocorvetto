@@ -36,9 +36,7 @@
       </div>
     </div>
 
-    <div class="text-center headertext mt-4">
-      <a href="{% url 'schedule' %}" class="btn btn-red primaryfont">{% trans "VIEW THE SCHEDULE" %}</a>
-    </div>
+    
 
     <!-- Modal -->
     <div class="modal fade" id="flyerModal{{ flyer.id }}" tabindex="-1" aria-labelledby="flyerModalLabel{{ flyer.id }}" aria-hidden="true">
@@ -71,4 +69,8 @@
     <p class="text-center navy">{% trans "No upcoming events at the moment." %}</p>
     {% endfor %}
   </div>
+
+  <div class="text-center headertext mt-4">
+      <a href="{% url 'schedule' %}" class="btn btn-red primaryfont">{% trans "VIEW THE SCHEDULE" %}</a>
+    </div>
 </section>
