@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container vh-100 mt-5">
+  <h2 class="primaryfont red">Welcome, {{ user.username }}</h2>
+  <p class="body-text navy">Select an area to manage:</p>
+  <ul class="list-group">
+<li class="list-group-item body-text navy"><a href="{% url 'portal:blog_list' %}">📝 Blog Posts</a>
+<li class="list-group-item body-text navy"><a href="{% url 'schedule_portal' %}">📅 Schedule</a></li>
+{# <li class="list-group-item body-text navy"><a href="{% url 'carousel_list' %}">🎠 Carousel</a></li> #}
+<li class="list-group-item body-text navy"><a href="{% url 'flyer_list' %}">📄 Upcoming Events Flyers</a></li>
+  </ul>
+  <form method="post" action="{% url 'portal:portal_logout' %}" style="display: inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-red primaryfont d-block mx-auto mt-3">
+        Log Out
+    </button>
+</form>
+
+</div>
+{% endblock %}

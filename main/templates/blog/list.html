@@ -2,17 +2,23 @@
 {% block content %}
 <div class="container mt-4">
   <h2 class="mb-3 primaryfont navy">Manage Blog Posts</h2>
-  <a href="{% url 'blog_create' %}" class="btn btn-red mb-3">+ Create New Post</a>
+
+  {# use portal namespace so reverse works #}
+  <a href="{% url 'portal:blog_create' %}" class="btn btn-red mb-3">+ Create New Post</a>
+
   <ul class="list-group">
     {% for post in posts %}
       <li class="list-group-item body-text navy d-flex justify-content-between align-items-center">
         <div>
-          <strong>{{ post.title|default:post.title_en }}</strong><br>
-          <small class="body-text red">Published: {{ post.published_at|date:"Y-m-d H:i" }}</small>
+          {# your model has title_en/title_it, not "title" #}
+          <strong>{{ post.title_en }}</strong><br>
+          <small class="body-text red">
+            Published: {{ post.published_at|default:post.created_at|date:"Y-m-d H:i" }}
+          </small>
         </div>
         <div>
-          <a href="{% url 'blog_edit' post.pk %}" class="btn btn-sm btn-red me-2">Edit</a>
-          <a href="{% url 'blog_delete' post.pk %}" class="btn btn-sm btn-red">Delete</a>
+          <a href="{% url 'portal:blog_edit' post.pk %}" class="btn btn-sm btn-red me-2">Edit</a>
+          <a href="{% url 'portal:blog_delete' post.pk %}" class="btn btn-sm btn-red">Delete</a>
         </div>
       </li>
     {% empty %}
