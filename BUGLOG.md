@@ -156,6 +156,15 @@ Date        | Bug                                               | Focus         
 | 2025-08-16 | Missing static assets | `map_pin.webp` and `logofull.webp` returned 404 | Moved assets to `main/static/images/` and referenced with `{% static %}`. |
 | 2025-08-16 | Static files not collected | Old static files not present in `STATIC_ROOT` | Ran `python manage.py collectstatic --noinput` after correcting dependencies. |
 | 2025-08-16 | Missing Python deps (`dotenv`, `cloudinary`, `ckeditor`, `psycopg`) | ModuleNotFoundError errors during collectstatic | Installed `python-dotenv`, `cloudinary`, `django-cloudinary-storage`, `django-ckeditor`, `pillow`, and `psycopg[binary]`. |
+| 2025-08-16 | Root & WWW DNS not pointing to Render | Missing/incorrect DNS records at GoDaddy | Added A @ → 216.24.57.1 and CNAME www → theenglishstudiocorvetto.onrender.com. |
+| 2025-08-16 | Render couldn’t issue SSL | Domain verified but cert stuck at “Certificate Error” | Cleaned DNS (no forwarding/duplicates), verified both domains in Render; Let’s Encrypt auto-provisioned. |
+| 2025-08-16 | Invalid Host Header (400) on custom domain | `theenglishstudiocorvetto.com` not in `ALLOWED_HOSTS` | Added onrender, root, and www to `ALLOWED_HOSTS` (via env or settings) and redeployed. |
+| 2025-08-16 | CSRF failures on custom domain | `CSRF_TRUSTED_ORIGINS` missing new HTTPS origins | Set `CSRF_TRUSTED_ORIGINS` to `https://theenglishstudiocorvetto.com, https://www.theenglishstudiocorvetto.com, https://theenglishstudiocorvetto.onrender.com`. |
+| 2025-08-16 | Inconsistent protocol / duplicate hostnames | HTTP allowed and no canonical domain | Enabled Force HTTPS in Render and set `www.theenglishstudiocorvetto.com` as Primary (301 redirect from root). |
+| 2025-08-16 | Map broke after domain switch | Google Maps API key restricted to old referrers | In Google Cloud → API key: added referrers `https://theenglishstudiocorvetto.com/*`, `https://www.theenglishstudiocorvetto.com/*`, and kept `…onrender.com/*`; saved & tested. |
+| 2025-08-16 | Map still flaky in prod (sanity) | Potential mismatch of mapId/key or loader | Confirmed official async loader with `importLibrary`, passed pin via `{% static %}` data attribute, and (if needed) removed/updated `mapId`. |
+| 2025-08-16 | Mixed content/asset 404s risk | Hardcoded `/static/...` in JS | Passed asset URLs from template via `data-*` and ran `collectstatic --noinput`; images load over HTTPS. |
+
 
 
 
