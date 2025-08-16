@@ -38,7 +38,7 @@ async function initMap() {
     img.src = pinUrl;            // resolved by Django `{% static %}` in the template
     img.alt = "Location pin";
     img.style.width = "90px";
-    img.style.height = "120px";
+    img.style.height = "auto";
     img.loading = "lazy";
     markerOptions.content = img; // custom content for AdvancedMarkerElement
   }
