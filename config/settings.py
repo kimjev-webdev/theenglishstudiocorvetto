@@ -44,7 +44,9 @@ LOGGING = {
 ALLOWED_HOSTS = [
     'theenglishstudiocorvetto.onrender.com',
     'localhost',
-    '127.0.0.1'
+    '127.0.0.1',
+    'theenglishstudiocorvetto.com',
+    'www.theenglishstudiocorvetto.com',
 ]
 
 # Installed apps configuration

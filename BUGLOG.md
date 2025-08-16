@@ -147,7 +147,16 @@ Date        | Bug                                               | Focus         
 | 2025-08-10 | Footer overlapping CKEditor on portal form                | `.container.vh-100` forced fixed viewport height                                | Removed `vh-100` (or replaced with `min-vh-100`) and added proper sticky-footer layout: `<main class="flex-grow-1">…</main>` with `<footer class="mt-auto">…</footer>` plus some bottom padding on the form container.                           |
 | 2025-08-10 | Local `ModuleNotFoundError: decouple`                     | Dependency not installed in local venv                                          | Installed `python-decouple` and added to `requirements.txt`; verified local venv (Python 3.11) and ran `manage.py` commands successfully.                                                                                                        |
 | 2025-08-10 | `KeyError: 'collectstatic'` running management commands   | Code accessed `os.environ['collectstatic']` directly                            | Replaced with safe env access (or removed entirely). If needed, use `DISABLE_COLLECTSTATIC` via `env('DISABLE_COLLECTSTATIC', default=False, cast=bool)`. Reminder: `collectstatic` isn’t needed for template/view changes.                      |
-| 2025-08-10 | Potential logout redirect mismatch                        | `redirect('portal_login')` not namespaced                                       | Switched to `redirect('portal:portal_login')` to match `config/urls.py` namespace.                                                                                                                                                               |
+| 2025-08-10 | Potential logout redirect mismatch                        | `redirect('portal_login')` not namespaced                                       | Switched to `redirect('portal:portal_login')` to match `config/urls.py` namespace. |
+| 2025-08-16 | Google Maps API key not injected into template | `{{ GOOGLE_MAPS_API_KEY }}` rendered empty | Added context processor `google_maps_api_key` and hooked into `TEMPLATES` to expose API key from settings. |
+| 2025-08-16 | Hardcoded static paths in JS | `pinImage.src = "/static/images/map_pin.webp";` caused 404 in production | Passed pin URL via `data-pin-url="{% static 'images/map_pin.webp' %}"` in template and consumed in JS. |
+| 2025-08-16 | Old Google Maps script tag caused async warning | `<script src="...&callback=initMap" async defer>` loaded directly | Replaced with official async loader using `google.maps.importLibrary`. |
+| 2025-08-16 | Map container missing proper height | Map div collapsed with no visible map | Added inline style and/or `.map { height: 425px; }` to ensure visibility. |
+| 2025-08-16 | JS tightly coupled to hardcoded values | `initMap` hardcoded lat/lng and pin path | Rewrote `maps.js` to read lat, lng, mapId, and pin URL from `<div id="map" data-*>`. |
+| 2025-08-16 | Missing static assets | `map_pin.webp` and `logofull.webp` returned 404 | Moved assets to `main/static/images/` and referenced with `{% static %}`. |
+| 2025-08-16 | Static files not collected | Old static files not present in `STATIC_ROOT` | Ran `python manage.py collectstatic --noinput` after correcting dependencies. |
+| 2025-08-16 | Missing Python deps (`dotenv`, `cloudinary`, `ckeditor`, `psycopg`) | ModuleNotFoundError errors during collectstatic | Installed `python-dotenv`, `cloudinary`, `django-cloudinary-storage`, `django-ckeditor`, `pillow`, and `psycopg[binary]`. |
+
 
 
 
