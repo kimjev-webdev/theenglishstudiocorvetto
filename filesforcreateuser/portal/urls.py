@@ -1,5 +1,4 @@
 from django.urls import path
-from . import views
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from .views import (
@@ -58,7 +57,4 @@ urlpatterns = [
         FlyerDeleteView.as_view(),
         name='flyer_delete'
     ),
-
-    path("users/", views.portal_users_list, name="portal_users"),
-    path("users/create/", views.portal_user_create, name="portal_user_create"),
 ]

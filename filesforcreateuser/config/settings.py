@@ -64,7 +64,7 @@ INSTALLED_APPS = [
     'cloudinary',
     'cloudinary_storage',
     'ckeditor',
-    'portal.apps.PortalConfig',
+    'portal',
     'flyers',
 ]
 
@@ -172,10 +172,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # More secure
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
-
-#  Admin credentials
-PORTAL_OWNER_USERNAME = os.environ.get("PORTAL_OWNER_USERNAME", "").lower()
-PORTAL_OWNER_EMAIL = os.environ.get("PORTAL_OWNER_EMAIL", "").lower()
 
 # Blog media files
 MEDIA_URL = '/media/'

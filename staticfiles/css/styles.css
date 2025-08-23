@@ -460,6 +460,7 @@ blog-text a {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 2px;
+    justify-content: center;
   }
 
   .day {
@@ -556,7 +557,6 @@ blog-text a {
 
     .blogpicture {
     max-width: 350px;
-    max-height: 400px;
     object-fit: contain;
   }
   }
