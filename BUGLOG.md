@@ -164,6 +164,29 @@ Date        | Bug                                               | Focus         
 | 2025-08-16 | Map broke after domain switch | Google Maps API key restricted to old referrers | In Google Cloud → API key: added referrers `https://theenglishstudiocorvetto.com/*`, `https://www.theenglishstudiocorvetto.com/*`, and kept `…onrender.com/*`; saved & tested. |
 | 2025-08-16 | Map still flaky in prod (sanity) | Potential mismatch of mapId/key or loader | Confirmed official async loader with `importLibrary`, passed pin via `{% static %}` data attribute, and (if needed) removed/updated `mapId`. |
 | 2025-08-16 | Mixed content/asset 404s risk | Hardcoded `/static/...` in JS | Passed asset URLs from template via `data-*` and ran `collectstatic --noinput`; images load over HTTPS. |
+| 2025-08-23 | Owner links not visible on dashboard  | Missing owner check                   | Added `PORTAL_OWNER_USERNAME/EMAIL` env + `is_portal_owner` and used it in templates.                                   |
+| 2025-08-23 | Owner blocked by staff gate           | `staff_check` only allowed `is_staff` | Updated `staff_check` to allow `is_staff or is_portal_owner`.                                                           |
+| 2025-08-23 | Feature links hidden for owner        | Template only checked groups          | Made dashboard show links when `is_owner` **or** user in group.                                                         |
+| 2025-08-23 | CRUD reachable via deep link          | Views not feature-gated               | Added `_require_group_or_redirect("BLOG"/"SCHEDULE"/"FLYERS")` with owner bypass.                                       |
+| 2025-08-23 | Groups missing/empty                  | Signal not creating perms             | Implemented `ensure_feature_groups` on `post_migrate`.                                                                  |
+| 2025-08-23 | Wrong app labels in signal            | Used `"portal/blog"` etc.             | Corrected to app labels: `blog`, `schedule`, `flyers`.                                                                  |
+| 2025-08-23 | Signal not loading                    | AppConfig not used                    | Switched to `portal.apps.PortalConfig` so `ready()` imports signals.                                                    |
+| 2025-08-23 | Post-migrate didn’t run group setup   | No migration triggered                | Ran `migrate`; also provided manual `ensure_feature_groups(sender=None)` call.                                          |
+| 2025-08-23 | Leanne saw no feature links           | Not in feature groups                 | Added Leanne to `BLOG`, `SCHEDULE`, `FLYERS`.                                                                           |
+| 2025-08-23 | Blank dashboard for Leanne            | `is_staff=False` on her account       | Set `is_staff=True` on Leanne (Render DB).                                                                              |
+| 2025-08-23 | Render shell errors                   | Running Python in bash                | Used `python manage.py shell` heredoc with proper Python.                                                               |
+| 2025-08-23 | Misused REPL                          | Pasted CLI/traceback into REPL        | Clarified “pure Python only” workflow; re-ran correct commands.                                                         |
+| 2025-08-23 | ImportError: `PortalUserUpdateForm`   | View imported non-existent form       | Implemented `PortalUserUpdateForm` in `portal/forms.py`.                                                                |
+| 2025-08-23 | No user editing                       | Missing edit view/template            | Added `portal_user_edit`, `edit_user.html`; prefilled feature checkboxes.                                               |
+| 2025-08-23 | Can deactivate owner                  | No guard in edit                      | Blocked deactivating owner in `portal_user_edit`.                                                                       |
+| 2025-08-23 | Need delete user                      | No delete flow                        | Added `portal_user_delete` + confirm page; blocked deleting owner/self.                                                 |
+| 2025-08-23 | Users list 500                        | Parentheses in `{% if %}`             | Rewrote condition using `{% with %}` + simple `if`; loaded `portal_extras`.                                             |
+| 2025-08-23 | Template lacked access helpers        | No filters to test groups/owner       | Added `portal_extras.has_group` and `portal_extras.is_owner`.                                                           |
+| 2025-08-23 | Missing password reset                | No reset routes/templates             | Wired Django auth reset URLs, pages, and email templates; link on login.                                                |
+| 2025-08-23 | Dev emails not delivered              | No email backend                      | Used console backend locally; added SMTP env config for Render.                                                         |
+| 2025-08-23 | CSS changes not visible               | Stale static assets                   | Ran `collectstatic --noinput`; enabled WhiteNoise `CompressedManifestStaticFilesStorage`; ensured `{% static %}` paths. |
+| 2025-08-23 | Owner not recognized by email         | Env not set on Render                 | Set `PORTAL_OWNER_EMAIL` on Render and redeployed.                                                                      |
+| 2025-08-23 | Owner could lock self out of sections | Group-only guards                     | Owner bypass added in view helper and dashboard conditions.                                                             |
 
 
 
