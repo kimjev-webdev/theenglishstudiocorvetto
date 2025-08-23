@@ -3,38 +3,30 @@
 
 {% block content %}
 <div class="container py-5">
-
-  <div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="mb-0">{% trans "Manage Flyers" %}</h2>
-    <div class="d-flex gap-2">
-      <a href="{% url 'portal:flyers_reorder' %}" class="btn btn-outline-secondary">
-        {% trans "Reorder" %}
-      </a>
-      <a href="{% url 'portal:flyer_create' %}" class="btn btn-primary">
-        {% trans "New Flyer" %}
-      </a>
+    <div>
+      <a href="{% url 'portal:flyers_reorder' %}" class="btn btn-outline-secondary me-2">{% trans "Reorder" %}</a>
+      <a href="{% url 'portal:flyer_create' %}" class="btn btn-primary">{% trans "New Flyer" %}</a>
     </div>
   </div>
 
   <table class="table table-striped align-middle">
     <thead>
       <tr>
-        <th class="text-muted small">#</th>
-        <th>{% trans "Preview" %}</th>
+        <th style="width:90px;">{% trans "Preview" %}</th>
         <th>{% trans "Title" %}</th>
-        <th>{% trans "Date" %}</th>
+        <th>{% trans "Event date" %}</th>
+        <th>{% trans "Order" %}</th>
         <th class="text-end">{% trans "Actions" %}</th>
       </tr>
     </thead>
     <tbody>
       {% for flyer in flyers %}
       <tr>
-        <td class="text-muted">{{ forloop.counter }}</td>
         <td>
           {% if flyer.image %}
-            <img src="{{ flyer.image.url }}"
-                 alt="{{ flyer.title_en|default:flyer.title_it }}"
-                 style="height:48px;width:auto;border-radius:4px;">
+            <img src="{{ flyer.image.url }}" alt="" style="height:60px;width:auto;border-radius:4px;">
           {% else %}
             <span class="text-muted">—</span>
           {% endif %}
@@ -42,18 +34,21 @@
         <td>{{ flyer.title_en|default:flyer.title_it }}</td>
         <td>
           {% if flyer.event_date %}
-            {{ flyer.event_date|date:"M j, Y" }}
+            {{ flyer.event_date|date:"Y-m-d" }}
           {% else %}
             <span class="text-muted">—</span>
           {% endif %}
         </td>
+        <td>
+          {% if flyer.sort_order %}
+            {{ flyer.sort_order }}
+          {% else %}
+            <span class="text-muted">0</span>
+          {% endif %}
+        </td>
         <td class="text-end">
-          <a href="{% url 'portal:flyer_update' flyer.pk %}" class="btn btn-sm btn-warning">
-            {% trans "Edit" %}
-          </a>
-          <a href="{% url 'portal:flyer_delete' flyer.pk %}" class="btn btn-sm btn-danger">
-            {% trans "Delete" %}
-          </a>
+          <a href="{% url 'portal:flyer_update' flyer.pk %}" class="btn btn-sm btn-warning">{% trans "Edit" %}</a>
+          <a href="{% url 'portal:flyer_delete' flyer.pk %}" class="btn btn-sm btn-danger">{% trans "Delete" %}</a>
         </td>
       </tr>
       {% empty %}

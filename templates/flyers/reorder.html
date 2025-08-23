@@ -1,62 +1,108 @@
 {% extends "base.html" %}
-{% load static %}
-{% block content %}
-<div class="container mt-4">
-  <h2 class="mb-3">Reorder Flyers</h2>
-  <p class="text-muted">Drag items to change the order. Click “Save Order”.</p>
+{% load i18n %}
 
-  <ul id="flyer-sort-list" class="list-group mb-3">
-    {% for f in flyers %}
-      <li class="list-group-item d-flex align-items-center" data-id="{{ f.id }}">
-        <span class="me-3" style="cursor:grab;">☰</span>
-        <div class="flex-grow-1">
-          <strong>{{ f.title_en|default:f.title_it }}</strong>
-          {% if f.event_date %}<div class="small text-muted">{{ f.event_date|date:"M j, Y" }}</div>{% endif %}
-        </div>
-        {% if f.image %}
-          <img src="{{ f.image.url }}" alt="" style="height:40px;width:auto;border-radius:4px;">
+{% block title %}{% trans "Reorder Flyers" %}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">{% trans "Reorder Flyers" %}</h2>
+    <a href="{% url 'portal:flyer_list' %}" class="btn btn-secondary">{% trans "Back to list" %}</a>
+  </div>
+
+  <p class="text-muted">{% trans "Drag items to change their order. Click Save when done." %}</p>
+
+  <ul id="flyers-list" class="list-group">
+    {% for flyer in flyers %}
+      <li class="list-group-item d-flex align-items-center gap-3" data-id="{{ flyer.id }}">
+        <span class="handle" title="{% trans 'Drag' %}" style="cursor:grab;">↕</span>
+
+        {% if flyer.image %}
+          <img
+            src="{{ flyer.image.url }}"
+            alt=""
+            style="height:48px;width:auto;border-radius:4px;"
+          >
+        {% else %}
+          <span class="text-muted">—</span>
         {% endif %}
+
+        <div class="flex-grow-1">
+          <div class="fw-bold">{{ flyer.title_en|default:flyer.title_it }}</div>
+          {% if flyer.event_date %}
+            <div class="text-muted small">{{ flyer.event_date|date:"Y-m-d" }}</div>
+          {% endif %}
+        </div>
+
+        <span class="badge bg-light text-dark border order-index">{{ forloop.counter }}</span>
       </li>
     {% empty %}
-      <li class="list-group-item">No flyers yet.</li>
+      <li class="list-group-item text-muted">{% trans "No flyers to reorder." %}</li>
     {% endfor %}
   </ul>
 
-  <button id="save-order" class="btn btn-primary">Save Order</button>
-  <a href="{% url 'portal:flyer_list' %}" class="btn btn-secondary ms-2">Back</a>
+  <form id="save-order-form" method="post" class="mt-3" action="{% url 'portal:flyers_reorder' %}">
+    {% csrf_token %}
+    <input type="hidden" name="order" id="order-input">
+    <button type="submit" class="btn btn-primary">{% trans "Save Order" %}</button>
+    <a href="{% url 'portal:flyer_list' %}" class="btn btn-outline-secondary ms-2">{% trans "Cancel" %}</a>
+  </form>
+
+  <div id="save-alert" class="alert alert-success mt-3 d-none" role="alert">
+    {% trans "Order saved." %}
+  </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+{# ---- Lightweight drag & drop + POST (no /media/ anywhere) ---- #}
+<script src="https://unpkg.com/sortablejs@1.15.2/Sortable.min.js" crossorigin="anonymous"></script>
 <script>
 (function() {
-  var el = document.getElementById('flyer-sort-list');
-  new Sortable(el, { animation: 150, handle: 'span' });
+  const list = document.getElementById('flyers-list');
+  if (!list) return;
 
-  function getOrder() {
-    return Array.from(el.querySelectorAll('li')).map(li => li.dataset.id);
-  }
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
+  const sortable = Sortable.create(list, {
+    handle: '.handle',
+    animation: 150,
+    onEnd: updateBadges
+  });
+
+  function updateBadges() {
+    document.querySelectorAll('#flyers-list .order-index').forEach((el, i) => {
+      el.textContent = i + 1;
+    });
   }
 
-  document.getElementById('save-order').addEventListener('click', function() {
-    fetch("", {
-      method: "POST",
+  const form = document.getElementById('save-order-form');
+  form.addEventListener('submit', function(ev) {
+    ev.preventDefault();
+
+    const ids = Array.from(document.querySelectorAll('#flyers-list [data-id]'))
+      .map(li => li.getAttribute('data-id'));
+    document.getElementById('order-input').value = ids.join(',');
+
+    const url = form.getAttribute('action');
+    const csrftoken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
+
+    fetch(url, {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": getCookie("csrftoken"),
-        "X-Requested-With": "XMLHttpRequest",
+        'X-CSRFToken': csrftoken,
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: JSON.stringify({ order: getOrder() })
+      body: new URLSearchParams({ order: ids })
     })
-    .then(r => r.json())
-    .then(data => {
-      if (data.ok) { alert("Order saved"); }
-      else { alert("Error: " + (data.error || "unknown")); }
+    .then(r => {
+      if (!r.ok) throw new Error('Bad response');
+      return r.text();
     })
-    .catch(err => alert("Network error: " + err));
+    .then(() => {
+      const alertEl = document.getElementById('save-alert');
+      alertEl.classList.remove('d-none');
+      setTimeout(() => alertEl.classList.add('d-none'), 2000);
+    })
+    .catch(() => {
+      alert('{% trans "Failed to save order." %}');
+    });
   });
 })();
 </script>
