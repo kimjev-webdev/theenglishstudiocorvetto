@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
+{% load portal_extras %}
+
 <div class="container mt-5">
   <h2>Users</h2>
   <table class="table">
@@ -19,19 +21,22 @@
     <td>
       {% for g in u.groups.all %}<span class="badge bg-secondary">{{ g.name }}</span>{% empty %}—{% endfor %}
     </td>
-    <td>
+   <td>
   <a href="{% url 'portal:portal_user_edit' u.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
 
-  {% if not (request.user.username|lower == u.username|lower) and not (u|is_owner) %}
-    <form action="{% url 'portal:portal_user_delete' u.id %}" method="post" style="display:inline;">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-sm btn-outline-danger"
-              onclick="return confirm('Delete {{ u.username }}?')">
-        Delete
-      </button>
-    </form>
-  {% endif %}
+  {% with ru=request.user.username|lower uu=u.username|lower isowner=u|is_owner %}
+    {% if ru != uu and not isowner %}
+      <form action="{% url 'portal:portal_user_delete' u.id %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-sm btn-outline-danger"
+                onclick="return confirm('Delete {{ u.username }}?')">
+          Delete
+        </button>
+      </form>
+    {% endif %}
+  {% endwith %}
 </td>
+
   </tr>
   {% endfor %}
 </tbody>
