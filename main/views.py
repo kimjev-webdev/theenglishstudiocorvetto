@@ -1,15 +1,10 @@
 from django.shortcuts import render
-from django.utils import timezone
 from flyers.models import Flyer  # ✅ Corrected import from the new app
 
 
 def home(request):
-    flyers = (
-        Flyer.objects
-        .filter(event_date__gte=timezone.now().date())
-        .order_by('event_date')
-    )
-    return render(request, 'index.html', {'flyers': flyers})
+    flyers = Flyer.objects.order_by("sort_order", "event_date")
+    return render(request, "index.html", {"flyers": flyers})
 
 
 def courses(request):

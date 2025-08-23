@@ -14,7 +14,7 @@ main {
   min-height: 75vh;
 }
 
-.container-fluid, .row {
+.container-fluid {
 --bs-gutter-x: none !important;
 }
 

@@ -60,6 +60,9 @@ urlpatterns = [
         name='flyer_delete'
     ),
 
+    path("flyers/reorder/", views.flyers_reorder, name="flyers_reorder"),
+
+
     # User management
     path("users/", views.portal_users_list, name="portal_users"),
     path("users/create/", views.portal_user_create, name="portal_user_create"),

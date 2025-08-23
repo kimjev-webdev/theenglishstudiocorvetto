@@ -16,22 +16,17 @@ FEATURE_GROUP_NAMES = ["BLOG", "SCHEDULE", "FLYERS"]
 
 # ---- Create User (used by Leanne) ----
 class PortalUserCreateForm(UserCreationForm):
-    email = forms.EmailField(
-        required=True
-    )
+    email = forms.EmailField(required=True)
     is_active = forms.BooleanField(
         required=False, initial=True, label="Active"
     )
     features = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple,
-        choices=[
-            (name, name) for name in FEATURE_GROUP_NAMES
-        ],
+        choices=[(name, name) for name in FEATURE_GROUP_NAMES],
         label="Feature access",
         help_text=(
-            "Tick the sections this user can access from the portal "
-            "dashboard."
+            "Tick the sections this user can access from the portal dashboard."
         ),
     )
 
@@ -41,9 +36,7 @@ class PortalUserCreateForm(UserCreationForm):
 
     def clean_username(self):
         username = self.cleaned_data["username"]
-        if User.objects.filter(
-            username__iexact=username
-        ).exists():
+        if User.objects.filter(username__iexact=username).exists():
             raise forms.ValidationError(
                 "A user with that username already exists."
             )
@@ -61,7 +54,7 @@ class PortalUserCreateForm(UserCreationForm):
         user = super().save(commit=False)
         user.email = self.cleaned_data["email"]
         user.is_active = self.cleaned_data.get("is_active", True)
-        # portal users are staff; change if you don’t want that
+        # Give portal access
         user.is_staff = True
         if commit:
             user.save()
@@ -114,27 +107,35 @@ class BlogPostForm(forms.ModelForm):
     class Meta:
         model = BlogPost
         fields = [
-            'title_en', 'title_it',
-            'slug',
-            'body_en', 'body_it',
-            'featured_image', 'video',
-            'status', 'published_at'
+            "title_en", "title_it",
+            "slug",
+            "body_en", "body_it",
+            "featured_image", "video",
+            "status", "published_at",
         ]
 
 
-# ---- Flyer form ----
+# ---- Flyer form (robust to model differences) ----
 class FlyerForm(forms.ModelForm):
-    description_en = forms.CharField(widget=CKEditorWidget())
-    description_it = forms.CharField(widget=CKEditorWidget())
-
     class Meta:
         model = Flyer
-        fields = [
-            'title_en', 'title_it',
-            'description_en', 'description_it',
-            'extra_info_en', 'extra_info_it',
-            'image', 'event_date'
-        ]
-    widgets = {
-        'event_date': forms.DateInput(attrs={'type': 'date'})
-    }
+        fields = "__all__"  # don't hard-code; model may differ across envs
+        # widgets will be set dynamically in __init__
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Attach CKEditor to description fields if present
+        for fld in ("description_en", "description_it"):
+            if fld in self.fields:
+                self.fields[fld].widget = CKEditorWidget()
+
+        # HTML5 date picker if event_date exists
+        if "event_date" in self.fields:
+            self.fields["event_date"].widget = forms.DateInput(
+                attrs={"type": "date"}
+            )
+
+        # Hide sort_order (managed via drag-and-drop UI)
+        if "sort_order" in self.fields:
+            self.fields["sort_order"].widget = forms.HiddenInput()
