@@ -1,5 +1,5 @@
 # portal/views.py
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -10,86 +10,112 @@ from django.contrib.auth import logout, get_user_model
 from blog.models import BlogPost
 from flyers.models import Flyer
 
-from .forms import BlogPostForm, FlyerForm, PortalUserCreateForm
+from .forms import (
+    BlogPostForm,
+    FlyerForm,
+    PortalUserCreateForm,
+    PortalUserUpdateForm,
+)
+
 from .authz import is_portal_owner, in_group
 
 User = get_user_model()
 
-# 🔐 Staff/owner access check for dashboard
 
-
+# staff/owner guard
 def staff_check(user):
     return user.is_authenticated and (user.is_staff or is_portal_owner(user))
 
-# ──────────────────────────────────────────────────────────────────────────────
-# Portal LOGIN views
-# ──────────────────────────────────────────────────────────────────────────────
 
-
+# Dashboard
 @login_required
 @user_passes_test(staff_check)
 def portal_dashboard(request):
     return render(request, 'portal/dashboard.html')
 
 
-# Portal LOGOUT view
+# Logout
 def portal_logout_view(request):
     logout(request)
     messages.success(request, "You have been safely logged out.")
     return redirect('portal:portal_login')
 
 
-# 🔐 Mixin for class-based staff/owner-only views
+# CBV guard
 class StaffRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         u = self.request.user
         return u.is_authenticated and (u.is_staff or is_portal_owner(u))
 
+# ===== Owner-only user management =====
 
-# ──────────────────────────────────────────────────────────────────────────────
-# OWNER-ONLY: Users list + Create user (checkboxes for BLOG/SCHEDULE/FLYERS)
-# ──────────────────────────────────────────────────────────────────────────────
+
 @login_required
-@user_passes_test(is_portal_owner)  # ONLY Leanne (env-driven)
+@user_passes_test(is_portal_owner)
 def portal_users_list(request):
     users = User.objects.order_by('username').all()
     return render(request, "portal/users_list.html", {"users": users})
 
 
 @login_required
-@user_passes_test(is_portal_owner)  # ONLY Leanne (env-driven)
+@user_passes_test(is_portal_owner)
 def portal_user_create(request):
     if request.method == "POST":
         form = PortalUserCreateForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "User created successfully.")
-            return redirect('portal:portal_dashboard')
+            return redirect('portal:portal_users')
     else:
         form = PortalUserCreateForm()
     return render(request, "portal/create_user.html", {"form": form})
 
-# ──────────────────────────────────────────────────────────────────────────────
-# FEATURE GATE helper (BLOG / SCHEDULE / FLYERS)
-# ──────────────────────────────────────────────────────────────────────────────
 
+@login_required
+@user_passes_test(is_portal_owner)
+def portal_user_edit(request, user_id: int):
+    target = get_object_or_404(User, pk=user_id)
+    # Safety: never allow deactivating the owner account
+    is_target_owner = is_portal_owner(target)
+
+    if request.method == "POST":
+        form = PortalUserUpdateForm(request.POST, instance=target)
+        if form.is_valid():
+            if (
+                is_target_owner
+                and not form.cleaned_data.get("is_active", True)
+            ):
+                messages.error(
+                    request,
+                    "You cannot deactivate the owner account."
+                )
+            else:
+                form.save()
+                messages.success(request, "User updated.")
+                return redirect('portal:portal_users')
+    else:
+        form = PortalUserUpdateForm(
+            instance=target
+        )
+    return render(
+        request,
+        "portal/edit_user.html",
+        {"form": form, "target": target}
+    )
+
+
+# ===== Feature gate helper =====
 
 def _require_group_or_redirect(request, group_name: str):
-    """
-    Allow if user is in the feature group OR is the portal owner.
-    Otherwise flash a message and return to dashboard.
-    """
     if not (
-        in_group(request.user, group_name) or is_portal_owner(request.user)
+        in_group(request.user, group_name) or
+        is_portal_owner(request.user)
     ):
         messages.error(request, "You don't have access to that section.")
         return redirect('portal:portal_dashboard')
     return None
 
-
-# ──────────────────────────────────────────────────────────────────────────────
-# 📝 BlogPost CRUD views (require staff/owner + BLOG feature)
-# ──────────────────────────────────────────────────────────────────────────────
+# ===== Blog CRUD (staff/owner + BLOG) =====
 
 
 class BlogListView(LoginRequiredMixin, StaffRequiredMixin, ListView):
@@ -107,6 +133,7 @@ class BlogListView(LoginRequiredMixin, StaffRequiredMixin, ListView):
 class BlogCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
     model = BlogPost
     form_class = BlogPostForm
+
     template_name = 'blog/form.html'
 
     def dispatch(self, request, *args, **kwargs):
@@ -135,6 +162,7 @@ class BlogUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
 class BlogDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     model = BlogPost
     template_name = 'blog/confirm_delete.html'
+
     success_url = reverse_lazy('portal:blog_list')
 
     def dispatch(self, request, *args, **kwargs):
@@ -143,9 +171,7 @@ class BlogDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
             return resp
         return super().dispatch(request, *args, **kwargs)
 
-# ──────────────────────────────────────────────────────────────────────────────
-# 🖼 Flyers CRUD views (require staff/owner + FLYERS feature)
-# ──────────────────────────────────────────────────────────────────────────────
+# ===== Flyers CRUD (staff/owner + FLYERS) =====
 
 
 class FlyerListView(LoginRequiredMixin, StaffRequiredMixin, ListView):

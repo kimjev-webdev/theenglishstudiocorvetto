@@ -59,6 +59,13 @@ urlpatterns = [
         name='flyer_delete'
     ),
 
+    # User management
     path("users/", views.portal_users_list, name="portal_users"),
     path("users/create/", views.portal_user_create, name="portal_user_create"),
+    path(
+        "users/<int:user_id>/edit/",
+        views.portal_user_edit,
+        name="portal_user_edit"
+    ),
+
 ]
