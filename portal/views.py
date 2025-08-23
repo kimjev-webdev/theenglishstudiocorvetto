@@ -10,15 +10,16 @@ from django.contrib.auth import logout, get_user_model
 from blog.models import BlogPost
 from flyers.models import Flyer
 
-from .forms import BlogPostForm, FlyerForm, PortalUserCreateForm  # NEW
-from .authz import is_portal_owner, in_group  # NEW
+from .forms import BlogPostForm, FlyerForm, PortalUserCreateForm
+from .authz import is_portal_owner, in_group
 
 User = get_user_model()
 
+# 🔐 Staff/owner access check for dashboard
 
-# 🔐 Function-based staff access check for dashboard
+
 def staff_check(user):
-    return user.is_authenticated and user.is_staff
+    return user.is_authenticated and (user.is_staff or is_portal_owner(user))
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Portal LOGIN views
@@ -35,30 +36,28 @@ def portal_dashboard(request):
 def portal_logout_view(request):
     logout(request)
     messages.success(request, "You have been safely logged out.")
-    # Use namespaced URL so it resolves under /portal/
     return redirect('portal:portal_login')
 
-# 🔐 Mixin for class-based staff-only views
 
-
+# 🔐 Mixin for class-based staff/owner-only views
 class StaffRequiredMixin(UserPassesTestMixin):
     def test_func(self):
-        return self.request.user.is_staff
+        u = self.request.user
+        return u.is_authenticated and (u.is_staff or is_portal_owner(u))
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # OWNER-ONLY: Users list + Create user (checkboxes for BLOG/SCHEDULE/FLYERS)
 # ──────────────────────────────────────────────────────────────────────────────
-
-
 @login_required
-@user_passes_test(is_portal_owner)  # ONLY Leanne (env-driven) can access
+@user_passes_test(is_portal_owner)  # ONLY Leanne (env-driven)
 def portal_users_list(request):
     users = User.objects.order_by('username').all()
     return render(request, "portal/users_list.html", {"users": users})
 
 
 @login_required
-@user_passes_test(is_portal_owner)  # ONLY Leanne (env-driven) can access
+@user_passes_test(is_portal_owner)  # ONLY Leanne (env-driven)
 def portal_user_create(request):
     if request.method == "POST":
         form = PortalUserCreateForm(request.POST)
@@ -77,22 +76,25 @@ def portal_user_create(request):
 
 def _require_group_or_redirect(request, group_name: str):
     """
-    If the signed-in user is not in the required feature group,
-    flash a message and send them back to the dashboard.
+    Allow if user is in the feature group OR is the portal owner.
+    Otherwise flash a message and return to dashboard.
     """
-    if not in_group(request.user, group_name):
+    if not (
+        in_group(request.user, group_name) or is_portal_owner(request.user)
+    ):
         messages.error(request, "You don't have access to that section.")
         return redirect('portal:portal_dashboard')
     return None
 
+
 # ──────────────────────────────────────────────────────────────────────────────
-# 📝 BlogPost CRUD views (require staff + BLOG feature)
+# 📝 BlogPost CRUD views (require staff/owner + BLOG feature)
 # ──────────────────────────────────────────────────────────────────────────────
 
 
 class BlogListView(LoginRequiredMixin, StaffRequiredMixin, ListView):
     model = BlogPost
-    template_name = 'blog/list.html'  # backend management list
+    template_name = 'blog/list.html'
     context_object_name = 'posts'
 
     def dispatch(self, request, *args, **kwargs):
@@ -113,7 +115,6 @@ class BlogCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
             return resp
         return super().dispatch(request, *args, **kwargs)
 
-    # After creating, go straight to the edit page for the new post
     def get_success_url(self):
         return reverse_lazy('portal:blog_edit', kwargs={'pk': self.object.pk})
 
@@ -122,7 +123,6 @@ class BlogUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     model = BlogPost
     form_class = BlogPostForm
     template_name = 'blog/form.html'
-    # After saving edits, return to the portal list
     success_url = reverse_lazy('portal:blog_list')
 
     def dispatch(self, request, *args, **kwargs):
@@ -135,7 +135,6 @@ class BlogUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
 class BlogDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
     model = BlogPost
     template_name = 'blog/confirm_delete.html'
-    # After deletion, return to the portal list
     success_url = reverse_lazy('portal:blog_list')
 
     def dispatch(self, request, *args, **kwargs):
@@ -144,10 +143,11 @@ class BlogDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
             return resp
         return super().dispatch(request, *args, **kwargs)
 
+# ──────────────────────────────────────────────────────────────────────────────
+# 🖼 Flyers CRUD views (require staff/owner + FLYERS feature)
+# ──────────────────────────────────────────────────────────────────────────────
 
-# ──────────────────────────────────────────────────────────────────────────────
-# 🖼 Flyers CRUD views (require staff + FLYERS feature)
-# ──────────────────────────────────────────────────────────────────────────────
+
 class FlyerListView(LoginRequiredMixin, StaffRequiredMixin, ListView):
     model = Flyer
     template_name = 'flyers/flyers_list.html'
