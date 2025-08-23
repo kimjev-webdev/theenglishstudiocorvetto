@@ -19,7 +19,19 @@
     <td>
       {% for g in u.groups.all %}<span class="badge bg-secondary">{{ g.name }}</span>{% empty %}—{% endfor %}
     </td>
-    <td><a href="{% url 'portal:portal_user_edit' u.id %}" class="btn btn-sm btn-outline-primary">Edit</a></td>
+    <td>
+  <a href="{% url 'portal:portal_user_edit' u.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
+
+  {% if not (request.user.username|lower == u.username|lower) and not (u|is_owner) %}
+    <form action="{% url 'portal:portal_user_delete' u.id %}" method="post" style="display:inline;">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm btn-outline-danger"
+              onclick="return confirm('Delete {{ u.username }}?')">
+        Delete
+      </button>
+    </form>
+  {% endif %}
+</td>
   </tr>
   {% endfor %}
 </tbody>

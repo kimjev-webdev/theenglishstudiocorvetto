@@ -51,14 +51,14 @@ class StaffRequiredMixin(UserPassesTestMixin):
 
 
 @login_required
-@user_passes_test(is_portal_owner)
+@user_passes_test(is_portal_owner)  # ONLY Leanne (env-driven) can access
 def portal_users_list(request):
     users = User.objects.order_by('username').all()
     return render(request, "portal/users_list.html", {"users": users})
 
 
 @login_required
-@user_passes_test(is_portal_owner)
+@user_passes_test(is_portal_owner)  # ONLY Leanne (env-driven) can access
 def portal_user_create(request):
     if request.method == "POST":
         form = PortalUserCreateForm(request.POST)
@@ -72,7 +72,7 @@ def portal_user_create(request):
 
 
 @login_required
-@user_passes_test(is_portal_owner)
+@user_passes_test(is_portal_owner)  # ONLY Leanne (env-driven) can access
 def portal_user_edit(request, user_id: int):
     target = get_object_or_404(User, pk=user_id)
     # Safety: never allow deactivating the owner account
@@ -81,9 +81,8 @@ def portal_user_edit(request, user_id: int):
     if request.method == "POST":
         form = PortalUserUpdateForm(request.POST, instance=target)
         if form.is_valid():
-            if (
-                is_target_owner
-                and not form.cleaned_data.get("is_active", True)
+            if is_target_owner and not form.cleaned_data.get(
+                "is_active", True
             ):
                 messages.error(
                     request,
@@ -94,13 +93,39 @@ def portal_user_edit(request, user_id: int):
                 messages.success(request, "User updated.")
                 return redirect('portal:portal_users')
     else:
-        form = PortalUserUpdateForm(
-            instance=target
-        )
+        form = PortalUserUpdateForm(instance=target)
+
     return render(
         request,
         "portal/edit_user.html",
         {"form": form, "target": target}
+    )
+
+
+@login_required
+@user_passes_test(is_portal_owner)  # ONLY Leanne (env-driven) can access
+def portal_user_delete(request, user_id: int):
+    target = get_object_or_404(User, pk=user_id)
+
+    # Safety: never delete the owner or yourself
+    if is_portal_owner(target):
+        messages.error(request, "You cannot delete the owner account.")
+        return redirect('portal:portal_users')
+    if target.pk == request.user.pk:
+        messages.error(request, "You cannot delete your own account.")
+        return redirect('portal:portal_users')
+
+    if request.method == "POST":
+        username = target.username
+        target.delete()
+        messages.success(request, f"User '{username}' deleted.")
+        return redirect('portal:portal_users')
+
+    # GET → show confirm page
+    return render(
+        request,
+        "portal/confirm_user_delete.html",
+        {"target": target}
     )
 
 

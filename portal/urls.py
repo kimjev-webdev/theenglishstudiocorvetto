@@ -67,5 +67,10 @@ urlpatterns = [
         views.portal_user_edit,
         name="portal_user_edit"
     ),
+    path(
+        "users/<int:user_id>/delete/",
+        views.portal_user_delete,
+        name="portal_user_delete"
+    ),
 
 ]
