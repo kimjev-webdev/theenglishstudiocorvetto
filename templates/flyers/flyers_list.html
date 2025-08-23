@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="mb-4">{% trans "Manage Flyers" %}</h2>
+
+  <div class="text-end mb-3">
+    <a href="{% url 'portal:flyer_create' %}" class="btn btn-success">
+      {% trans "Add New Flyer" %}
+    </a>
+  </div>
+
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr>
+        <th>{% trans "Title" %}</th>
+        <th>{% trans "Date" %}</th>
+        <th>{% trans "Actions" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for flyer in flyers %}
+      <tr>
+        <td>{{ flyer.title_en }}</td>
+        <td>{{ flyer.event_date }}</td>
+        <td>
+          <a href="{% url 'portal:flyer_update' flyer.pk %}" class="btn btn-sm btn-warning">{% trans "Edit" %}</a>
+          <a href="{% url 'portal:flyer_delete' flyer.pk %}" class="btn btn-sm btn-danger">{% trans "Delete" %}</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

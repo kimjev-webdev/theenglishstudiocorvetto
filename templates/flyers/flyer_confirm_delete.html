@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Delete Flyer" %}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center red primaryfont mb-4">{% trans "Confirm Delete" %}</h2>
+  <p class="text-center navy body-text">
+    {% blocktrans with title=object.title_en %}
+      Are you sure you want to delete the flyer "{{ title }}"?
+    {% endblocktrans %}
+  </p>
+
+  <form method="post" class="text-center mt-4">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">{% trans "Yes, delete" %}</button>
+    <a href="{% url 'portal:flyer_list' %}" class="btn btn-secondary ms-2">{% trans "Cancel" %}</a>
+  </form>
+</div>
+{% endblock %}
