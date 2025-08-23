@@ -8,30 +8,26 @@ from ckeditor.widgets import CKEditorWidget
 from blog.models import BlogPost
 from flyers.models import Flyer
 
-# ----------------------------
-# FEATURE GROUPS (checkboxes)
-# ----------------------------
-FEATURE_GROUP_NAMES = ["BLOG", "SCHEDULE", "FLYERS"]
-
-# ----------------------------
-# CREATE USER FORM (portal)
-# ----------------------------
 User = get_user_model()
 
+# ---- Feature groups shown as checkboxes ----
+FEATURE_GROUP_NAMES = ["BLOG", "SCHEDULE", "FLYERS"]
 
+
+# ---- Create User (used by Leanne) ----
 class PortalUserCreateForm(UserCreationForm):
     email = forms.EmailField(
         required=True
     )
     is_active = forms.BooleanField(
-        required=False,
-        initial=True,
-        label="Active"
+        required=False, initial=True, label="Active"
     )
     features = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple,
-        choices=[(name, name) for name in FEATURE_GROUP_NAMES],
+        choices=[
+            (name, name) for name in FEATURE_GROUP_NAMES
+        ],
         label="Feature access",
         help_text=(
             "Tick the sections this user can access from the portal "
@@ -65,22 +61,52 @@ class PortalUserCreateForm(UserCreationForm):
         user = super().save(commit=False)
         user.email = self.cleaned_data["email"]
         user.is_active = self.cleaned_data.get("is_active", True)
-        # Keep portal users as staff (so they can sign in to the portal area).
-        # Remove or set False if you plan to gate purely by groups instead.
+        # portal users are staff; change if you don’t want that
         user.is_staff = True
-
         if commit:
             user.save()
             selected = self.cleaned_data.get("features", [])
             groups = Group.objects.filter(name__in=selected)
-            # replace any existing groups with exactly these
             user.groups.set(groups)
         return user
 
 
-# ----------------------------
-# BLOG FORM
-# ----------------------------
+# ---- Update User (owner-only edit; no password fields) ----
+class PortalUserUpdateForm(forms.ModelForm):
+    email = forms.EmailField(required=False)
+    is_active = forms.BooleanField(required=False, label="Active")
+    features = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=[(name, name) for name in FEATURE_GROUP_NAMES],
+        label="Feature access",
+    )
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "first_name", "last_name", "is_active")
+        widgets = {
+            "username": forms.TextInput(attrs={"readonly": "readonly"}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        current = list(self.instance.groups.values_list("name", flat=True))
+        self.fields["features"].initial = [
+            g for g in FEATURE_GROUP_NAMES if g in current
+        ]
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if commit:
+            user.save()
+            selected = self.cleaned_data.get("features", [])
+            groups = Group.objects.filter(name__in=selected)
+            user.groups.set(groups)
+        return user
+
+
+# ---- Blog form ----
 class BlogPostForm(forms.ModelForm):
     body_en = forms.CharField(widget=CKEditorWidget())
     body_it = forms.CharField(widget=CKEditorWidget())
@@ -96,9 +122,7 @@ class BlogPostForm(forms.ModelForm):
         ]
 
 
-# ----------------------------
-# FLYER FORM
-# ----------------------------
+# ---- Flyer form ----
 class FlyerForm(forms.ModelForm):
     description_en = forms.CharField(widget=CKEditorWidget())
     description_it = forms.CharField(widget=CKEditorWidget())
@@ -111,6 +135,6 @@ class FlyerForm(forms.ModelForm):
             'extra_info_en', 'extra_info_it',
             'image', 'event_date'
         ]
-        widgets = {
-            'event_date': forms.DateInput(attrs={'type': 'date'})
-        }
+    widgets = {
+        'event_date': forms.DateInput(attrs={'type': 'date'})
+    }
