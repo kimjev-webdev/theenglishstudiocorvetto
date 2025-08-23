@@ -187,7 +187,20 @@ Date        | Bug                                               | Focus         
 | 2025-08-23 | CSS changes not visible               | Stale static assets                   | Ran `collectstatic --noinput`; enabled WhiteNoise `CompressedManifestStaticFilesStorage`; ensured `{% static %}` paths. |
 | 2025-08-23 | Owner not recognized by email         | Env not set on Render                 | Set `PORTAL_OWNER_EMAIL` on Render and redeployed.                                                                      |
 | 2025-08-23 | Owner could lock self out of sections | Group-only guards                     | Owner bypass added in view helper and dashboard conditions.                                                             |
-
+| 2025-08-23 | Password reset not available from portal login | Auth UX | Wired Django auth reset URLs under /portal/, added “Forgot your password?” links on all login templates, created reset/done/confirm/complete templates. |
+| 2025-08-23 | Outbound email not configured in prod | SMTP | Switched to env-driven SMTP (Gmail App Password). Set EMAIL_* + DEFAULT_FROM_EMAIL on Render; moved dev to console backend locally. |
+| 2025-08-23 | Reset links using wrong host / scheme | Proxy headers | Enabled USE_X_FORWARDED_HOST=True and SECURE_PROXY_SSL_HEADER=('HTTP_X_FORWARDED_PROTO','https'); updated ALLOWED_HOSTS + CSRF_TRUSTED_ORIGINS to live domain. |
+| 2025-08-23 | CSS changes not appearing | Staticfiles | Ran collectstatic --noinput; ensured templates use {% static 'css/styles.css' %} (not hardcoded paths); confirmed WhiteNoise serves hashed assets. |
+| 2025-08-23 | Flyer images 404 under /media/... | Storage / templates | Confirmed Cloudinary storage active; removed all hardcoded /media/ usages; switched all image refs to {{ flyer.image.url }} behind {% if flyer.image %} guards. |
+| 2025-08-23 | New flyer upload saved no/bad image | Form HTML | Fixed flyer_form.html (clean markup + enctype="multipart/form-data"); added current image preview block; included {{ form.media }} for CKEditor. |
+| 2025-08-23 | Reorder page 500 (template missing) | Flyers portal | Added flyers/reorder.html with SortableJS; implemented POST handler to persist sort_order; added “Reorder” button in list. |
+| 2025-08-23 | Admin list view error on flyers | Django admin | Made FlyerAdmin list columns dynamic to avoid referencing non-existent fields across migrations. |
+| 2025-08-23 | Flyer model fields inconsistent across DBs | Migrations | Reintroduced event_date, image, extra_info_* with null=True/blank=True; added sort_order + created_at; forward migration applied cleanly. |
+| 2025-08-23 | Attempted rollback failed (NOT NULL on event_date) | Migrations | Abandoned rollback; created forward migration with nullable fields and defaults; migrated successfully. |
+| 2025-08-23 | Homepage carousel flips with single flyer | Front-end | Updated homepage_flyers.html: carousel only when ≥2 flyers; single-flyer hero on md+; guarded all modals/images. |
+| 2025-08-23 | Leanne could manage users but not see features | AuthZ / Groups | Verified is_staff on Leanne; assigned BLOG/SCHEDULE/FLYERS groups in prod DB; kept owner bypass in view helper so owner isn’t blocked by groups. |
+| 2025-08-23 | Users edit/delete missing for owner | User mgmt | Added owner-only edit + delete views, forms, URLs, and confirm delete template with safety guards (cannot delete owner/self). |
+| 2025-08-23 | Users list template syntax error | Templates | Fixed malformed {% if %} in users_list.html (removed broken filter pipeline); page renders. |
 
 
 
