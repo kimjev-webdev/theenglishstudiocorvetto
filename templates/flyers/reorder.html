@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-3">Reorder Flyers</h2>
+  <p class="text-muted">Drag items to change the order. Click “Save Order”.</p>
+
+  <ul id="flyer-sort-list" class="list-group mb-3">
+    {% for f in flyers %}
+      <li class="list-group-item d-flex align-items-center" data-id="{{ f.id }}">
+        <span class="me-3" style="cursor:grab;">☰</span>
+        <div class="flex-grow-1">
+          <strong>{{ f.title_en|default:f.title_it }}</strong>
+          {% if f.event_date %}<div class="small text-muted">{{ f.event_date|date:"M j, Y" }}</div>{% endif %}
+        </div>
+        {% if f.image %}
+          <img src="{{ f.image.url }}" alt="" style="height:40px;width:auto;border-radius:4px;">
+        {% endif %}
+      </li>
+    {% empty %}
+      <li class="list-group-item">No flyers yet.</li>
+    {% endfor %}
+  </ul>
+
+  <button id="save-order" class="btn btn-primary">Save Order</button>
+  <a href="{% url 'portal:flyer_list' %}" class="btn btn-secondary ms-2">Back</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+<script>
+(function() {
+  var el = document.getElementById('flyer-sort-list');
+  new Sortable(el, { animation: 150, handle: 'span' });
+
+  function getOrder() {
+    return Array.from(el.querySelectorAll('li')).map(li => li.dataset.id);
+  }
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  document.getElementById('save-order').addEventListener('click', function() {
+    fetch("", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken"),
+        "X-Requested-With": "XMLHttpRequest",
+      },
+      body: JSON.stringify({ order: getOrder() })
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.ok) { alert("Order saved"); }
+      else { alert("Error: " + (data.error || "unknown")); }
+    })
+    .catch(err => alert("Network error: " + err));
+  });
+})();
+</script>
+{% endblock %}
