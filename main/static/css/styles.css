@@ -661,3 +661,12 @@ blog-text a {
     margin-right: 100px !important;
   }
 }
+
+@media (min-width: 768px) and (max-width: 1300px) {
+  .desktop-only .two-up .flyer-70vh {
+    height: clamp(380px, 62vh, 720px); /* uniform height */
+    width: auto;                       /* let width vary per aspect ratio */
+    max-width: 100%;                   /* never overflow its column */
+    object-fit: contain;               /* keep full image visible */
+  }
+}
