@@ -7,74 +7,50 @@
     <h3 class="text-center off-white body-text">{% trans "Click on a flyer to find out more" %}</h3>
   </div>
 
-  {% with count=flyers|length %}
-    {# ── Carousel for md+ screens (only if 2+ images) ─────────────────────── #}
-    {% if count|default:0 >= 2 %}
-      <div id="flyerCarousel" class="carousel slide d-none d-md-block" data-bs-ride="carousel" data-bs-interval="5000">
-        <div class="carousel-indicators">
-          {% for flyer in flyers %}
-            {% if flyer.image %}
-              <button type="button"
-                      data-bs-target="#flyerCarousel"
-                      data-bs-slide-to="{{ forloop.counter0 }}"
-                      class="{% if forloop.first %}active{% endif %}"
-                      aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
-                      aria-label="Slide {{ forloop.counter }}"></button>
-            {% endif %}
-          {% endfor %}
-        </div>
+  <!-- Swiper CSS (CDN) -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css">
 
-        <div class="carousel-inner">
-          {% for flyer in flyers %}
-            {% if flyer.image %}
-              <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                <div class="d-flex justify-content-center">
-                  <img src="{{ flyer.image.url }}"
-                       class="img-fluid"
-                       style="max-height:70vh; aspect-ratio:1/1.414;"
-                       alt="{{ flyer.title_en|default:flyer.title_it }}">
-                </div>
-              </div>
-            {% endif %}
-          {% endfor %}
-        </div>
-
-        <button class="carousel-control-prev" type="button" data-bs-target="#flyerCarousel" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon"></span>
-          <span class="visually-hidden">{% trans "Previous" %}</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#flyerCarousel" data-bs-slide="next">
-          <span class="carousel-control-next-icon"></span>
-          <span class="visually-hidden">{% trans "Next" %}</span>
-        </button>
-      </div>
-
-    {% elif count == 1 %}
-      {# One flyer: show a single hero on md+ (no auto-ride, no controls) #}
-      {% with f=flyers.0 %}
-        {% if f.image %}
-          <div class="d-none d-md-block mt-3">
-            <div class="d-flex justify-content-center">
-              <img src="{{ f.image.url }}"
-                   class="img-fluid"
-                   style="max-height:70vh; aspect-ratio:1/1.414;"
-                   alt="{{ f.title_en|default:f.title_it }}">
+  {% comment %}
+    Carousel
+    - Works with any number of flyers.
+    - If only 1 slide, arrows/autoplay are disabled automatically.
+  {% endcomment %}
+  <div class="swiper my-flyer-carousel mt-3">
+    <div class="swiper-wrapper">
+      {% for flyer in flyers %}
+        {% if flyer.image %}
+          <div class="swiper-slide text-center">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#flyerModal-{{ flyer.pk }}" class="d-inline-block">
+              <img
+                src="{{ flyer.image.url }}"
+                alt="{{ flyer.title_en|default:flyer.title_it }}"
+                style="max-height:70vh;width:auto;border-radius:8px;"
+                class="img-fluid"
+              >
+            </a>
+            <div class="mt-2 fw-semibold">
+              {{ flyer.title_en|default:flyer.title_it }}
             </div>
           </div>
         {% endif %}
-      {% endwith %}
-    {% endif %}
-  {% endwith %}
+      {% endfor %}
+    </div>
 
-  {# ── Modals (only render if image exists) ───────────────────────────────── #}
+    <!-- arrows + pagination -->
+    <div class="swiper-button-prev" aria-label="{% trans 'Previous' %}"></div>
+    <div class="swiper-button-next" aria-label="{% trans 'Next' %}"></div>
+    <div class="swiper-pagination"></div>
+  </div>
+
+  {# Modals: one per flyer (unique ids!) #}
+  {% get_current_language as LANGUAGE_CODE %}
   {% for flyer in flyers %}
     {% if flyer.image %}
-      <div class="modal fade" id="flyerModal{{ flyer.id }}" tabindex="-1" aria-labelledby="flyerModalLabel{{ flyer.id }}" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal fade" id="flyerModal-{{ flyer.pk }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              {% get_current_language as LANGUAGE_CODE %}
-              <h5 class="modal-title primaryfont red" id="flyerModalLabel{{ flyer.id }}">
+              <h5 class="modal-title primaryfont red">
                 {% if LANGUAGE_CODE == "it" %}
                   {{ flyer.title_it|default:flyer.title_en }}
                 {% else %}
@@ -83,13 +59,18 @@
               </h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body text-center">
+              <img src="{{ flyer.image.url }}" class="img-fluid mb-3" alt="">
               {% if LANGUAGE_CODE == "it" %}
-                <div class="body-text mb-2">{{ flyer.description_it|default:flyer.description_en|safe }}</div>
-                <div class="fw-bold mt-3">{{ flyer.extra_info_it|default:flyer.extra_info_en }}</div>
+                {% if flyer.description_it or flyer.extra_info_it %}
+                  <div class="text-start body-text mb-2">{{ flyer.description_it|default:flyer.description_en|safe }}</div>
+                  <div class="fw-bold mt-2">{{ flyer.extra_info_it|default:flyer.extra_info_en }}</div>
+                {% endif %}
               {% else %}
-                <div class="body-text navy mb-2">{{ flyer.description_en|default:flyer.description_it|safe }}</div>
-                <div class="body-text red mt-3">{{ flyer.extra_info_en|default:flyer.extra_info_it }}</div>
+                {% if flyer.description_en or flyer.extra_info_en %}
+                  <div class="text-start body-text navy mb-2">{{ flyer.description_en|default:flyer.description_it|safe }}</div>
+                  <div class="body-text red mt-2">{{ flyer.extra_info_en|default:flyer.extra_info_it }}</div>
+                {% endif %}
               {% endif %}
             </div>
           </div>
@@ -101,4 +82,27 @@
   <div class="text-center headertext mt-4">
     <a href="{% url 'schedule' %}" class="btn btn-red primaryfont">{% trans "VIEW THE SCHEDULE" %}</a>
   </div>
+
+  <!-- Swiper JS (CDN) -->
+  <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const slideCount = document.querySelectorAll('.my-flyer-carousel .swiper-slide').length;
+      const multi = slideCount > 1;
+
+      new Swiper('.my-flyer-carousel', {
+        loop: multi,                                     // no loop if only 1
+        centeredSlides: true,
+        slidesPerView: 1,
+        spaceBetween: 24,
+        autoplay: multi ? { delay: 4000, disableOnInteraction: false } : false,
+        navigation: multi ? { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } : {},
+        pagination: multi ? { el: '.swiper-pagination', clickable: true } : {},
+        breakpoints: {
+          768: { slidesPerView: Math.min(2, slideCount) },
+          992: { slidesPerView: Math.min(3, slideCount) }
+        }
+      });
+    });
+  </script>
 </section>
