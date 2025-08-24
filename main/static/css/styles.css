@@ -286,69 +286,77 @@ img.footerpic {
    Flyers & Swiper carousel (homepage)
    ========================================================= */
 
-/* Exact 70vh height, auto width (no cropping) */
-.flyer-70vh {
-  height: 70vh;
-  min-height: 70vh;
-  max-height: 70vh;
-  width: auto;
-  object-fit: contain;
-  border-radius: 10px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, .25);
-  background: #fff;
-  display: block;
+/* Exact 70vh posters with auto width */
+.flyer-70vh{
+  height:70vh; min-height:70vh; max-height:70vh; width:auto;
+  object-fit:contain; border-radius:10px; background:#fff;
+  box-shadow:0 12px 30px rgba(0,0,0,.25); display:block;
 }
 
-/* --- Swiper layout shell --- */
-.my-flyer-carousel {
-  position: relative;
-  width: 100%;
-  padding: 10px 0;
-  overflow: visible; /* allow side peeking */
+/* ---- Vanilla coverflow container ---- */
+.flyer-cf{
+  position:relative;
+  padding:10px 0;
+  overflow:visible;
+  /* how far left/right the side slides sit */
+  --offset: min(28vw, 420px);
+  --far: calc(var(--offset) * 2);
+}
+.flyer-cf-track{
+  position:relative;
+  height:70vh;
+  list-style:none; margin:0; padding:0;
+}
+.flyer-cf-slide{
+  position:absolute; top:0; left:50%;
+  transform:translateX(-50%);
+  transition:transform .45s ease, opacity .45s ease, z-index .45s ease, filter .45s ease;
+  z-index:1; opacity:0; pointer-events:none;
 }
 
-.my-flyer-carousel .swiper-wrapper {
-  align-items: center;
-  overflow: visible;
+/* Positions */
+.flyer-cf-slide.cf-center{
+  z-index:5; opacity:1; pointer-events:auto;
+  transform:translateX(-50%) scale(1);
+}
+.flyer-cf-slide.cf-left{
+  z-index:4; opacity:.97; pointer-events:auto;
+  transform:translateX(calc(-50% - var(--offset))) scale(.92);
+  filter:blur(.2px);
+}
+.flyer-cf-slide.cf-right{
+  z-index:4; opacity:.97; pointer-events:auto;
+  transform:translateX(calc(-50% + var(--offset))) scale(.92);
+  filter:blur(.2px);
+}
+.flyer-cf-slide.cf-out-left{
+  transform:translateX(calc(-50% - var(--far))) scale(.85);
+  opacity:0;
+}
+.flyer-cf-slide.cf-out-right{
+  transform:translateX(calc(-50% + var(--far))) scale(.85);
+  opacity:0;
 }
 
-.my-flyer-carousel .swiper-slide {
-  width: auto;                      /* content defines width */
-  display: inline-flex;
-  justify-content: center;
-  position: relative;
-  z-index: 1;
+/* Arrows */
+.cf-nav{
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:44px; height:44px; border-radius:50%;
+  border:0; background:#fff; color:#B30000;
+  box-shadow:0 8px 20px rgba(0,0,0,.25);
+  display:flex; align-items:center; justify-content:center;
+  z-index:9999; cursor:pointer;
 }
+.cf-prev{ left:12px; }
+.cf-next{ right:12px; }
+.cf-nav:focus-visible{ outline:2px solid #B30000; }
+.cf-nav > * { pointer-events:none; }
 
-.my-flyer-carousel .swiper-slide a {
-  position: relative;
-  z-index: 2; /* above slide bg, below arrows */
-}
-
-/* --- Navigation arrows: must sit above overlapping slides --- */
-.my-flyer-carousel .swiper-button-prev,
-.my-flyer-carousel .swiper-button-next {
-  color: #B30000;
-  z-index: 9999 !important;
-  pointer-events: auto;
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,.35));
-}
-
-/* Don’t let the icon inside the button eat clicks */
-.my-flyer-carousel .swiper-button-prev > *,
-.my-flyer-carousel .swiper-button-next > * {
-  pointer-events: none;
-}
-
-/* --- Pagination dots --- */
-.my-flyer-carousel .swiper-pagination-bullet {
-  background: #B30000;
-  opacity: .6;
-}
-
-.my-flyer-carousel .swiper-pagination-bullet-active {
-  background: #37376B;
-  opacity: 1;
+/* Make mobile a tad shorter */
+@media (max-width: 576px){
+  .flyer-cf-track{ height:60vh; }
+  .flyer-70vh{ height:60vh; min-height:60vh; max-height:60vh; }
+  .flyer-cf{ --offset: min(30vw, 260px); }
 }
 
 /* --- Small-screen nicety: slightly shorter cards --- */

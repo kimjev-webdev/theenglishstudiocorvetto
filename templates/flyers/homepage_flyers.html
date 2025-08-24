@@ -11,26 +11,26 @@
   </div>
 
   {% if count >= 3 %}
-    <!-- ========== COVERFLOW CAROUSEL (3+ slides) ========== -->
-    <div class="swiper my-flyer-carousel mt-2">
-      <div class="swiper-wrapper">
+    {# ===== Vanilla coverflow (3+ slides) — no external libs ===== #}
+    <div class="flyer-cf mt-2" data-autoplay="4000">
+      <button class="cf-nav cf-prev" aria-label="{% trans 'Previous' %}">&lsaquo;</button>
+      <button class="cf-nav cf-next" aria-label="{% trans 'Next' %}">&rsaquo;</button>
+
+      <ul class="flyer-cf-track">
         {% for flyer in slides %}
           {% if flyer.image %}
-            <div class="swiper-slide text-center">
-              <a href="#" data-bs-toggle="modal" data-bs-target="#flyerModal-{{ flyer.pk }}" class="d-inline-block">
+            <li class="flyer-cf-slide">
+              <a href="#" class="d-inline-block" data-bs-toggle="modal" data-bs-target="#flyerModal-{{ flyer.pk }}">
                 <img src="{{ flyer.image.url }}" alt="{{ flyer.title_en|default:flyer.title_it }}" class="flyer-70vh">
               </a>
-            </div>
+            </li>
           {% endif %}
         {% endfor %}
-      </div>
-      <div class="swiper-button-prev" aria-label="{% trans 'Previous' %}"></div>
-      <div class="swiper-button-next" aria-label="{% trans 'Next' %}"></div>
-      <div class="swiper-pagination"></div>
+      </ul>
     </div>
 
   {% elif count == 2 %}
-    <!-- ========== STATIC TWO-UP (no carousel) ========== -->
+    {# ===== Static two-up (no carousel) ===== #}
     <div class="container mt-3">
       <div class="row justify-content-center g-3">
         {% for flyer in slides %}
@@ -46,7 +46,7 @@
     </div>
 
   {% elif count == 1 %}
-    <!-- ========== STATIC SINGLE CENTERED ========== -->
+    {# ===== Static single centered ===== #}
     {% with f=slides.0 %}
       {% if f.image %}
         <div class="d-flex justify-content-center mt-3">
@@ -67,7 +67,11 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title primaryfont red">
-                {% if LANGUAGE_CODE == "it" %}{{ flyer.title_it|default:flyer.title_en }}{% else %}{{ flyer.title_en|default:flyer.title_it }}{% endif %}
+                {% if LANGUAGE_CODE == "it" %}
+                  {{ flyer.title_it|default:flyer.title_en }}
+                {% else %}
+                  {{ flyer.title_en|default:flyer.title_it }}
+                {% endif %}
               </h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
             </div>
