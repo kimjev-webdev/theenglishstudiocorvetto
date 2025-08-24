@@ -40,10 +40,6 @@
               <a href="#" data-bs-toggle="modal" data-bs-target="#flyerModal-{{ flyer.pk }}" class="d-inline-block">
                 <img src="{{ flyer.image.url }}" alt="{{ flyer.title_en|default:flyer.title_it }}" class="flyer-70vh">
               </a>
-              <div class="mt-2 fw-semibold">
-                {% get_current_language as LANGUAGE_CODE %}
-                {% if LANGUAGE_CODE == "it" %}{{ flyer.title_it|default:flyer.title_en }}{% else %}{{ flyer.title_en|default:flyer.title_it }}{% endif %}
-              </div>
             </div>
           {% endif %}
         {% endfor %}
@@ -94,11 +90,7 @@
             <div class="col-12 col-md-6 text-center">
               <a href="#" data-bs-toggle="modal" data-bs-target="#flyerModal-{{ flyer.pk }}">
                 <img src="{{ flyer.image.url }}" alt="{{ flyer.title_en|default:flyer.title_it }}" class="flyer-70vh">
-              </a>
-              <div class="mt-2 fw-semibold">
-                {% get_current_language as LANGUAGE_CODE %}
-                {% if LANGUAGE_CODE == "it" %}{{ flyer.title_it|default:flyer.title_en }}{% else %}{{ flyer.title_en|default:flyer.title_it }}{% endif %}
-              </div>
+              </a>     
             </div>
           {% endif %}
         {% endfor %}
@@ -113,10 +105,6 @@
           <a href="#" data-bs-toggle="modal" data-bs-target="#flyerModal-{{ f.pk }}">
             <img src="{{ f.image.url }}" alt="{{ f.title_en|default:f.title_it }}" class="flyer-70vh">
           </a>
-        </div>
-        <div class="mt-2 text-center fw-semibold">
-          {% get_current_language as LANGUAGE_CODE %}
-          {% if LANGUAGE_CODE == "it" %}{{ f.title_it|default:f.title_en }}{% else %}{{ f.title_en|default:f.title_it }}{% endif %}
         </div>
       {% endif %}
     {% endwith %}
@@ -136,16 +124,15 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
             </div>
             <div class="modal-body text-center">
-              <img src="{{ flyer.image.url }}" class="img-fluid mb-3" alt="">
               {% if LANGUAGE_CODE == "it" %}
                 {% if flyer.description_it or flyer.extra_info_it %}
-                  <div class="text-start body-text mb-2">{{ flyer.description_it|default:flyer.description_en|safe }}</div>
-                  <div class="fw-bold mt-2">{{ flyer.extra_info_it|default:flyer.extra_info_en }}</div>
+                  <div class="text-start body-text navy mb-2">{{ flyer.description_it|default:flyer.description_en|safe }}</div>
+                  <div class="fw-bold body-text red">{{ flyer.extra_info_it|default:flyer.extra_info_en }}</div>
                 {% endif %}
               {% else %}
                 {% if flyer.description_en or flyer.extra_info_en %}
                   <div class="text-start body-text navy mb-2">{{ flyer.description_en|default:flyer.description_it|safe }}</div>
-                  <div class="body-text red mt-2">{{ flyer.extra_info_en|default:flyer.extra_info_it }}</div>
+                  <div class="body-text red">{{ flyer.extra_info_en|default:flyer.extra_info_it }}</div>
                 {% endif %}
               {% endif %}
             </div>

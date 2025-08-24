@@ -10,9 +10,7 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 
-from django.db.models import (
-    Max, F, Q, Case, When, IntegerField
-)
+from django.db.models import Max, F, Q  # Q for debug counts, F for NULL-safe order
 import json
 
 from blog.models import BlogPost
@@ -89,30 +87,16 @@ def portal_user_edit(request, user_id: int):
     if request.method == "POST":
         form = PortalUserUpdateForm(request.POST, instance=target)
         if form.is_valid():
-            if (
-                is_target_owner
-                and not form.cleaned_data.get("is_active", True)
-            ):
-                messages.error(
-                    request,
-                    (
-                        "You cannot deactivate the owner account."
-                    )
-                )
+            if (is_target_owner and not form.cleaned_data.get("is_active", True)):
+                messages.error(request, "You cannot deactivate the owner account.")
             else:
                 form.save()
-                messages.success(
-                    request, "User updated."
-                )
+                messages.success(request, "User updated.")
                 return redirect('portal:portal_users')
     else:
         form = PortalUserUpdateForm(instance=target)
 
-    return render(
-        request,
-        "portal/edit_user.html",
-        {"form": form, "target": target},
-    )
+    return render(request, "portal/edit_user.html", {"form": form, "target": target})
 
 
 @login_required
@@ -122,10 +106,7 @@ def portal_user_delete(request, user_id: int):
 
     # Safety: never delete the owner or yourself
     if is_portal_owner(target):
-        messages.error(
-            request,
-            "You cannot delete the owner account."
-        )
+        messages.error(request, "You cannot delete the owner account.")
         return redirect('portal:portal_users')
     if target.pk == request.user.pk:
         messages.error(request, "You cannot delete your own account.")
@@ -138,19 +119,12 @@ def portal_user_delete(request, user_id: int):
         return redirect('portal:portal_users')
 
     # GET → show confirm page
-    return render(
-        request,
-        "portal/confirm_user_delete.html",
-        {"target": target},
-    )
+    return render(request, "portal/confirm_user_delete.html", {"target": target})
 
 
 # ===== Feature gate helper =====
 def _require_group_or_redirect(request, group_name: str):
-    if not (
-        in_group(request.user, group_name) or
-        is_portal_owner(request.user)
-    ):
+    if not (in_group(request.user, group_name) or is_portal_owner(request.user)):
         messages.error(request, "You don't have access to that section.")
         return redirect('portal:portal_dashboard')
     return None
@@ -224,25 +198,17 @@ class FlyerListView(LoginRequiredMixin, StaffRequiredMixin, ListView):
             return resp
         return super().dispatch(request, *args, **kwargs)
 
-    # Include undated flyers and keep a stable, predictable order
+    # Include ALL flyers; put dateless after dated; stable ordering.
     def get_queryset(self):
+        total = Flyer.objects.all().count()
+        dateless = Flyer.objects.filter(Q(event_date__isnull=True) | Q(event_date="")).count()
+        print(f"[FLYER LIST] total={total} dateless={dateless}")
+
         return (
-            Flyer.objects
-            .annotate(
-                # mark rows that have NO date (NULL or empty string)
-                no_date=Case(
-                    When(
-                        Q(event_date__isnull=True) | Q(event_date=""),
-                        then=1
-                    ),
-                    default=0,
-                    output_field=IntegerField(),
-                )
-            )
+            Flyer.objects.all()
             .order_by(
                 "sort_order",
-                "no_date",  # dated first, then dateless
-                F("event_date").asc(nulls_last=True),
+                F("event_date").asc(nulls_last=True),  # NULLs shove to the end
                 "pk",
             )
         )
@@ -289,12 +255,7 @@ class FlyerCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
         self.object = obj  # tell the CBV what we saved
 
         img = getattr(obj, "image", None)
-        print(
-            "=== FLYER CREATED ===",
-            obj.pk,
-            getattr(img, "name", None),
-            getattr(img, "url", None),
-        )
+        print("=== FLYER CREATED ===", obj.pk, getattr(img, "name", None), getattr(img, "url", None))
         return redirect(self.get_success_url())
 
 
@@ -329,12 +290,7 @@ class FlyerUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         response = super().form_valid(form)
         obj = self.object
         img = getattr(obj, "image", None)
-        print(
-            "=== FLYER UPDATED ===",
-            obj.pk,
-            getattr(img, "name", None),
-            getattr(img, "url", None),
-        )
+        print("=== FLYER UPDATED ===", obj.pk, getattr(img, "name", None), getattr(img, "url", None))
         return response
 
 
@@ -361,10 +317,7 @@ def flyers_reorder(request):
         return resp
 
     # AJAX POST with array of IDs → save new sort_order
-    if (
-        request.method == "POST"
-        and request.headers.get("x-requested-with") == "XMLHttpRequest"
-    ):
+    if (request.method == "POST" and request.headers.get("x-requested-with") == "XMLHttpRequest"):
         try:
             data = json.loads(request.body.decode("utf-8"))
             order = data.get("order", [])
@@ -374,21 +327,9 @@ def flyers_reorder(request):
         except Exception as e:
             return JsonResponse({"ok": False, "error": str(e)}, status=400)
 
-    # GET → render the reorder UI (use same ordering as list)
+    # GET → render the reorder UI (same ordering as list)
     flyers = (
-        Flyer.objects
-        .annotate(
-            no_date=Case(
-                When(Q(event_date__isnull=True) | Q(event_date=""), then=1),
-                default=0,
-                output_field=IntegerField(),
-            )
-        )
-        .order_by(
-            "sort_order",
-            "no_date",
-            F("event_date").asc(nulls_last=True),
-            "pk",
-        )
+        Flyer.objects.all()
+        .order_by("sort_order", F("event_date").asc(nulls_last=True), "pk")
     )
     return render(request, "flyers/reorder.html", {"flyers": flyers})
