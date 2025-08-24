@@ -10,12 +10,31 @@
   <!-- Swiper CSS (CDN) -->
   <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css">
 
-  {% comment %}
-    Carousel
-    - Works with any number of flyers.
-    - If only 1 slide, arrows/autoplay are disabled automatically.
-  {% endcomment %}
-  <div class="swiper my-flyer-carousel mt-3">
+  <style>
+    /* Make the carousel feel like centered cards that stack */
+    .my-flyer-carousel { width: 100%; padding: 24px 0; }
+    .my-flyer-carousel .swiper-wrapper { align-items: center; }
+    /* Auto width so coverflow can overlap; clamp keeps it responsive */
+    .my-flyer-carousel .swiper-slide {
+      width: clamp(240px, 52vw, 440px);
+    }
+    .my-flyer-carousel .swiper-slide img {
+      width: 100%;
+      height: auto;
+      max-height: 70vh;
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.25);
+      background: #fff; /* keeps edges clean if image is transparent */
+    }
+    /* Make side slides visible (Swiper already handles overflow internally) */
+    .my-flyer-carousel .swiper-button-prev,
+    .my-flyer-carousel .swiper-button-next { color: #111; }
+    .my-flyer-carousel .swiper-pagination-bullet { background: #666; opacity: .6; }
+    .my-flyer-carousel .swiper-pagination-bullet-active { background: #111; opacity: 1; }
+  </style>
+
+  <div class="swiper my-flyer-carousel mt-2">
     <div class="swiper-wrapper">
       {% for flyer in flyers %}
         {% if flyer.image %}
@@ -24,12 +43,15 @@
               <img
                 src="{{ flyer.image.url }}"
                 alt="{{ flyer.title_en|default:flyer.title_it }}"
-                style="max-height:70vh;width:auto;border-radius:8px;"
-                class="img-fluid"
               >
             </a>
             <div class="mt-2 fw-semibold">
-              {{ flyer.title_en|default:flyer.title_it }}
+              {% get_current_language as LANGUAGE_CODE %}
+              {% if LANGUAGE_CODE == "it" %}
+                {{ flyer.title_it|default:flyer.title_en }}
+              {% else %}
+                {{ flyer.title_en|default:flyer.title_it }}
+              {% endif %}
             </div>
           </div>
         {% endif %}
@@ -42,7 +64,6 @@
     <div class="swiper-pagination"></div>
   </div>
 
-  {# Modals: one per flyer (unique ids!) #}
   {% get_current_language as LANGUAGE_CODE %}
   {% for flyer in flyers %}
     {% if flyer.image %}
@@ -87,20 +108,30 @@
   <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const slideCount = document.querySelectorAll('.my-flyer-carousel .swiper-slide').length;
-      const multi = slideCount > 1;
+      const slides = document.querySelectorAll('.my-flyer-carousel .swiper-slide').length;
+      const multi = slides > 1;
 
       new Swiper('.my-flyer-carousel', {
-        loop: multi,                                     // no loop if only 1
+        effect: 'coverflow',
+        loop: multi,                        // no loop if only 1 slide
         centeredSlides: true,
-        slidesPerView: 1,
-        spaceBetween: 24,
+        slidesPerView: 'auto',              // use CSS width for card size
+        grabCursor: true,
+        coverflowEffect: {
+          rotate: 0,                        // no tilt; just stack
+          stretch: -40,                     // negative => overlap a bit
+          depth: 220,                       // how far slides recede
+          modifier: 1.1,
+          slideShadows: false
+        },
         autoplay: multi ? { delay: 4000, disableOnInteraction: false } : false,
         navigation: multi ? { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } : {},
         pagination: multi ? { el: '.swiper-pagination', clickable: true } : {},
+        // On small screens keep one big card; on larger, peeking cards show naturally
         breakpoints: {
-          768: { slidesPerView: Math.min(2, slideCount) },
-          992: { slidesPerView: Math.min(3, slideCount) }
+          0:   { /* slidesPerView stays 'auto' */ },
+          768: { /* wider cards allowed by CSS clamp */ },
+          1200:{ /* same; larger max via clamp above */ }
         }
       });
     });
