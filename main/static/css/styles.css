@@ -669,8 +669,10 @@ blog-text a {
     aspect-ratio: auto !important; /* Let it size naturally */
     height: 120px; /* or whatever looks best */
   }
+}
 
-  .two-up .two-up-img{
+@media (min-width: 1000px) {
+      .two-up .two-up-img{
     height: 50vh;  
 }
 }
