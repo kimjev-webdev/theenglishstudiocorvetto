@@ -7,10 +7,12 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import logout, get_user_model
 from django.http import JsonResponse
-from django.db.models import Max  # Max for auto sort_order
-from django.db.models import F    # F for NULL-safe ordering
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
+
+from django.db.models import (
+    Max, F, Q, Case, When, IntegerField
+)
 import json
 
 from blog.models import BlogPost
@@ -93,11 +95,15 @@ def portal_user_edit(request, user_id: int):
             ):
                 messages.error(
                     request,
-                    "You cannot deactivate the owner account."
+                    (
+                        "You cannot deactivate the owner account."
+                    )
                 )
             else:
                 form.save()
-                messages.success(request, "User updated.")
+                messages.success(
+                    request, "User updated."
+                )
                 return redirect('portal:portal_users')
     else:
         form = PortalUserUpdateForm(instance=target)
@@ -105,7 +111,7 @@ def portal_user_edit(request, user_id: int):
     return render(
         request,
         "portal/edit_user.html",
-        {"form": form, "target": target}
+        {"form": form, "target": target},
     )
 
 
@@ -116,7 +122,10 @@ def portal_user_delete(request, user_id: int):
 
     # Safety: never delete the owner or yourself
     if is_portal_owner(target):
-        messages.error(request, "You cannot delete the owner account.")
+        messages.error(
+            request,
+            "You cannot delete the owner account."
+        )
         return redirect('portal:portal_users')
     if target.pk == request.user.pk:
         messages.error(request, "You cannot delete your own account.")
@@ -132,14 +141,15 @@ def portal_user_delete(request, user_id: int):
     return render(
         request,
         "portal/confirm_user_delete.html",
-        {"target": target}
+        {"target": target},
     )
 
 
 # ===== Feature gate helper =====
 def _require_group_or_redirect(request, group_name: str):
     if not (
-        in_group(request.user, group_name) or is_portal_owner(request.user)
+        in_group(request.user, group_name) or
+        is_portal_owner(request.user)
     ):
         messages.error(request, "You don't have access to that section.")
         return redirect('portal:portal_dashboard')
@@ -218,8 +228,20 @@ class FlyerListView(LoginRequiredMixin, StaffRequiredMixin, ListView):
     def get_queryset(self):
         return (
             Flyer.objects
+            .annotate(
+                # mark rows that have NO date (NULL or empty string)
+                no_date=Case(
+                    When(
+                        Q(event_date__isnull=True) | Q(event_date=""),
+                        then=1
+                    ),
+                    default=0,
+                    output_field=IntegerField(),
+                )
+            )
             .order_by(
                 "sort_order",
+                "no_date",  # dated first, then dateless
                 F("event_date").asc(nulls_last=True),
                 "pk",
             )
@@ -267,9 +289,12 @@ class FlyerCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
         self.object = obj  # tell the CBV what we saved
 
         img = getattr(obj, "image", None)
-        print("=== FLYER CREATED ===", obj.pk,
-              getattr(img, "name", None),
-              getattr(img, "url", None))
+        print(
+            "=== FLYER CREATED ===",
+            obj.pk,
+            getattr(img, "name", None),
+            getattr(img, "url", None),
+        )
         return redirect(self.get_success_url())
 
 
@@ -304,9 +329,12 @@ class FlyerUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         response = super().form_valid(form)
         obj = self.object
         img = getattr(obj, "image", None)
-        print("=== FLYER UPDATED ===", obj.pk,
-              getattr(img, "name", None),
-              getattr(img, "url", None))
+        print(
+            "=== FLYER UPDATED ===",
+            obj.pk,
+            getattr(img, "name", None),
+            getattr(img, "url", None),
+        )
         return response
 
 
@@ -347,9 +375,20 @@ def flyers_reorder(request):
             return JsonResponse({"ok": False, "error": str(e)}, status=400)
 
     # GET → render the reorder UI (use same ordering as list)
-    flyers = Flyer.objects.order_by(
-        "sort_order",
-        F("event_date").asc(nulls_last=True),
-        "pk",
+    flyers = (
+        Flyer.objects
+        .annotate(
+            no_date=Case(
+                When(Q(event_date__isnull=True) | Q(event_date=""), then=1),
+                default=0,
+                output_field=IntegerField(),
+            )
+        )
+        .order_by(
+            "sort_order",
+            "no_date",
+            F("event_date").asc(nulls_last=True),
+            "pk",
+        )
     )
     return render(request, "flyers/reorder.html", {"flyers": flyers})
