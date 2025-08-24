@@ -58,24 +58,26 @@
       </div>
 
     {% elif count == 2 %}
-      {# ---- Static two-up (mark container for mid-width equal-height rule) ---- #}
-      <div class="container mt-3 two-up">
-        <div class="row justify-content-center g-3">
-          {% for flyer in slides %}
-            {% if flyer.image %}
-              <div class="col-12 col-md-6 text-center">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#flyerModal-{{ flyer.pk }}">
-                  <img
-                    src="{{ flyer.image.url }}"
-                    alt="{{ flyer.title_en|default:flyer.title_it }}"
-                    class="flyer-70vh"
-                  >
-                </a>
-              </div>
-            {% endif %}
-          {% endfor %}
+     {# ---- Static two-up (equal heights between 768–1300) ---- #}
+<div class="container mt-3 two-up">
+  <div class="row justify-content-center g-3">
+    {% for flyer in slides %}
+      {% if flyer.image %}
+        <div class="col-12 col-md-6 d-flex justify-content-center">
+          <div class="two-up-box">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#flyerModal-{{ flyer.pk }}">
+              <img
+                src="{{ flyer.image.url }}"
+                alt="{{ flyer.title_en|default:flyer.title_it }}"
+                class="two-up-img"
+              >
+            </a>
+          </div>
         </div>
-      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
 
     {% elif count == 1 %}
       {# ---- Static single centered ---- #}
