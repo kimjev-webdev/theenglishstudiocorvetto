@@ -361,6 +361,30 @@ img.footerpic {
 .cf-next{ right:clamp(8px, 2vw, 24px); }
 
 
+  /* Give each column a fixed stage height and center the image inside */
+  .two-up .two-up-box{
+    height: clamp(420px, 62vh, 720px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* keep inside the page */
+    width: min(640px, 100%);
+  }
+
+  /* Image fits inside the box, keeps aspect ratio */
+  .two-up .two-up-img{
+    max-height: 100%;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+
+    /* same cosmetics as other flyers */
+    border-radius: 12px;
+    box-shadow: 0 12px 28px rgba(0,0,0,.24);
+    background: #fff;
+    display: block;
+  }
+
 
 /*blog styles*/
 /*blog card styles*/
@@ -661,3 +685,4 @@ blog-text a {
     margin-right: 100px !important;
   }
 }
+
