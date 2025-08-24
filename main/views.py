@@ -1,23 +1,25 @@
+# main/views.py
 from django.shortcuts import render
-from flyers.models import Flyer  # ✅ Corrected import from the new app
-
+from django.db.models import F
+from flyers.models import Flyer  # ✅ from the flyers app
 
 def home(request):
-    flyers = Flyer.objects.order_by("sort_order", "event_date")
+    # Include undated flyers; keep a predictable order
+    flyers = Flyer.objects.order_by(
+        "sort_order",
+        F("event_date").asc(nulls_last=True),
+        "pk",
+    )
     return render(request, "index.html", {"flyers": flyers})
 
-
 def courses(request):
-    return render(request, 'courses.html')
-
+    return render(request, "courses.html")
 
 def about(request):
-    return render(request, 'about.html')
-
+    return render(request, "about.html")
 
 def calendar(request):
-    return render(request, 'calendar.html')
-
+    return render(request, "calendar.html")
 
 def contact(request):
-    return render(request, 'contact.html')
+    return render(request, "contact.html")
