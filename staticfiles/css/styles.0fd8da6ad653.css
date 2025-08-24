@@ -336,6 +336,7 @@ img.footerpic {
 
 /* Reserve a consistent visual height for the stage */
 .flyer-cf-track{
+  width: 100%;
   position:relative;                      /* important for abs. slides */
   height:clamp(420px, 70vh, 820px);
 }
@@ -354,7 +355,8 @@ img.footerpic {
 /* Navigation arrows (kept inside wrapper so no overflow) */
 .cf-nav{
   position:absolute; top:50%; transform:translateY(-50%);
-  z-index:5;
+  z-index:9999;
+  pointer-events: auto;
   background:transparent; border:0; cursor:pointer;
   color:#B30000; line-height:1; font-size:clamp(28px, 4vw, 44px);
   padding:.25rem .5rem;

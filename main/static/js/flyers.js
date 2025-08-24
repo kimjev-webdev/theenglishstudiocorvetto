@@ -1,89 +1,61 @@
 // main/static/js/flyers.js
-(function () {
-  function initCoverflow(root) {
-    const track  = root.querySelector('.flyer-cf-track');
-    const slides = Array.from(root.querySelectorAll('.flyer-cf-slide'));
-    const prev   = root.querySelector('.cf-prev');
-    const next   = root.querySelector('.cf-next');
-    if (!track || slides.length < 3) return;
+document.addEventListener('DOMContentLoaded', () => {
+  const wrap  = document.querySelector('.flyer-cf');
+  if (!wrap) return;
 
-    let idx = 0;
-    let timer = null;
-    const gapFactor = 0.58;   // how much the side slides overlap (smaller = more overlap)
-    const scaleStep = 0.08;   // scale drop per step away from center
-    const maxSteps  = Math.floor(slides.length / 2);
+  const track = wrap.querySelector('.flyer-cf-track');
+  const slides = Array.from(wrap.querySelectorAll('.flyer-cf-slide'));
+  const prev  = wrap.querySelector('.cf-prev');
+  const next  = wrap.querySelector('.cf-next');
 
-    // Ensure the track reserves enough height
-    const setHeight = () => {
-      const h = Math.max(...slides.map(li => li.offsetHeight));
-      track.style.height = h + 'px';
-    };
+  let index = 0;
+  let timer = null;
+  const autoplayMs = parseInt(wrap.getAttribute('data-autoplay') || '0', 10) || 0;
 
-    const layout = () => {
-      const center = slides[idx];
-      const slideW = center.offsetWidth || 400;
-      const stepX  = slideW * gapFactor;
-
-      slides.forEach((li, i) => {
-        // compute shortest signed distance from current index (circular)
-        let d = i - idx;
-        if (d > slides.length / 2) d -= slides.length;
-        if (d < -slides.length / 2) d += slides.length;
-
-        const z = 100 - Math.abs(d);
-        const s = Math.max(1 - Math.abs(d) * scaleStep, 0.7);
-        const x = d * stepX;
-
-        li.style.transform  = `translateX(${x}px) scale(${s})`;
-        li.style.zIndex     = z;
-        li.style.opacity    = Math.abs(d) > maxSteps ? 0 : 1;
-        li.style.pointerEvents = (Math.abs(d) <= 1) ? 'auto' : 'none';
-      });
-    };
-
-    const go = (delta) => {
-      idx = (idx + delta + slides.length) % slides.length;
-      layout();
-    };
-
-    // Nav
-    prev && prev.addEventListener('click', e => { e.preventDefault(); stop(); go(-1); start(); });
-    next && next.addEventListener('click', e => { e.preventDefault(); stop(); go(+1); start(); });
-
-    // Click a side slide to focus it
-    slides.forEach((li, i) => {
-      li.addEventListener('click', (e) => {
-        if (i === idx) return; // center slide -> let link open the modal
-        e.preventDefault();
-        stop();
-        idx = i;
-        layout();
-        start();
-      });
-    });
-
-    // Autoplay
-    const delay = parseInt(root.getAttribute('data-autoplay') || '0', 10);
-    const start = () => {
-      if (!delay) return;
-      stop();
-      timer = setInterval(() => go(+1), delay);
-    };
-    const stop  = () => { if (timer) { clearInterval(timer); timer = null; } };
-    root.addEventListener('mouseenter', stop);
-    root.addEventListener('mouseleave', start);
-
-    // kick it off
-    setHeight();
-    layout();
-    start();
-
-    // Re-measure on resize
-    window.addEventListener('resize', () => { setHeight(); layout(); });
+  // distance between centres of slides (responsive)
+  function spacing() {
+    const w = track.clientWidth;
+    return Math.min(Math.max(w * 0.32, 180), 360); // 180..360px
   }
 
-  // init every coverflow on page (desktop area)
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.flyer-cf').forEach(initCoverflow);
-  });
-})();
+  function render() {
+    const s = spacing();
+    slides.forEach((el, i) => {
+      const d = i - index;                 // relative offset from active
+      const x = d * s;                      // horizontal push
+      const a = Math.min(Math.abs(d), 3);   // clamp off-screen slides
+      const scale = 1 - a * 0.12;           // step down 12% each side
+      const opacity = 1 - Math.min(Math.abs(d) * 0.18, 0.6);
+      const z = 100 - Math.abs(d);          // keep centre above arrows? we'll set arrows higher via CSS
+
+      el.style.zIndex = z;
+      el.style.opacity = String(opacity);
+      // left:50% in CSS + translateX(-50%) keeps the centre slide truly centred
+      el.style.transform = `translateX(${x}px) translateX(-50%) scale(${scale})`;
+    });
+  }
+
+  function step(dir) {
+    index = (index + dir + slides.length) % slides.length;
+    render();
+  }
+
+  function start() {
+    if (!autoplayMs) return;
+    timer = setInterval(() => step(1), autoplayMs);
+  }
+
+  function stop() {
+    if (timer) clearInterval(timer);
+    timer = null;
+  }
+
+  prev?.addEventListener('click', () => { stop(); step(-1); start(); });
+  next?.addEventListener('click', () => { stop(); step(1);  start(); });
+
+  window.addEventListener('resize', render);
+
+  // init
+  render();
+  start();
+});
