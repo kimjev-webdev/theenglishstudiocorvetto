@@ -177,7 +177,7 @@ STATIC_ROOT = (
     BASE_DIR
     / "staticfiles"
 )
-STATICFILES_DIRS = [BASE_DIR / "main" / "static"]
+
 
 MEDIA_URL = "/media/"
 # MEDIA_ROOT is unused by Cloudinary for user uploads but kept for local dev/
