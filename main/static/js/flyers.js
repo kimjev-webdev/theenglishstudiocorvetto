@@ -1,61 +1,116 @@
 // main/static/js/flyers.js
 document.addEventListener('DOMContentLoaded', () => {
-  const wrap  = document.querySelector('.flyer-cf');
-  if (!wrap) return;
+  const root = document.querySelector('.flyer-cf');
+  if (!root) return;
 
-  const track = wrap.querySelector('.flyer-cf-track');
-  const slides = Array.from(wrap.querySelectorAll('.flyer-cf-slide'));
-  const prev  = wrap.querySelector('.cf-prev');
-  const next  = wrap.querySelector('.cf-next');
+  const track  = root.querySelector('.flyer-cf-track');
+  const slides = Array.from(track.querySelectorAll('.flyer-cf-slide'));
+  const prevBtn = root.querySelector('.cf-prev');
+  const nextBtn = root.querySelector('.cf-next');
 
-  let index = 0;
+  const N = slides.length;
+  if (N < 3) return; // desktop carousel only runs with 3+
+
+  // ---- Tunables ---------------------------------------------------
+  const VISIBLE_PER_SIDE = Math.min(2, Math.floor((N - 1) / 2)); // neighbors each side
+  const BASE_OFFSET = 260;     // px shift for the first neighbor
+  const GAP_SHRINK  = 0.86;    // spacing reduces as you go outward
+  const SCALE_STEP  = 0.88;    // scale for each step away from center
+  const OPACITY_BASE = 0.95;   // center neighbors start near-opaque
+  const OPACITY_STEP = 0.15;   // fade as you go outward
+  // -----------------------------------------------------------------
+
+  let idx = 0; // active (center) slide index
   let timer = null;
-  const autoplayMs = parseInt(wrap.getAttribute('data-autoplay') || '0', 10) || 0;
+  const delay = parseInt(root.dataset.autoplay || '0', 10) || 0;
 
-  // distance between centres of slides (responsive)
-  function spacing() {
-    const w = track.clientWidth;
-    return Math.min(Math.max(w * 0.32, 180), 360); // 180..360px
+  function offsetForStep(k) {
+    // sum a geometric series to get nice even spacing
+    let x = 0;
+    for (let j = 1; j <= k; j++) x += BASE_OFFSET * Math.pow(GAP_SHRINK, j - 1);
+    return x;
   }
 
-  function render() {
-    const s = spacing();
-    slides.forEach((el, i) => {
-      const d = i - index;                 // relative offset from active
-      const x = d * s;                      // horizontal push
-      const a = Math.min(Math.abs(d), 3);   // clamp off-screen slides
-      const scale = 1 - a * 0.12;           // step down 12% each side
-      const opacity = 1 - Math.min(Math.abs(d) * 0.18, 0.6);
-      const z = 100 - Math.abs(d);          // keep centre above arrows? we'll set arrows higher via CSS
+  function place(el, x, scale, opacity, z, interactive) {
+    // Anchor by center, then push left/right, then scale
+    el.style.transform = `translateX(-50%) translateX(${x}px) scale(${scale})`;
+    el.style.zIndex = String(z);
+    el.style.opacity = String(opacity);
+    el.style.pointerEvents = interactive ? 'auto' : 'none';
+  }
 
-      el.style.zIndex = z;
-      el.style.opacity = String(opacity);
-      // left:50% in CSS + translateX(-50%) keeps the centre slide truly centred
-      el.style.transform = `translateX(${x}px) translateX(-50%) scale(${scale})`;
+  function layout() {
+    const ZCENTER = 1000;
+    slides.forEach((el, i) => {
+      const rel = ((i - idx) % N + N) % N; // 0..N-1 relative to center
+      if (rel === 0) {
+        // Center
+        place(el, 0, 1, 1, ZCENTER, true);
+        return;
+      }
+
+      // Right side neighbors: 1..VISIBLE_PER_SIDE
+      if (rel <= VISIBLE_PER_SIDE) {
+        const k = rel;
+        const x = offsetForStep(k);
+        const s = Math.pow(SCALE_STEP, k);
+        const o = Math.max(0, OPACITY_BASE - OPACITY_STEP * (k - 1));
+        place(el, +x, s, o, ZCENTER - k, true);
+        return;
+      }
+
+      // Left side neighbors: N-1 .. N-VISIBLE_PER_SIDE
+      if (rel >= N - VISIBLE_PER_SIDE) {
+        const k = N - rel;
+        const x = offsetForStep(k);
+        const s = Math.pow(SCALE_STEP, k);
+        const o = Math.max(0, OPACITY_BASE - OPACITY_STEP * (k - 1));
+        place(el, -x, s, o, ZCENTER - k, true);
+        return;
+      }
+
+      // Everything else: hide (still in DOM to keep loop smooth)
+      place(el, 0, 0.6, 0, 0, false);
     });
   }
 
-  function step(dir) {
-    index = (index + dir + slides.length) % slides.length;
-    render();
-  }
+  function next() { idx = (idx + 1) % N; layout(); }
+  function prev() { idx = (idx - 1 + N) % N; layout(); }
 
-  function start() {
-    if (!autoplayMs) return;
-    timer = setInterval(() => step(1), autoplayMs);
-  }
+  // Controls
+  nextBtn?.addEventListener('click', next);
+  prevBtn?.addEventListener('click', prev);
 
-  function stop() {
-    if (timer) clearInterval(timer);
-    timer = null;
-  }
+  // Click a non-center slide -> bring to front
+  slides.forEach((el, i) => {
+    el.addEventListener('click', () => {
+      if (i === idx) return;
+      // find shortest direction
+      const rightSteps = ((i - idx) % N + N) % N;
+      const leftSteps  = N - rightSteps;
+      if (rightSteps <= leftSteps) {
+        idx = (idx + rightSteps) % N;
+      } else {
+        idx = (idx - leftSteps + N) % N;
+      }
+      layout();
+    });
+  });
 
-  prev?.addEventListener('click', () => { stop(); step(-1); start(); });
-  next?.addEventListener('click', () => { stop(); step(1);  start(); });
+  // Autoplay (pause on hover)
+  function start() { if (delay > 0 && !timer) timer = setInterval(next, delay); }
+  function stop()  { if (timer) clearInterval(timer), (timer = null); }
+  root.addEventListener('mouseenter', stop);
+  root.addEventListener('mouseleave', start);
 
-  window.addEventListener('resize', render);
+  // Keyboard (desktop)
+  root.setAttribute('tabindex', '0');
+  root.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') prev();
+    if (e.key === 'ArrowRight') next();
+  });
 
-  // init
-  render();
+  // Init
+  layout();
   start();
 });

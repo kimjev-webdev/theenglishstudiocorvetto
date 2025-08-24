@@ -366,6 +366,19 @@ img.footerpic {
 .cf-prev{ left:clamp(8px, 2vw, 24px); }
 .cf-next{ right:clamp(8px, 2vw, 24px); }
 
+/* Center each absolute slide by its middle, not its left edge */
+.flyer-cf-slide{
+  position: absolute;
+  top: 0; bottom: 0; left: 50%;
+  display: flex; align-items: center; justify-content: center;
+  /* IMPORTANT: start centered; JS will append another translateX(...) + scale() */
+  transform: translateX(-50%);
+  transform-origin: center center;
+  transition: transform .45s ease, opacity .3s ease;
+  will-change: transform;
+  max-width: 100%;
+}
+
 
 
 /*blog styles*/
