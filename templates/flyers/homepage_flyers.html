@@ -1,82 +1,120 @@
 {% load i18n %}
 {% load static %}
 
+{% comment %} prefer the list that only includes items with images {% endcomment %}
+{% with slides=flyers_imgs|default:flyers %}
+{% with count=slides|length %}
+
 <section class="container-fluid mt-3" id="upcoming">
   <div class="p-4 rounded navy-bg w-100">
     <h2 class="text-center off-white primaryfont indexheader">{% trans "Upcoming Events" %}</h2>
     <h3 class="text-center off-white body-text">{% trans "Click on a flyer to find out more" %}</h3>
   </div>
 
-  <!-- Swiper CSS (CDN) -->
-  <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css">
-
   <style>
-    /* Make the carousel feel like centered cards that stack */
-    .my-flyer-carousel { width: 100%; padding: 24px 0; }
-    .my-flyer-carousel .swiper-wrapper { align-items: center; }
-    /* Auto width so coverflow can overlap; clamp keeps it responsive */
-    .my-flyer-carousel .swiper-slide {
-      width: clamp(240px, 52vw, 440px);
-    }
-    .my-flyer-carousel .swiper-slide img {
-      width: 100%;
-      height: auto;
-      max-height: 70vh;
-      object-fit: contain;
-      border-radius: 10px;
-      box-shadow: 0 12px 30px rgba(0,0,0,.25);
-      background: #fff; /* keeps edges clean if image is transparent */
-    }
-    /* Make side slides visible (Swiper already handles overflow internally) */
-    .my-flyer-carousel .swiper-button-prev,
-    .my-flyer-carousel .swiper-button-next { color: #111; }
-    .my-flyer-carousel .swiper-pagination-bullet { background: #666; opacity: .6; }
-    .my-flyer-carousel .swiper-pagination-bullet-active { background: #111; opacity: 1; }
+    /* shared: exact 70vh height, auto width */
+    .flyer-70vh { height: 70vh; min-height: 70vh; max-height: 70vh; width: auto; object-fit: contain; border-radius: 10px; box-shadow: 0 12px 30px rgba(0,0,0,.25); background:#fff; }
   </style>
 
-  <div class="swiper my-flyer-carousel mt-2">
-    <div class="swiper-wrapper">
-      {% for flyer in flyers %}
-        {% if flyer.image %}
-          <div class="swiper-slide text-center">
-            <a href="#" data-bs-toggle="modal" data-bs-target="#flyerModal-{{ flyer.pk }}" class="d-inline-block">
-              <img
-                src="{{ flyer.image.url }}"
-                alt="{{ flyer.title_en|default:flyer.title_it }}"
-              >
-            </a>
-            <div class="mt-2 fw-semibold">
-              {% get_current_language as LANGUAGE_CODE %}
-              {% if LANGUAGE_CODE == "it" %}
-                {{ flyer.title_it|default:flyer.title_en }}
-              {% else %}
-                {{ flyer.title_en|default:flyer.title_it }}
-              {% endif %}
+  {% if count >= 3 %}
+    <!-- ========== COVERFLOW CAROUSEL (3+ slides) ========== -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css">
+
+    <style>
+      .my-flyer-carousel { width: 100%; padding: 24px 0; }
+      .my-flyer-carousel .swiper-wrapper { align-items: center; }
+      .my-flyer-carousel .swiper-slide { width: auto; display: inline-flex; justify-content: center; }
+      .my-flyer-carousel .swiper-button-prev,
+      .my-flyer-carousel .swiper-button-next { color: #111; }
+      .my-flyer-carousel .swiper-pagination-bullet { background: #666; opacity: .6; }
+      .my-flyer-carousel .swiper-pagination-bullet-active { background: #111; opacity: 1; }
+    </style>
+
+    <div class="swiper my-flyer-carousel mt-2">
+      <div class="swiper-wrapper">
+        {% for flyer in slides %}
+          {% if flyer.image %}
+            <div class="swiper-slide text-center">
+              <a href="#" data-bs-toggle="modal" data-bs-target="#flyerModal-{{ flyer.pk }}" class="d-inline-block">
+                <img src="{{ flyer.image.url }}" alt="{{ flyer.title_en|default:flyer.title_it }}" class="flyer-70vh">
+              </a>
+              <div class="mt-2 fw-semibold">
+                {% get_current_language as LANGUAGE_CODE %}
+                {% if LANGUAGE_CODE == "it" %}{{ flyer.title_it|default:flyer.title_en }}{% else %}{{ flyer.title_en|default:flyer.title_it }}{% endif %}
+              </div>
             </div>
-          </div>
-        {% endif %}
-      {% endfor %}
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="swiper-button-prev" aria-label="{% trans 'Previous' %}"></div>
+      <div class="swiper-button-next" aria-label="{% trans 'Next' %}"></div>
+      <div class="swiper-pagination"></div>
     </div>
 
-    <!-- arrows + pagination -->
-    <div class="swiper-button-prev" aria-label="{% trans 'Previous' %}"></div>
-    <div class="swiper-button-next" aria-label="{% trans 'Next' %}"></div>
-    <div class="swiper-pagination"></div>
-  </div>
+    <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        new Swiper('.my-flyer-carousel', {
+          effect: 'coverflow',
+          loop: true,
+          centeredSlides: true,
+          slidesPerView: 'auto',
+          grabCursor: true,
+          coverflowEffect: { rotate: 0, stretch: -40, depth: 220, modifier: 1.1, slideShadows: false },
+          autoplay: { delay: 4000, disableOnInteraction: false },
+          navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+          pagination: { el: '.swiper-pagination', clickable: true }
+        });
+      });
+    </script>
 
+  {% elif count == 2 %}
+    <!-- ========== STATIC TWO-UP (no carousel) ========== -->
+    <div class="container mt-3">
+      <div class="row justify-content-center g-3">
+        {% for flyer in slides %}
+          {% if flyer.image %}
+            <div class="col-12 col-md-6 text-center">
+              <a href="#" data-bs-toggle="modal" data-bs-target="#flyerModal-{{ flyer.pk }}">
+                <img src="{{ flyer.image.url }}" alt="{{ flyer.title_en|default:flyer.title_it }}" class="flyer-70vh">
+              </a>
+              <div class="mt-2 fw-semibold">
+                {% get_current_language as LANGUAGE_CODE %}
+                {% if LANGUAGE_CODE == "it" %}{{ flyer.title_it|default:flyer.title_en }}{% else %}{{ flyer.title_en|default:flyer.title_it }}{% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+  {% elif count == 1 %}
+    <!-- ========== STATIC SINGLE CENTERED ========== -->
+    {% with f=slides.0 %}
+      {% if f.image %}
+        <div class="d-flex justify-content-center mt-3">
+          <a href="#" data-bs-toggle="modal" data-bs-target="#flyerModal-{{ f.pk }}">
+            <img src="{{ f.image.url }}" alt="{{ f.title_en|default:f.title_it }}" class="flyer-70vh">
+          </a>
+        </div>
+        <div class="mt-2 text-center fw-semibold">
+          {% get_current_language as LANGUAGE_CODE %}
+          {% if LANGUAGE_CODE == "it" %}{{ f.title_it|default:f.title_en }}{% else %}{{ f.title_en|default:f.title_it }}{% endif %}
+        </div>
+      {% endif %}
+    {% endwith %}
+  {% endif %}
+
+  {# --------- Modals (only for flyers with images) --------- #}
   {% get_current_language as LANGUAGE_CODE %}
-  {% for flyer in flyers %}
+  {% for flyer in slides %}
     {% if flyer.image %}
       <div class="modal fade" id="flyerModal-{{ flyer.pk }}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title primaryfont red">
-                {% if LANGUAGE_CODE == "it" %}
-                  {{ flyer.title_it|default:flyer.title_en }}
-                {% else %}
-                  {{ flyer.title_en|default:flyer.title_it }}
-                {% endif %}
+                {% if LANGUAGE_CODE == "it" %}{{ flyer.title_it|default:flyer.title_en }}{% else %}{{ flyer.title_en|default:flyer.title_it }}{% endif %}
               </h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
             </div>
@@ -103,37 +141,7 @@
   <div class="text-center headertext mt-4">
     <a href="{% url 'schedule' %}" class="btn btn-red primaryfont">{% trans "VIEW THE SCHEDULE" %}</a>
   </div>
-
-  <!-- Swiper JS (CDN) -->
-  <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const slides = document.querySelectorAll('.my-flyer-carousel .swiper-slide').length;
-      const multi = slides > 1;
-
-      new Swiper('.my-flyer-carousel', {
-        effect: 'coverflow',
-        loop: multi,                        // no loop if only 1 slide
-        centeredSlides: true,
-        slidesPerView: 'auto',              // use CSS width for card size
-        grabCursor: true,
-        coverflowEffect: {
-          rotate: 0,                        // no tilt; just stack
-          stretch: -40,                     // negative => overlap a bit
-          depth: 220,                       // how far slides recede
-          modifier: 1.1,
-          slideShadows: false
-        },
-        autoplay: multi ? { delay: 4000, disableOnInteraction: false } : false,
-        navigation: multi ? { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } : {},
-        pagination: multi ? { el: '.swiper-pagination', clickable: true } : {},
-        // On small screens keep one big card; on larger, peeking cards show naturally
-        breakpoints: {
-          0:   { /* slidesPerView stays 'auto' */ },
-          768: { /* wider cards allowed by CSS clamp */ },
-          1200:{ /* same; larger max via clamp above */ }
-        }
-      });
-    });
-  </script>
 </section>
+
+{% endwith %}
+{% endwith %}
