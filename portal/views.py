@@ -226,6 +226,31 @@ class FlyerCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
             return resp
         return super().dispatch(request, *args, **kwargs)
 
+    # Ensure uploaded files are passed to the form
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["files"] = self.request.FILES or None
+        return kwargs
+
+    # Print real validation errors so we can see why it failed
+    def form_invalid(self, form):
+        print("=== FLYER CREATE INVALID ===")
+        print("METHOD:", self.request.method)
+        print("CONTENT_TYPE:", self.request.META.get("CONTENT_TYPE"))
+        print("FILES KEYS:", list(self.request.FILES.keys()))
+        print("POST KEYS:", list(self.request.POST.keys()))
+        print("FORM ERRORS JSON:", form.errors.as_json())
+        return super().form_invalid(form)
+
+    # Confirm what saved (pk + image name/url)
+    def form_valid(self, form):
+        obj = form.save()
+        img = getattr(obj, "image", None)  # change name if your field differs
+        print("=== FLYER CREATED ===", obj.pk,
+              getattr(img, "name", None),
+              getattr(img, "url", None))
+        return super().form_valid(form)
+
 
 class FlyerUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
     model = Flyer
@@ -238,6 +263,28 @@ class FlyerUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         if resp:
             return resp
         return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["files"] = self.request.FILES or None
+        return kwargs
+
+    def form_invalid(self, form):
+        print("=== FLYER UPDATE INVALID ===")
+        print("METHOD:", self.request.method)
+        print("CONTENT_TYPE:", self.request.META.get("CONTENT_TYPE"))
+        print("FILES KEYS:", list(self.request.FILES.keys()))
+        print("POST KEYS:", list(self.request.POST.keys()))
+        print("FORM ERRORS JSON:", form.errors.as_json())
+        return super().form_invalid(form)
+
+    def form_valid(self, form):
+        obj = form.save()
+        img = getattr(obj, "image", None)
+        print("=== FLYER UPDATED ===", obj.pk,
+              getattr(img, "name", None),
+              getattr(img, "url", None))
+        return super().form_valid(form)
 
 
 class FlyerDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
