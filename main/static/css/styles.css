@@ -352,12 +352,11 @@ img.footerpic {
 .cf-nav:focus-visible{ outline:2px solid #B30000; }
 .cf-nav > * { pointer-events:none; }
 
-/* Make mobile a tad shorter */
-@media (max-width: 576px){
-  .flyer-cf-track{ height:60vh; }
-  .flyer-70vh{ height:60vh; min-height:60vh; max-height:60vh; }
-  .flyer-cf{ --offset: min(30vw, 260px); }
-}
+/* Show/hide blocks by breakpoint */
+.mobile-only { display: none; }
+.desktop-only { display: block; }
+
+
 
 /* --- Small-screen nicety: slightly shorter cards --- */
 @media (max-width: 576px) {
@@ -531,10 +530,12 @@ blog-text a {
   display: none !important; /* remove the down arrow */
 }
 
-
-
 /* media queries for responsive design */
 @media (max-width: 576px) {
+  .flyer-cf-track{ height:60vh; }
+  .flyer-70vh{ height:60vh; min-height:60vh; max-height:60vh; }
+  .flyer-cf{ --offset: min(30vw, 260px); }
+
   .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -621,6 +622,9 @@ blog-text a {
   .nav-link {
     padding: 0 !important;
   }
+
+  .mobile-only { display: block; }
+  .desktop-only { display: none; }
 }
 
 @media (min-width: 768px) {
