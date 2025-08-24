@@ -6,12 +6,9 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import logout, get_user_model
-from django.http import JsonResponse
-from django.db.models import Max  # Max for auto sort_order
-from django.db.models import F    # F for NULL-safe ordering
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import never_cache
-import json
+from django.http import JsonResponse  # NEW
+from django.db.models import Max      # NEW (for auto sort_order)
+import json                           # NEW
 
 from blog.models import BlogPost
 from flyers.models import Flyer
@@ -202,7 +199,6 @@ class BlogDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
 
 # ===== Flyers CRUD (staff/owner + FLYERS) =====
 
-@method_decorator(never_cache, name="dispatch")  # avoid stale portal pages
 class FlyerListView(LoginRequiredMixin, StaffRequiredMixin, ListView):
     model = Flyer
     template_name = 'flyers/flyers_list.html'
@@ -214,16 +210,9 @@ class FlyerListView(LoginRequiredMixin, StaffRequiredMixin, ListView):
             return resp
         return super().dispatch(request, *args, **kwargs)
 
-    # Include undated flyers and keep a stable, predictable order
+    # Respect manual ordering in portal too
     def get_queryset(self):
-        return (
-            Flyer.objects
-            .order_by(
-                "sort_order",
-                F("event_date").asc(nulls_last=True),
-                "pk",
-            )
-        )
+        return Flyer.objects.order_by("sort_order", "event_date")
 
 
 class FlyerCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
@@ -322,10 +311,9 @@ class FlyerDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
         return super().dispatch(request, *args, **kwargs)
 
 
-# ===== Flyers drag-and-drop reorder =====
+# ===== Flyers drag-and-drop reorder (NEW) =====
 
 @login_required
-@never_cache
 def flyers_reorder(request):
     # same feature gate as other flyers views
     resp = _require_group_or_redirect(request, "FLYERS")
@@ -346,10 +334,6 @@ def flyers_reorder(request):
         except Exception as e:
             return JsonResponse({"ok": False, "error": str(e)}, status=400)
 
-    # GET → render the reorder UI (use same ordering as list)
-    flyers = Flyer.objects.order_by(
-        "sort_order",
-        F("event_date").asc(nulls_last=True),
-        "pk",
-    )
+    # GET → render the reorder UI
+    flyers = Flyer.objects.order_by("sort_order", "event_date")
     return render(request, "flyers/reorder.html", {"flyers": flyers})
