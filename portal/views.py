@@ -7,7 +7,8 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import logout, get_user_model
 from django.http import JsonResponse  # NEW
-import json  # NEW
+from django.db.models import Max      # NEW (for auto sort_order)
+import json                           # NEW
 
 from blog.models import BlogPost
 from flyers.models import Flyer
@@ -242,14 +243,23 @@ class FlyerCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
         print("FORM ERRORS JSON:", form.errors.as_json())
         return super().form_invalid(form)
 
-    # Confirm what saved (pk + image name/url)
+    # Set sort_order automatically and save cleanly (no double-save)
     def form_valid(self, form):
-        obj = form.save()
-        img = getattr(obj, "image", None)  # change name if your field differs
+        obj = form.save(commit=False)
+
+        # Auto-append to the end of the list
+        max_order = Flyer.objects.aggregate(m=Max("sort_order"))["m"]
+        obj.sort_order = (max_order + 1) if max_order is not None else 0
+
+        obj.save()
+        form.save_m2m()
+        self.object = obj  # tell the CBV what we saved
+
+        img = getattr(obj, "image", None)
         print("=== FLYER CREATED ===", obj.pk,
               getattr(img, "name", None),
               getattr(img, "url", None))
-        return super().form_valid(form)
+        return redirect(self.get_success_url())
 
 
 class FlyerUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
@@ -278,13 +288,15 @@ class FlyerUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         print("FORM ERRORS JSON:", form.errors.as_json())
         return super().form_invalid(form)
 
+    # Save using the parent, then print what changed
     def form_valid(self, form):
-        obj = form.save()
+        response = super().form_valid(form)
+        obj = self.object
         img = getattr(obj, "image", None)
         print("=== FLYER UPDATED ===", obj.pk,
               getattr(img, "name", None),
               getattr(img, "url", None))
-        return super().form_valid(form)
+        return response
 
 
 class FlyerDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):

@@ -119,11 +119,17 @@ class BlogPostForm(forms.ModelForm):
 class FlyerForm(forms.ModelForm):
     class Meta:
         model = Flyer
-        fields = "__all__"  # don't hard-code; model may differ across envs
-        # widgets will be set dynamically in __init__
+        # Keep this dynamic; we’ll drop admin-only fields in __init__
+        fields = "__all__"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # Remove sort_order from the form entirely —
+        # it’s managed by drag & drop
+        # This avoids validation like "This field is required."
+        if "sort_order" in self.fields:
+            self.fields.pop("sort_order")
 
         # Attach CKEditor to description fields if present
         for fld in ("description_en", "description_it"):
@@ -135,7 +141,3 @@ class FlyerForm(forms.ModelForm):
             self.fields["event_date"].widget = forms.DateInput(
                 attrs={"type": "date"}
             )
-
-        # Hide sort_order (managed via drag-and-drop UI)
-        if "sort_order" in self.fields:
-            self.fields["sort_order"].widget = forms.HiddenInput()
