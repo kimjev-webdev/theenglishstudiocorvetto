@@ -363,7 +363,6 @@ img.footerpic {
 
   /* Give each column a fixed stage height and center the image inside */
   .two-up .two-up-box{
-    height: clamp(420px, 62vh, 720px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -372,7 +371,7 @@ img.footerpic {
   }
 
 .two-up .two-up-img{
-  height: 100%;                  /* lock equal heights */
+  height: 60vh;                  /* lock equal heights */
   width: auto;                   /* keep aspect ratio */
   /* no max-width:100% here on purpose */
   object-fit: cover;             /* extra safety if both dims set */
@@ -672,10 +671,10 @@ blog-text a {
   }
 }
 
-@media (min-width: 1200px) {
-  .aboutp {
-    margin-left: 100px !important;
-    margin-right: 100px !important;
+
+@media (min-width: 1440px) {
+  .two-up .two-up-img{
+    height: 75vh;                  /* lock equal heights */
   }
 }
 
