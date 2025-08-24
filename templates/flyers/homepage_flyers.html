@@ -7,31 +7,11 @@
 <section class="container-fluid mt-3" id="upcoming">
   <div class="p-4 rounded navy-bg w-100">
     <h2 class="text-center off-white primaryfont indexheader">{% trans "Upcoming Events" %}</h2>
-    <h3 class="text-center off-white body-text">{% trans "Click on a flyer to find out more" %}</h3>
+    <h4 class="text-center off-white body-text">{% trans "Click on a flyer to find out more" %}</h4>
   </div>
-
-  <style>
-    /* shared: exact 70vh height, auto width */
-    .flyer-70vh{
-      height:70vh;min-height:70vh;max-height:70vh;width:auto;
-      object-fit:contain;border-radius:10px;box-shadow:0 12px 30px rgba(0,0,0,.25);background:#fff;
-    }
-  </style>
 
   {% if count >= 3 %}
     <!-- ========== COVERFLOW CAROUSEL (3+ slides) ========== -->
-    <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css">
-
-    <style>
-      .my-flyer-carousel{width:100%;padding:24px 0;overflow:visible;} /* allow peeking sides */
-      .my-flyer-carousel .swiper-wrapper{align-items:center;}
-      .my-flyer-carousel .swiper-slide{width:auto;display:inline-flex;justify-content:center;}
-      .my-flyer-carousel .swiper-button-prev,
-      .my-flyer-carousel .swiper-button-next{color:#111;}
-      .my-flyer-carousel .swiper-pagination-bullet{background:#666;opacity:.6;}
-      .my-flyer-carousel .swiper-pagination-bullet-active{background:#111;opacity:1;}
-    </style>
-
     <div class="swiper my-flyer-carousel mt-2">
       <div class="swiper-wrapper">
         {% for flyer in slides %}
@@ -49,38 +29,6 @@
       <div class="swiper-pagination"></div>
     </div>
 
-    <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        const slideCount = document.querySelectorAll('.my-flyer-carousel .swiper-slide').length;
-
-        new Swiper('.my-flyer-carousel', {
-          effect: 'coverflow',
-          loop: true,                         // infinite
-          loopedSlides: slideCount,           // duplicate all for safety
-          loopAdditionalSlides: 3,            // extra duplicates avoid gaps
-          centeredSlides: true,
-          centeredSlidesBounds: true,         // keep perfect centering
-          slidesPerView: 'auto',              // card width comes from content
-          spaceBetween: 24,
-          grabCursor: true,
-          slideToClickedSlide: true,
-          watchSlidesProgress: true,
-          normalizeSlideIndex: true,
-          coverflowEffect: {
-            rotate: 0,
-            stretch: -60,                     // negative => slight overlap
-            depth: 220,
-            modifier: 1.05,
-            slideShadows: false
-          },
-          autoplay: { delay: 4000, disableOnInteraction: false },
-          navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-          pagination: { el: '.swiper-pagination', clickable: true }
-        });
-      });
-    </script>
-
   {% elif count == 2 %}
     <!-- ========== STATIC TWO-UP (no carousel) ========== -->
     <div class="container mt-3">
@@ -90,7 +38,7 @@
             <div class="col-12 col-md-6 text-center">
               <a href="#" data-bs-toggle="modal" data-bs-target="#flyerModal-{{ flyer.pk }}">
                 <img src="{{ flyer.image.url }}" alt="{{ flyer.title_en|default:flyer.title_it }}" class="flyer-70vh">
-              </a>     
+              </a>
             </div>
           {% endif %}
         {% endfor %}
