@@ -10,8 +10,8 @@
     <h4 class="text-center off-white body-text">{% trans "Click on a flyer to find out more" %}</h4>
   </div>
 
-  {# ===================== PHONES: stacked (always) ===================== #}
-  <div class="flyer-stack mt-3">
+  {# ===================== MOBILE (always static) ===================== #}
+  <div class="mobile-only mt-3">
     <div class="container">
       <div class="row g-3">
         {% for flyer in slides %}
@@ -21,7 +21,7 @@
                 <img
                   src="{{ flyer.image.url }}"
                   alt="{{ flyer.title_en|default:flyer.title_it }}"
-                  class="flyer-70vh"
+                  class="flyer-mobile"  {# <- width-fixed, auto height #}
                 >
               </a>
             </div>
@@ -31,7 +31,7 @@
     </div>
   </div>
 
-  {# ===================== MD+ SCREENS ================================ #}
+  {# ===================== DESKTOP (≥768px) ========================= #}
   <div class="desktop-only">
     {% if count >= 3 %}
       {# ---- Vanilla coverflow (no external libs) ---- #}
@@ -48,7 +48,7 @@
                   <img
                     src="{{ flyer.image.url }}"
                     alt="{{ flyer.title_en|default:flyer.title_it }}"
-                    class="flyer-70vh"
+                    class="flyer-70vh"  {# <- height-fixed, auto width #}
                   >
                 </a>
               </li>
@@ -95,7 +95,7 @@
     {% endif %}
   </div>
 
-  {# ===================== Modals (shared) ============================ #}
+  {# ===================== Modals (shared) ========================== #}
   {% get_current_language as LANGUAGE_CODE %}
   {% for flyer in slides %}
     {% if flyer.image %}
@@ -115,21 +115,13 @@
             <div class="modal-body text-center">
               {% if LANGUAGE_CODE == "it" %}
                 {% if flyer.description_it or flyer.extra_info_it %}
-                  <div class="text-start body-text navy mb-2">
-                    {{ flyer.description_it|default:flyer.description_en|safe }}
-                  </div>
-                  <div class="fw-bold body-text red">
-                    {{ flyer.extra_info_it|default:flyer.extra_info_en }}
-                  </div>
+                  <div class="text-start body-text navy mb-2">{{ flyer.description_it|default:flyer.description_en|safe }}</div>
+                  <div class="fw-bold body-text red">{{ flyer.extra_info_it|default:flyer.extra_info_en }}</div>
                 {% endif %}
               {% else %}
                 {% if flyer.description_en or flyer.extra_info_en %}
-                  <div class="text-start body-text navy mb-2">
-                    {{ flyer.description_en|default:flyer.description_it|safe }}
-                  </div>
-                  <div class="body-text red">
-                    {{ flyer.extra_info_en|default:flyer.extra_info_it }}
-                  </div>
+                  <div class="text-start body-text navy mb-2">{{ flyer.description_en|default:flyer.description_it|safe }}</div>
+                  <div class="body-text red">{{ flyer.extra_info_en|default:flyer.extra_info_it }}</div>
                 {% endif %}
               {% endif %}
             </div>

@@ -1,102 +1,89 @@
 // main/static/js/flyers.js
 (function () {
-  document.addEventListener("DOMContentLoaded", function () {
-    const root = document.querySelector(".flyer-cf");
-    if (!root) return;
+  function initCoverflow(root) {
+    const track  = root.querySelector('.flyer-cf-track');
+    const slides = Array.from(root.querySelectorAll('.flyer-cf-slide'));
+    const prev   = root.querySelector('.cf-prev');
+    const next   = root.querySelector('.cf-next');
+    if (!track || slides.length < 3) return;
 
-    const track = root.querySelector(".flyer-cf-track");
-    const slides = Array.from(track.querySelectorAll(".flyer-cf-slide"));
-    const n = slides.length;
-
-    // Only enable the coverflow for 3+ slides. 1–2 stay static in the template.
-    if (n < 3) return;
-
-    const prevBtn = root.querySelector(".cf-prev");
-    const nextBtn = root.querySelector(".cf-next");
-    const autoplayDelay =
-      parseInt(root.getAttribute("data-autoplay") || "4000", 10) || 4000;
-
-    let i = 0;      // current center index
+    let idx = 0;
     let timer = null;
+    const gapFactor = 0.58;   // how much the side slides overlap (smaller = more overlap)
+    const scaleStep = 0.08;   // scale drop per step away from center
+    const maxSteps  = Math.floor(slides.length / 2);
 
-    function cls(el, ...names) {
-      el.className = "flyer-cf-slide " + names.join(" ");
-    }
+    // Ensure the track reserves enough height
+    const setHeight = () => {
+      const h = Math.max(...slides.map(li => li.offsetHeight));
+      track.style.height = h + 'px';
+    };
 
-    function render() {
-      const L1 = (i - 1 + n) % n;
-      const R1 = (i + 1) % n;
-      slides.forEach((el, idx) => {
-        if (idx === i) {
-          cls(el, "cf-center");
-        } else if (idx === L1) {
-          cls(el, "cf-left");
-        } else if (idx === R1) {
-          cls(el, "cf-right");
-        } else {
-          // put everything else outside, left or right
-          // decide side by shortest direction
-          const distR = (idx - i + n) % n;
-          const distL = (i - idx + n) % n;
-          if (distL < distR) {
-            cls(el, "cf-out-left");
-          } else {
-            cls(el, "cf-out-right");
-          }
-        }
+    const layout = () => {
+      const center = slides[idx];
+      const slideW = center.offsetWidth || 400;
+      const stepX  = slideW * gapFactor;
+
+      slides.forEach((li, i) => {
+        // compute shortest signed distance from current index (circular)
+        let d = i - idx;
+        if (d > slides.length / 2) d -= slides.length;
+        if (d < -slides.length / 2) d += slides.length;
+
+        const z = 100 - Math.abs(d);
+        const s = Math.max(1 - Math.abs(d) * scaleStep, 0.7);
+        const x = d * stepX;
+
+        li.style.transform  = `translateX(${x}px) scale(${s})`;
+        li.style.zIndex     = z;
+        li.style.opacity    = Math.abs(d) > maxSteps ? 0 : 1;
+        li.style.pointerEvents = (Math.abs(d) <= 1) ? 'auto' : 'none';
       });
-    }
+    };
 
-    function go(delta) {
-      i = (i + delta + n) % n;
-      render();
-    }
-
-    function startAuto() {
-      stopAuto();
-      timer = setInterval(() => go(1), autoplayDelay);
-    }
-    function stopAuto() {
-      if (timer) {
-        clearInterval(timer);
-        timer = null;
-      }
-    }
+    const go = (delta) => {
+      idx = (idx + delta + slides.length) % slides.length;
+      layout();
+    };
 
     // Nav
-    nextBtn.addEventListener("click", () => go(1));
-    prevBtn.addEventListener("click", () => go(-1));
+    prev && prev.addEventListener('click', e => { e.preventDefault(); stop(); go(-1); start(); });
+    next && next.addEventListener('click', e => { e.preventDefault(); stop(); go(+1); start(); });
 
-    // Click a side slide → bring to front (don’t open modal yet)
-    slides.forEach((el, idx) => {
-      el.addEventListener("click", (e) => {
-        if (idx !== i) {
-          e.preventDefault(); // stops "#" link / modal on side slides
-          i = idx;
-          render();
-        }
-        // if idx === i the inner <a> will trigger the Bootstrap modal as usual
+    // Click a side slide to focus it
+    slides.forEach((li, i) => {
+      li.addEventListener('click', (e) => {
+        if (i === idx) return; // center slide -> let link open the modal
+        e.preventDefault();
+        stop();
+        idx = i;
+        layout();
+        start();
       });
     });
 
-    // Pause on hover / resume on leave
-    root.addEventListener("pointerenter", stopAuto);
-    root.addEventListener("pointerleave", startAuto);
+    // Autoplay
+    const delay = parseInt(root.getAttribute('data-autoplay') || '0', 10);
+    const start = () => {
+      if (!delay) return;
+      stop();
+      timer = setInterval(() => go(+1), delay);
+    };
+    const stop  = () => { if (timer) { clearInterval(timer); timer = null; } };
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', start);
 
-    // Also pause when any flyer modal is open
-    document.addEventListener("shown.bs.modal", stopAuto);
-    document.addEventListener("hidden.bs.modal", startAuto);
+    // kick it off
+    setHeight();
+    layout();
+    start();
 
-    // Reflow when images load so initial layout is perfect
-    slides.forEach((el) => {
-      const img = el.querySelector("img");
-      if (img && !img.complete) {
-        img.addEventListener("load", render, { once: true });
-      }
-    });
+    // Re-measure on resize
+    window.addEventListener('resize', () => { setHeight(); layout(); });
+  }
 
-    // Kickoff
-    render();
-    startAuto();
+  // init every coverflow on page (desktop area)
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.flyer-cf').forEach(initCoverflow);
   });
 })();
