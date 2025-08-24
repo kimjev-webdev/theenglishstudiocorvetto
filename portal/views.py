@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 
-from django.db.models import Max, F, Q  # Q for debug counts, F for NULL-safe order
+from django.db.models import Max, F, Case, When, IntegerField
 import json
 
 from blog.models import BlogPost
@@ -85,10 +85,19 @@ def portal_user_edit(request, user_id: int):
     is_target_owner = is_portal_owner(target)
 
     if request.method == "POST":
-        form = PortalUserUpdateForm(request.POST, instance=target)
+        form = PortalUserUpdateForm(
+            request.POST,
+            instance=target
+        )
         if form.is_valid():
-            if (is_target_owner and not form.cleaned_data.get("is_active", True)):
-                messages.error(request, "You cannot deactivate the owner account.")
+            if (
+                is_target_owner
+                and not form.cleaned_data.get("is_active", True)
+            ):
+                messages.error(
+                    request,
+                    "You cannot deactivate the owner account."
+                )
             else:
                 form.save()
                 messages.success(request, "User updated.")
@@ -96,7 +105,11 @@ def portal_user_edit(request, user_id: int):
     else:
         form = PortalUserUpdateForm(instance=target)
 
-    return render(request, "portal/edit_user.html", {"form": form, "target": target})
+    return render(
+        request,
+        "portal/edit_user.html",
+        {"form": form, "target": target}
+    )
 
 
 @login_required
@@ -119,12 +132,19 @@ def portal_user_delete(request, user_id: int):
         return redirect('portal:portal_users')
 
     # GET → show confirm page
-    return render(request, "portal/confirm_user_delete.html", {"target": target})
+    return render(
+        request,
+        "portal/confirm_user_delete.html",
+        {"target": target}
+    )
 
 
 # ===== Feature gate helper =====
 def _require_group_or_redirect(request, group_name: str):
-    if not (in_group(request.user, group_name) or is_portal_owner(request.user)):
+    if not (
+        in_group(request.user, group_name) or
+        is_portal_owner(request.user)
+    ):
         messages.error(request, "You don't have access to that section.")
         return redirect('portal:portal_dashboard')
     return None
@@ -198,20 +218,32 @@ class FlyerListView(LoginRequiredMixin, StaffRequiredMixin, ListView):
             return resp
         return super().dispatch(request, *args, **kwargs)
 
-    # Include ALL flyers; put dateless after dated; stable ordering.
+    # Show ALL flyers. Dated first, then dateless. Stable order.
     def get_queryset(self):
-        total = Flyer.objects.all().count()
-        dateless = Flyer.objects.filter(Q(event_date__isnull=True) | Q(event_date="")).count()
-        print(f"[FLYER LIST] total={total} dateless={dateless}")
-
-        return (
-            Flyer.objects.all()
+        qs = (
+            Flyer.objects
+            .annotate(
+                no_date=Case(
+                    When(event_date__isnull=True, then=1),  # only check NULL
+                    default=0,
+                    output_field=IntegerField(),
+                )
+            )
             .order_by(
                 "sort_order",
-                F("event_date").asc(nulls_last=True),  # NULLs shove to the end
+                "no_date",  # dated first, dateless after
+                F("event_date").asc(nulls_last=True),
                 "pk",
             )
         )
+        # Debug line so we can confirm in logs
+        print(
+            "[FLYER LIST] total=",
+            Flyer.objects.count(),
+            " dateless=",
+            Flyer.objects.filter(event_date__isnull=True).count()
+        )
+        return qs
 
 
 class FlyerCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
@@ -226,13 +258,11 @@ class FlyerCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
             return resp
         return super().dispatch(request, *args, **kwargs)
 
-    # Ensure uploaded files are passed to the form
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["files"] = self.request.FILES or None
         return kwargs
 
-    # Print real validation errors so we can see why it failed
     def form_invalid(self, form):
         print("=== FLYER CREATE INVALID ===")
         print("METHOD:", self.request.method)
@@ -242,20 +272,22 @@ class FlyerCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
         print("FORM ERRORS JSON:", form.errors.as_json())
         return super().form_invalid(form)
 
-    # Set sort_order automatically and save cleanly (no double-save)
     def form_valid(self, form):
         obj = form.save(commit=False)
-
-        # Auto-append to the end of the list
+        # Append to end
         max_order = Flyer.objects.aggregate(m=Max("sort_order"))["m"]
         obj.sort_order = (max_order + 1) if max_order is not None else 0
-
         obj.save()
         form.save_m2m()
-        self.object = obj  # tell the CBV what we saved
+        self.object = obj
 
         img = getattr(obj, "image", None)
-        print("=== FLYER CREATED ===", obj.pk, getattr(img, "name", None), getattr(img, "url", None))
+        print(
+            "=== FLYER CREATED ===",
+            obj.pk,
+            getattr(img, "name", None),
+            getattr(img, "url", None)
+        )
         return redirect(self.get_success_url())
 
 
@@ -285,12 +317,16 @@ class FlyerUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         print("FORM ERRORS JSON:", form.errors.as_json())
         return super().form_invalid(form)
 
-    # Save using the parent, then print what changed
     def form_valid(self, form):
         response = super().form_valid(form)
         obj = self.object
         img = getattr(obj, "image", None)
-        print("=== FLYER UPDATED ===", obj.pk, getattr(img, "name", None), getattr(img, "url", None))
+        print(
+            "=== FLYER UPDATED ===",
+            obj.pk,
+            getattr(img, "name", None),
+            getattr(img, "url", None)
+        )
         return response
 
 
@@ -317,7 +353,10 @@ def flyers_reorder(request):
         return resp
 
     # AJAX POST with array of IDs → save new sort_order
-    if (request.method == "POST" and request.headers.get("x-requested-with") == "XMLHttpRequest"):
+    if (
+        request.method == "POST"
+        and request.headers.get("x-requested-with") == "XMLHttpRequest"
+    ):
         try:
             data = json.loads(request.body.decode("utf-8"))
             order = data.get("order", [])
@@ -329,7 +368,19 @@ def flyers_reorder(request):
 
     # GET → render the reorder UI (same ordering as list)
     flyers = (
-        Flyer.objects.all()
-        .order_by("sort_order", F("event_date").asc(nulls_last=True), "pk")
+        Flyer.objects
+        .annotate(
+            no_date=Case(
+                When(event_date__isnull=True, then=1),
+                default=0,
+                output_field=IntegerField(),
+            )
+        )
+        .order_by(
+            "sort_order",
+            "no_date",
+            F("event_date").asc(nulls_last=True),
+            "pk"
+        )
     )
     return render(request, "flyers/reorder.html", {"flyers": flyers})
