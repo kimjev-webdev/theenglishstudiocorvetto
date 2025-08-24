@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title %}Leanne's Blog{% endblock %}
+
+{% block content %}
+  <main class="container py-5 min-vh-100">
+
+    <h1 class="primaryfont text-center red mb-4">Leanne's Blog</h1>
+
+    <div class="row">
+      {% for post in posts %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+          <div class="card blog-card h-100 shadow-sm border-0">
+            {% if post.featured_image %}
+              <div class="poststyles">
+                <img src="{{ post.featured_image.url }}"
+                     alt="{% if LANGUAGE_CODE == 'it' %}{{ post.title_it }}{% else %}{{ post.title_en }}{% endif %}"
+                     class="blogimage">
+              </div>
+            {% endif %}
+            <div class="card-body">
+              <p class="mini-text red body-text mb-1">{{ post.published_at|date:"F j, Y" }}</p>
+              <h6 class="card-title navy primaryfont mb-0">
+                {% if LANGUAGE_CODE == "it" %}
+                  {{ post.title_it }}
+                {% else %}
+                  {{ post.title_en }}
+                {% endif %}
+              </h6>
+            </div>
+            <a href="{% url 'blog_detail' slug=post.slug %}" class="stretched-link"></a>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col">
+          <p>No posts found.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </main>
+{% endblock %}

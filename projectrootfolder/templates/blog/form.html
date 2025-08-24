@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container min-vh-100 mt-4">
+  <h2>{{ view.object.pk|yesno:"Edit Post,Create New Post" }}</h2>
+  <form method="post" enctype="multipart/form-data" class="mb-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="{% url 'portal:blog_list' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

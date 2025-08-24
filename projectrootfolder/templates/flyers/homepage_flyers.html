@@ -1,0 +1,104 @@
+{% load i18n %}
+{% load static %}
+
+<section class="container-fluid mt-3" id="upcoming">
+  <div class="p-4 rounded navy-bg w-100">
+    <h2 class="text-center off-white primaryfont indexheader">{% trans "Upcoming Events" %}</h2>
+    <h3 class="text-center off-white body-text">{% trans "Click on a flyer to find out more" %}</h3>
+  </div>
+
+  {% with count=flyers|length %}
+    {# ── Carousel for md+ screens (only if 2+ images) ─────────────────────── #}
+    {% if count|default:0 >= 2 %}
+      <div id="flyerCarousel" class="carousel slide d-none d-md-block" data-bs-ride="carousel" data-bs-interval="5000">
+        <div class="carousel-indicators">
+          {% for flyer in flyers %}
+            {% if flyer.image %}
+              <button type="button"
+                      data-bs-target="#flyerCarousel"
+                      data-bs-slide-to="{{ forloop.counter0 }}"
+                      class="{% if forloop.first %}active{% endif %}"
+                      aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+                      aria-label="Slide {{ forloop.counter }}"></button>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <div class="carousel-inner">
+          {% for flyer in flyers %}
+            {% if flyer.image %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <div class="d-flex justify-content-center">
+                  <img src="{{ flyer.image.url }}"
+                       class="img-fluid"
+                       style="max-height:70vh; aspect-ratio:1/1.414;"
+                       alt="{{ flyer.title_en|default:flyer.title_it }}">
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#flyerCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+          <span class="visually-hidden">{% trans "Previous" %}</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#flyerCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+          <span class="visually-hidden">{% trans "Next" %}</span>
+        </button>
+      </div>
+
+    {% elif count == 1 %}
+      {# One flyer: show a single hero on md+ (no auto-ride, no controls) #}
+      {% with f=flyers.0 %}
+        {% if f.image %}
+          <div class="d-none d-md-block mt-3">
+            <div class="d-flex justify-content-center">
+              <img src="{{ f.image.url }}"
+                   class="img-fluid"
+                   style="max-height:70vh; aspect-ratio:1/1.414;"
+                   alt="{{ f.title_en|default:f.title_it }}">
+            </div>
+          </div>
+        {% endif %}
+      {% endwith %}
+    {% endif %}
+  {% endwith %}
+
+  {# ── Modals (only render if image exists) ───────────────────────────────── #}
+  {% for flyer in flyers %}
+    {% if flyer.image %}
+      <div class="modal fade" id="flyerModal{{ flyer.id }}" tabindex="-1" aria-labelledby="flyerModalLabel{{ flyer.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              {% get_current_language as LANGUAGE_CODE %}
+              <h5 class="modal-title primaryfont red" id="flyerModalLabel{{ flyer.id }}">
+                {% if LANGUAGE_CODE == "it" %}
+                  {{ flyer.title_it|default:flyer.title_en }}
+                {% else %}
+                  {{ flyer.title_en|default:flyer.title_it }}
+                {% endif %}
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
+            </div>
+            <div class="modal-body">
+              {% if LANGUAGE_CODE == "it" %}
+                <div class="body-text mb-2">{{ flyer.description_it|default:flyer.description_en|safe }}</div>
+                <div class="fw-bold mt-3">{{ flyer.extra_info_it|default:flyer.extra_info_en }}</div>
+              {% else %}
+                <div class="body-text navy mb-2">{{ flyer.description_en|default:flyer.description_it|safe }}</div>
+                <div class="body-text red mt-3">{{ flyer.extra_info_en|default:flyer.extra_info_it }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  <div class="text-center headertext mt-4">
+    <a href="{% url 'schedule' %}" class="btn btn-red primaryfont">{% trans "VIEW THE SCHEDULE" %}</a>
+  </div>
+</section>

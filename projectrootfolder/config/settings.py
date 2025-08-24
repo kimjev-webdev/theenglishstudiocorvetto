@@ -173,30 +173,15 @@ USE_TZ = True
 # Static / Media
 # ──────────────────────────────────────────────────────────────────────────────
 STATIC_URL = "/static/"
-STATIC_ROOT = (
-    BASE_DIR
-    / "staticfiles"
-)
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "main" / "static"]
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"
-# MEDIA_ROOT is unused by Cloudinary for user uploads but kept for local dev/
-# fallback
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# Django 5+: storage backends must be configured via STORAGES
-STORAGES = {
-    # User-uploaded media → Cloudinary
-    "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-    },
-    # Collected static files → WhiteNoise
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
-
-# Cloudinary credentials (use env vars in production)
+# Cloudinary for user-uploaded media (static still via WhiteNoise)
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 CLOUDINARY_STORAGE = {
     "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
     "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
@@ -220,7 +205,7 @@ EMAIL_HOST_PASSWORD = os.getenv(
     "EMAIL_HOST_PASSWORD", ""
 )  # Gmail App Password
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "true").strip().lower() == "true"
-EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "false").strip().lower() == "false"
+EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "false").strip().lower() == "true"
 EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "20"))
 
 DEFAULT_FROM_EMAIL = os.getenv(
@@ -236,21 +221,11 @@ CKEDITOR_CONFIGS = {
     "default": {
         "toolbar": "Custom",
         "toolbar_Custom": [
-            [
-                "Format", "Bold", "Italic", "Underline"
-            ],
-            [
-                "NumberedList", "BulletedList"
-            ],
-            [
-                "Blockquote"
-            ],
-            [
-                "Link", "Unlink"
-            ],
-            [
-                "RemoveFormat", "Source"
-            ],
+            ["Format", "Bold", "Italic", "Underline"],
+            ["NumberedList", "BulletedList"],
+            ["Blockquote"],
+            ["Link", "Unlink"],
+            ["RemoveFormat", "Source"],
         ],
         "format_tags": "p;h2;h3;h4;pre",
         "height": 300,
@@ -262,18 +237,16 @@ CKEDITOR_CONFIGS = {
 # Portal owner (env-driven)
 # ──────────────────────────────────────────────────────────────────────────────
 PORTAL_OWNER_USERNAME = (
-    os.environ.get("PORTAL_OWNER_USERNAME", "").strip().lower()
+    os.environ.get("PORTAL_OWNER_USERNAME", "")
+    .strip()
+    .lower()
 )
-PORTAL_OWNER_EMAIL = (
-    os.environ.get("PORTAL_OWNER_EMAIL", "").strip().lower()
-)
+PORTAL_OWNER_EMAIL = os.environ.get("PORTAL_OWNER_EMAIL", "").strip().lower()
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Security / Misc
 # ──────────────────────────────────────────────────────────────────────────────
 APPEND_SLASH = True
-
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Logging
 LOGGING = {

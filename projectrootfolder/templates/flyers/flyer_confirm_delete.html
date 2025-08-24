@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Delete Flyer" %}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="mb-4 text-danger">{% trans "Delete Flyer" %}</h2>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <p class="mb-3">
+        {% blocktrans with title=object.title_en|default:object.title_it %}
+          Are you sure you want to delete "<strong>{{ title }}</strong>"?
+        {% endblocktrans %}
+      </p>
+
+      {% if object.image %}
+        <div class="mb-3">
+          <div class="text-muted small mb-1">{% trans "Current image preview:" %}</div>
+          <img src="{{ object.image.url }}" alt="" style="height:120px;width:auto;border-radius:6px;">
+        </div>
+      {% endif %}
+
+      {% if object.event_date %}
+        <p class="text-muted mb-4">
+          {% trans "Event date:" %} {{ object.event_date|date:"Y-m-d" }}
+        </p>
+      {% endif %}
+
+      <form method="post" action="">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">
+          {% trans "Yes, delete it" %}
+        </button>
+        <a href="{% url 'portal:flyer_list' %}" class="btn btn-secondary ms-2">
+          {% trans "Cancel" %}
+        </a>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
