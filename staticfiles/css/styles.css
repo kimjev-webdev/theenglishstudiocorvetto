@@ -371,20 +371,13 @@ img.footerpic {
     width: min(640px, 100%);
   }
 
-  /* Image fits inside the box, keeps aspect ratio */
-  .two-up .two-up-img{
-    max-height: 100%;
-    width: auto;
-    max-width: 100%;
-    object-fit: contain;
-
-    /* same cosmetics as other flyers */
-    border-radius: 12px;
-    box-shadow: 0 12px 28px rgba(0,0,0,.24);
-    background: #fff;
-    display: block;
-  }
-
+.two-up .two-up-img{
+  height: 100%;                  /* lock equal heights */
+  width: auto;                   /* keep aspect ratio */
+  /* no max-width:100% here on purpose */
+  object-fit: cover;             /* extra safety if both dims set */
+  display: block;
+}
 
 /*blog styles*/
 /*blog card styles*/
