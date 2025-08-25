@@ -1,4 +1,4 @@
-// CSRF helper
+// ===== CSRF cookie helper =====
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
@@ -17,22 +17,86 @@ const csrftoken = getCookie('csrftoken');
 const urls = window.urls;
 
 /* ------------------------------------------------------------------ *
+ * Toasts (Bootstrap 5)
+ * ------------------------------------------------------------------ */
+function ensureToastContainer() {
+  let c = document.getElementById('toast-container');
+  if (!c) {
+    c = document.createElement('div');
+    c.id = 'toast-container';
+    c.className = 'position-fixed top-0 end-0 p-3';
+    c.style.zIndex = '1080';
+    document.body.appendChild(c);
+  }
+  return c;
+}
+
+function showToast(message, variant = 'success') {
+  const container = ensureToastContainer();
+  const wrapper = document.createElement('div');
+  // Map variants to BS classes
+  const bg = {
+    success: 'bg-success text-white',
+    danger: 'bg-danger text-white',
+    warning: 'bg-warning',
+    info: 'bg-info'
+  }[variant] || 'bg-secondary text-white';
+
+  wrapper.className = `toast align-items-center border-0 ${bg}`;
+  wrapper.setAttribute('role', 'alert');
+  wrapper.setAttribute('aria-live', 'assertive');
+  wrapper.setAttribute('aria-atomic', 'true');
+  wrapper.innerHTML = `
+    <div class="d-flex">
+      <div class="toast-body">${message}</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  `;
+  container.appendChild(wrapper);
+  const t = new bootstrap.Toast(wrapper, { delay: 2500 });
+  t.show();
+  wrapper.addEventListener('hidden.bs.toast', () => wrapper.remove());
+}
+
+/* ------------------------------------------------------------------ *
+ * Fetch helper: JSON in/out + unified errors
+ * ------------------------------------------------------------------ */
+async function fetchJSON(url, options = {}) {
+  const opts = {
+    credentials: 'same-origin',
+    headers: { 'X-CSRFToken': csrftoken, ...(options.headers || {}) },
+    ...options
+  };
+  const res = await fetch(url, opts);
+  let data = null;
+  try { data = await res.json(); } catch { /* not JSON, leave null */ }
+
+  // Prefer server's {ok:false,error} contract
+  if (!res.ok || (data && data.ok === false)) {
+    const msg = (data && (data.error || data.message)) || `HTTP ${res.status}`;
+    const err = new Error(msg);
+    err.status = res.status;
+    err.payload = data;
+    throw err;
+  }
+  return data || { ok: true, message: 'OK' };
+}
+
+/* ------------------------------------------------------------------ *
  * Helpers
  * ------------------------------------------------------------------ */
 function buildEventPayloadFromForm() {
-  // IMPORTANT: take raw values from <input type="date"> and friends.
-  // Do NOT construct Date() or toISOString(), which can timezone-shift.
-  const repeatUntilStr = document.getElementById('event-repeat-until').value; // "YYYY-MM-DD" or ""
-
+  // Keep raw string values to avoid TZ issues.
+  const repeatUntilStr = document.getElementById('event-repeat-until').value; // "YYYY-MM-DD" | ""
   return {
     class_id: document.getElementById('event-class').value,
     date: document.getElementById('event-date').value,               // "YYYY-MM-DD"
-    start_time: document.getElementById('event-start').value,         // "HH:MM"
-    end_time: document.getElementById('event-end').value,             // "HH:MM"
-    recurrence: document.getElementById('event-recurrence').value,    // e.g. "weekly"
-    days_of_week: document.getElementById('event-days').value,        // e.g. "Mon,Wed,Fri"
+    start_time: document.getElementById('event-start').value,        // "HH:MM"
+    end_time: document.getElementById('event-end').value,            // "HH:MM"
+    recurrence: document.getElementById('event-recurrence').value,   // e.g. "weekly"
+    days_of_week: document.getElementById('event-days').value,       // "Mon,Wed,Fri"
     recurrence_exceptions: document.getElementById('event-exceptions').value, // "YYYY-MM-DD, YYYY-MM-DD"
-    repeat_until: repeatUntilStr || null                              // null when empty
+    repeat_until: repeatUntilStr || null
   };
 }
 
@@ -43,46 +107,44 @@ const eventForm = document.getElementById('event-form');
 eventForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const saveBtn = eventForm.querySelector('button[type="submit"]');
-  saveBtn.disabled = true;
+  saveBtn && (saveBtn.disabled = true);
 
   const eventId = document.getElementById('event-id').value;
   const url = eventId ? urls.updateEvent(eventId) : urls.createEvent;
   const payload = buildEventPayloadFromForm();
 
   try {
-    const res = await fetch(url, {
+    const data = await fetchJSON(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrftoken,
-      },
-      body: JSON.stringify(payload),
-      credentials: 'same-origin'
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     });
 
-    if (res.ok) {
-      eventForm.reset();
-      document.getElementById('event-id').value = '';
-      bootstrap.Modal.getInstance(document.getElementById('eventModal'))?.hide();
-      // Reload so the table reflects changes immediately
-      location.reload();
-    } else {
-      alert('Error saving event.');
-    }
+    showToast(data.message || (eventId ? 'Event updated.' : 'Event created.'), 'success');
+
+    // Reset + close modal then refresh to reflect table/calendar
+    eventForm.reset();
+    document.getElementById('event-id').value = '';
+    const modalEl = document.getElementById('eventModal');
+    bootstrap.Modal.getInstance(modalEl)?.hide();
+    // If you have a client-side table refresh, call it here instead of reloading
+    location.reload();
   } catch (err) {
-    console.error('Error submitting form:', err);
-    alert('Unexpected error. Please try again.');
+    console.error('Event save failed:', err);
+    const variant = err.status === 403 ? 'warning' : 'danger';
+    const msg = err.message || 'Error saving event.';
+    showToast(msg, variant);
   } finally {
-    saveBtn.disabled = false;
+    saveBtn && (saveBtn.disabled = false);
   }
 });
 
 // Modal open (add)
 document.querySelector('#add-event-btn')?.addEventListener('click', () => {
   document.getElementById('event-id').value = '';
-  eventForm.reset();
+  eventForm?.reset();
   new bootstrap.Modal(document.getElementById('eventModal')).show();
-  setTimeout(() => document.getElementById('event-class')?.focus(), 500);
+  setTimeout(() => document.getElementById('event-class')?.focus(), 150);
 });
 
 // Modal open (edit)
@@ -113,14 +175,16 @@ window.editEvent = function (id) {
 };
 
 // Delete event
-window.deleteEvent = async function(id) {
+window.deleteEvent = async function (id) {
   if (!confirm('Delete this event?')) return;
-  const res = await fetch(urls.deleteEvent(id), {
-    method: 'POST',
-    headers: { 'X-CSRFToken': csrftoken },
-    credentials: 'same-origin'
-  });
-  if (res.ok) document.querySelector(`tr[data-id='${id}']`)?.remove();
+  try {
+    const data = await fetchJSON(urls.deleteEvent(id), { method: 'POST' });
+    document.querySelector(`tr[data-id='${id}']`)?.remove();
+    showToast(data.message || 'Event deleted.', 'success');
+  } catch (err) {
+    console.error('Delete failed:', err);
+    showToast(err.message || 'Failed to delete event.', 'danger');
+  }
 };
 
 /* ------------------------------------------------------------------ *
@@ -130,7 +194,7 @@ const classForm = document.getElementById('class-form');
 classForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const saveBtn = classForm.querySelector('button[type="submit"]');
-  saveBtn.disabled = true;
+  saveBtn && (saveBtn.disabled = true);
 
   const payload = {
     name_en: document.getElementById('class-name-en').value,
@@ -142,43 +206,41 @@ classForm?.addEventListener('submit', async (e) => {
   const url = id ? urls.updateClass(id) : urls.createClass;
 
   try {
-    const res = await fetch(url, {
+    const res = await fetchJSON(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrftoken,
-      },
-      body: JSON.stringify(payload),
-      credentials: 'same-origin'
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     });
 
-    if (res.ok) {
-      const data = await res.json();
-      if (id) {
-        const row = document.querySelector(`tr[data-id='${id}']`);
-        if (row) {
-          row.querySelector('td:nth-child(1)').textContent = data.emoji;
-          row.querySelector('td:nth-child(2)').textContent = data.name_en;
-          row.querySelector('td:nth-child(3)').textContent = data.name_it;
-        }
-      } else {
-        location.reload();
-      }
+    const data = res.data || res; // support either shape
+    showToast(res.message || (id ? 'Class updated.' : 'Class created.'), 'success');
 
+    if (id) {
+      // Update the existing row without reloading
+      const row = document.querySelector(`tr[data-id='${id}']`);
+      if (row) {
+        const cells = row.querySelectorAll('td');
+        // assuming cols: emoji | name_en | name_it | actions
+        cells[0].textContent = (data.emoji ?? payload.emoji ?? '').trim();
+        cells[1].textContent = (data.name_en ?? payload.name_en ?? '').trim();
+        cells[2].textContent = (data.name_it ?? payload.name_it ?? '').trim();
+      }
       classForm.reset();
       document.getElementById('class-id').value = '';
     } else {
-      alert('Something went wrong while saving the class.');
+      // Simplest: refresh to show the new row
+      location.reload();
     }
   } catch (err) {
-    console.error('Error saving class:', err);
-    alert('Unexpected error. Please try again.');
+    console.error('Class save failed:', err);
+    const variant = err.status === 403 ? 'warning' : 'danger';
+    showToast(err.message || 'Something went wrong while saving the class.', variant);
   } finally {
-    saveBtn.disabled = false;
+    saveBtn && (saveBtn.disabled = false);
   }
 });
 
-window.editClass = function(id) {
+window.editClass = function (id) {
   const row = document.querySelector(`tr[data-id='${id}']`);
   if (!row) return;
   const cells = row.querySelectorAll('td');
@@ -188,14 +250,14 @@ window.editClass = function(id) {
   document.getElementById('class-emoji').value = cells[0].textContent.trim();
 };
 
-window.deleteClass = async function(id) {
+window.deleteClass = async function (id) {
   if (!confirm('Delete this class?')) return;
-  const res = await fetch(urls.deleteClass(id), {
-    method: 'POST',
-    headers: { 'X-CSRFToken': csrftoken },
-    credentials: 'same-origin'
-  });
-  if (res.ok) {
+  try {
+    const res = await fetchJSON(urls.deleteClass(id), { method: 'POST' });
     document.querySelector(`tr[data-id='${id}']`)?.remove();
+    showToast(res.message || 'Class deleted.', 'success');
+  } catch (err) {
+    console.error('Delete class failed:', err);
+    showToast(err.message || 'Failed to delete class.', 'danger');
   }
 };

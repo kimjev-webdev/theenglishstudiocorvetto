@@ -1,17 +1,34 @@
+# schedule/views.py
 import calendar
 import json
-from datetime import date, timedelta, datetime
+from datetime import date, timedelta, time as dtime
+
 from dateutil.relativedelta import relativedelta
 
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.forms.models import model_to_dict
 from django.utils.formats import date_format
 from django.db.models import Q
+from django.utils.dateparse import parse_date, parse_time
+
+from django.contrib.auth.decorators import login_required, user_passes_test
+from portal.authz import is_portal_owner
+from portal.authz import in_group  # reuse your portal auth helpers
 
 from .models import Event, Class
+
+
+# ---- auth guard for schedule admin endpoints ----
+def _schedule_guard(user):
+    return (
+        user.is_authenticated and (
+            user.is_staff or
+            is_portal_owner(user) or
+            in_group(user, "SCHEDULE")
+        )
+    )
 
 
 def get_adjacent_month(year, month, offset):
@@ -21,6 +38,7 @@ def get_adjacent_month(year, month, offset):
     return new_year, new_month
 
 
+# ===== Public calendar page =====
 def calendar_view(request, year=None, month=None):
     today = date.today()
     year = int(year) if year else today.year
@@ -36,7 +54,9 @@ def calendar_view(request, year=None, month=None):
     # ends after month starts)
     events = (
         Event.objects
-        .filter(Q(date__lte=last_day) | Q(repeat_until__gte=first_day))
+        .filter(
+            Q(date__lte=last_day) | Q(repeat_until__gte=first_day)
+        )
         .select_related('class_instance')
         .distinct()
     )
@@ -44,14 +64,10 @@ def calendar_view(request, year=None, month=None):
 
     # ---- expand events into the month, clamped to repeat_until if set ----
     for event in events:
-        exceptions = set(
-            event.recurrence_exceptions or []
-        )
+        exceptions = set(event.recurrence_exceptions or [])
         end_boundary = (
-            (
-                min(last_day, event.repeat_until)
-                if event.repeat_until else last_day
-            )
+            min(last_day, event.repeat_until)
+            if event.repeat_until else last_day
         )
 
         if event.recurrence == 'none':
@@ -131,123 +147,230 @@ def calendar_view(request, year=None, month=None):
     })
 
 
+# If this list is an admin page, lock it down.
+# If it's public, drop the decorators.
+@login_required
+@user_passes_test(_schedule_guard)
 def event_list_view(request):
     classes = Class.objects.all()
     events = Event.objects.all().select_related('class_instance')
     return render(
         request,
         'schedule/event_list.html',
-        {'classes': classes, 'events': events}
+        {
+            'classes': classes,
+            'events': events
+        }
     )
 
 
-# ----------------------------- CREATE ---------------------------------
-@csrf_exempt
+# ---------- helpers for JSON endpoints ----------
+def _json_bad_request(msg, status=400):
+    return JsonResponse({"ok": False, "error": msg}, status=status)
+
+
+def _parse_exceptions(value):
+    # Accept list OR comma-separated string
+    if value is None:
+        return []
+    if isinstance(value, (list, tuple)):
+        return [str(v).strip() for v in value if str(v).strip()]
+    return [s.strip() for s in str(value).split(',') if s.strip()]
+
+
+# ----------------------------- CREATE EVENT ---------------------------------
+@login_required
+@user_passes_test(_schedule_guard)
 @require_POST
 def create_event(request):
-    data = json.loads(request.body)
-    cls = get_object_or_404(Class, id=data['class_id'])
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+    except Exception:
+        return _json_bad_request("Invalid JSON payload")
 
-    exceptions = [
-        d.strip()
-        for d in data.get('recurrence_exceptions', '').split(',')
-        if d.strip()
-    ]
+    cls = get_object_or_404(Class, id=data.get('class_id'))
 
-    # Accept missing repeat_until as None; parse "YYYY-MM-DD" when provided
-    repeat_until_str = data.get('repeat_until')
-    repeat_until = (
-        datetime.strptime(repeat_until_str, '%Y-%m-%d').date()
-        if repeat_until_str else None
-    )
+    d = parse_date(data.get('date'))
+    st = parse_time(data.get('start_time'))
+    et = parse_time(data.get('end_time'))
+    if not d or not st or not et:
+        return _json_bad_request(
+            "Missing or invalid date/start_time/end_time "
+            "(use ISO e.g. 2025-08-25, 14:30:00)"
+        )
+
+    # ensure end after start (simple check; adjust if events can span midnight)
+    if isinstance(st, dtime) and isinstance(et, dtime) and et <= st:
+        return _json_bad_request("end_time must be after start_time")
+
+    rec = data.get('recurrence', 'none')
+    days_of_week = data.get('days_of_week', '')
+    exceptions = _parse_exceptions(data.get('recurrence_exceptions'))
+    ru = data.get('repeat_until')
+    repeat_until = parse_date(ru) if ru else None
 
     event = Event.objects.create(
         class_instance=cls,
-        date=data['date'],
-        start_time=data['start_time'],
-        end_time=data['end_time'],
-        recurrence=data.get('recurrence', 'none'),
-        days_of_week=data.get('days_of_week', ''),
+        date=d,
+        start_time=st,
+        end_time=et,
+        recurrence=rec,
+        days_of_week=days_of_week,
         recurrence_exceptions=exceptions,
         repeat_until=repeat_until,
     )
-    return JsonResponse(model_to_dict(event))
+    return JsonResponse(
+        {
+            "ok": True,
+            "message": "Event created.",
+            "data": model_to_dict(event)
+        },
+        status=201
+    )
 
 
-# ----------------------------- UPDATE ---------------------------------
-@csrf_exempt
+# ----------------------------- UPDATE EVENT ---------------------------------
+@login_required
+@user_passes_test(_schedule_guard)
 @require_POST
 def update_event(request, event_id):
-    data = json.loads(request.body)
     ev = get_object_or_404(Event, id=event_id)
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+    except Exception:
+        return _json_bad_request("Invalid JSON payload")
 
-    # Only update fields that were actually sent
     if 'class_id' in data:
         ev.class_instance = get_object_or_404(Class, id=data['class_id'])
+
     if 'date' in data:
-        ev.date = data['date']
+        d = parse_date(data['date'])
+        if not d:
+            return _json_bad_request("Invalid date")
+        ev.date = d
+
     if 'start_time' in data:
-        ev.start_time = data['start_time']
+        st = parse_time(data['start_time'])
+        if not st:
+            return _json_bad_request("Invalid start_time")
+        ev.start_time = st
+
     if 'end_time' in data:
-        ev.end_time = data['end_time']
+        et = parse_time(data['end_time'])
+        if not et:
+            return _json_bad_request("Invalid end_time")
+        ev.end_time = et
+
     if 'recurrence' in data:
         ev.recurrence = data['recurrence']
+
     if 'days_of_week' in data:
         ev.days_of_week = data['days_of_week']
 
     if 'recurrence_exceptions' in data:
-        ev.recurrence_exceptions = [
-            d.strip()
-            for d in data.get('recurrence_exceptions', '').split(',')
-            if d.strip()
-        ]
-
-    # Critical: only change repeat_until if the client sent the key
-    if 'repeat_until' in data:
-        ru = data['repeat_until']  # may be "", null, or "YYYY-MM-DD"
-        ev.repeat_until = (
-            datetime.strptime(ru, '%Y-%m-%d').date() if ru else None
+        ev.recurrence_exceptions = _parse_exceptions(
+            data.get('recurrence_exceptions')
         )
 
+    if 'repeat_until' in data:
+        ru = data['repeat_until']
+        ev.repeat_until = parse_date(ru) if ru else None
+
+    # validate times if both present
+    if ev.start_time and ev.end_time and ev.end_time <= ev.start_time:
+        return _json_bad_request("end_time must be after start_time")
+
     ev.save()
-    return JsonResponse(model_to_dict(ev))
+    return JsonResponse({
+        "ok": True,
+        "message": "Event updated.",
+        "data": model_to_dict(ev)
+    })
 
 
-@csrf_exempt
+# ----------------------------- DELETE EVENT ---------------------------------
+@login_required
+@user_passes_test(_schedule_guard)
 @require_POST
 def delete_event(request, event_id):
     ev = get_object_or_404(Event, id=event_id)
     ev.delete()
-    return JsonResponse({'deleted': True})
+    return JsonResponse({
+        "ok": True,
+        "message": "Event deleted.",
+        "data": {"id": event_id}
+    })
 
 
-@csrf_exempt
+# ----------------------------- CREATE CLASS ---------------------------------
+@login_required
+@user_passes_test(_schedule_guard)
 @require_POST
 def create_class(request):
-    data = json.loads(request.body)
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+    except Exception:
+        return _json_bad_request("Invalid JSON payload")
+
+    name_en = (data.get('name_en') or "").strip()
+    if not name_en:
+        return _json_bad_request("name_en is required")
+
     cls = Class.objects.create(
-        name_en=data['name_en'],
-        name_it=data.get('name_it', ''),
-        emoji=data.get('emoji', '')
+        name_en=name_en,
+        name_it=data.get('name_it', '').strip(),
+        emoji=data.get('emoji', '').strip()
     )
-    return JsonResponse(model_to_dict(cls))
+    return JsonResponse(
+        {
+            "ok": True,
+            "message": "Class created.",
+            "data": model_to_dict(cls)
+        },
+        status=201
+    )
 
 
-@csrf_exempt
+# ----------------------------- UPDATE CLASS ---------------------------------
+@login_required
+@user_passes_test(_schedule_guard)
 @require_POST
 def update_class(request, class_id):
-    data = json.loads(request.body)
     cls = get_object_or_404(Class, id=class_id)
-    cls.name_en = data['name_en']
-    cls.name_it = data.get('name_it', '')
-    cls.emoji = data.get('emoji', '')
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+    except Exception:
+        return _json_bad_request("Invalid JSON payload")
+
+    if 'name_en' in data:
+        name_en = (data.get('name_en') or "").strip()
+        if not name_en:
+            return _json_bad_request("name_en is required")
+        cls.name_en = name_en
+
+    if 'name_it' in data:
+        cls.name_it = (data.get('name_it') or "").strip()
+
+    if 'emoji' in data:
+        cls.emoji = (data.get('emoji') or "").strip()
+
     cls.save()
-    return JsonResponse(model_to_dict(cls))
+    return JsonResponse({
+        "ok": True,
+        "message": "Class updated.",
+        "data": model_to_dict(cls)
+    })
 
 
-@csrf_exempt
+# ----------------------------- DELETE CLASS ---------------------------------
+@login_required
+@user_passes_test(_schedule_guard)
 @require_POST
 def delete_class(request, class_id):
     cls = get_object_or_404(Class, id=class_id)
     cls.delete()
-    return JsonResponse({'deleted': True})
+    return JsonResponse({
+        "ok": True,
+        "message": "Class deleted.",
+        "data": {"id": class_id}
+    })
