@@ -1,7 +1,9 @@
-from django.shortcuts import render
+# contact/views.py
+from django.shortcuts import render, redirect
 from django.conf import settings
-from .forms import ContactForm
+from django.contrib import messages
 from django.core.mail import EmailMessage
+from .forms import ContactForm
 import requests
 
 
@@ -11,8 +13,8 @@ def contact_view(request):
     if request.method == "POST" and form.is_valid():
         data = form.cleaned_data
 
-        # Format the message
-        message = (
+        # Build email body
+        body = (
             f"Name: {data['full_name']}\n"
             f"Email: {data['email']}\n"
             f"Phone: {data.get('phone', 'N/A')}\n"
@@ -22,63 +24,57 @@ def contact_view(request):
             f"Message:\n{data['message']}"
         )
 
-        # ✅ Send email with reply-to
-        email = EmailMessage(
-            subject=f"New Contact Form Submission: {data['subject']}",
-            body=message,
-            from_email="theenglishstudio.corvetto@gmail.com",
-            to=["theenglishstudio.corvetto@gmail.com"],
-            reply_to=[data["email"]],
-        )
-        email.send()
+        # Send email (with reply-to)
+        try:
+            EmailMessage(
+                subject=f"New Contact Form Submission: {data['subject']}",
+                body=body,
+                from_email="theenglishstudio.corvetto@gmail.com",
+                to=["theenglishstudio.corvetto@gmail.com"],
+                reply_to=[data["email"]],
+            ).send(fail_silently=False)
+        except Exception as e:
+            # Don’t fail the UX—log and proceed
+            print(f"Email send error: {e}")
 
-        # ✅ Subscribe to Mailchimp if opted-in
+        # Optional: Mailchimp subscribe
         if data.get("subscribe"):
-            mailchimp_api_key = settings.MAILCHIMP_API_KEY
-            mailchimp_list_id = settings.MAILCHIMP_AUDIENCE_ID
-            datacenter = mailchimp_api_key.split('-')[-1]
-
-            url = (
-                f"https://{datacenter}.api.mailchimp.com/3.0/lists/"
-                f"{mailchimp_list_id}/members"
-            )
-            payload = {
-                "email_address": data["email"],
-                "status": "subscribed",
-                "merge_fields": {"FNAME": data["full_name"]}
-            }
-            headers = {
-                "Authorization": f"apikey {mailchimp_api_key}"
-            }
-
             try:
-                response = requests.post(url, json=payload, headers=headers)
-                response.raise_for_status()
-            except requests.exceptions.RequestException as e:
+                api_key = settings.MAILCHIMP_API_KEY
+                list_id = settings.MAILCHIMP_AUDIENCE_ID
+                dc = api_key.split("-")[-1]  # datacenter suffix
+
+                url = (
+                    f"https://{dc}.api.mailchimp.com/3.0/lists/"
+                    f"{list_id}/members"
+                )
+                payload = {
+                    "email_address": data["email"],
+                    "status": "subscribed",
+                    "merge_fields": {"FNAME": data["full_name"]},
+                }
+                headers = {"Authorization": f"apikey {api_key}"}
+                r = requests.post(
+                    url, json=payload, headers=headers, timeout=10
+                )
+                r.raise_for_status()
+            except Exception as e:
                 print(f"Mailchimp error: {e}")
 
-        print("✔️ Contact form submitted successfully — modal should show")
+        messages.success(request, "Thanks! We’ll be in touch soon.")
+        # PRG: redirect so refresh doesn’t resubmit; modal will show on GET
+        return redirect(f"{request.path}?sent=1")
 
-        return render(
-            request,
-            "contact.html",
-            {
-                "form": ContactForm(),
-                "show_modal": True,
-                "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY,
-                # Pass the API key to the template
-            }
-        )
+    # GET or invalid POST → render page
+    show_modal = request.GET.get("sent") == "1"
 
-    # ❌ GET or invalid form, render the form again
     return render(
         request,
         "contact.html",
         {
             "form": form,
-            "google_maps_api_key": (
-                settings.GOOGLE_MAPS_API_KEY
-                # Pass the API key to the template
-            ),
-        }
+            "show_modal": show_modal,  # your JS reads this to auto-open modal
+            # leaving your maps key exactly as you had it:
+            "google_maps_api_key": settings.GOOGLE_MAPS_API_KEY,
+        },
     )

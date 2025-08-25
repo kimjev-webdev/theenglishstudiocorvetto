@@ -34,7 +34,13 @@ urlpatterns += i18n_patterns(
     path('portal/', include(('portal.urls', 'portal'), namespace='portal')),
     path('blog/', include('blog.urls')),
     path('flyers/', include('flyers.urls')),
+    path('contact/', include('contact.urls')),
+
 )
+
+# Custom error handlers
+handler404 = "main.views.not_found"
+handler500 = "main.views.server_error"
 
 # Serve media files in development
 if settings.DEBUG:
