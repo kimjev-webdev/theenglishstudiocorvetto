@@ -455,6 +455,7 @@ blog-text a {
 
 .day {
   position: relative;
+  border-radius: 10px;
   border: 1px solid #ddd;
   background: white;
   aspect-ratio: 1 / 1; /* ✅ Ensures square shape */
