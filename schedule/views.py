@@ -12,10 +12,10 @@ from django.forms.models import model_to_dict
 from django.utils.formats import date_format
 from django.db.models import Q
 from django.utils.dateparse import parse_date, parse_time
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from django.contrib.auth.decorators import login_required, user_passes_test
-from portal.authz import is_portal_owner
-from portal.authz import in_group  # reuse your portal auth helpers
+from portal.authz import is_portal_owner, in_group
 
 from .models import Event, Class
 
@@ -24,9 +24,9 @@ from .models import Event, Class
 def _schedule_guard(user):
     return (
         user.is_authenticated and (
-            user.is_staff or
-            is_portal_owner(user) or
-            in_group(user, "SCHEDULE")
+            user.is_staff
+            or is_portal_owner(user)
+            or in_group(user, "SCHEDULE")
         )
     )
 
@@ -54,9 +54,7 @@ def calendar_view(request, year=None, month=None):
     # ends after month starts)
     events = (
         Event.objects
-        .filter(
-            Q(date__lte=last_day) | Q(repeat_until__gte=first_day)
-        )
+        .filter(Q(date__lte=last_day) | Q(repeat_until__gte=first_day))
         .select_related('class_instance')
         .distinct()
     )
@@ -75,9 +73,7 @@ def calendar_view(request, year=None, month=None):
                 first_day <= event.date <= last_day
                 and event.date not in exceptions
             ):
-                events_by_day.setdefault(
-                    event.date, []
-                ).append(event)
+                events_by_day.setdefault(event.date, []).append(event)
 
         elif event.recurrence == 'weekly':
             current = event.date
@@ -147,21 +143,17 @@ def calendar_view(request, year=None, month=None):
     })
 
 
-# If this list is an admin page, lock it down.
-# If it's public, drop the decorators.
+# ===== Admin list (ensure CSRF cookie on GET) =====
+@ensure_csrf_cookie
 @login_required
 @user_passes_test(_schedule_guard)
 def event_list_view(request):
     classes = Class.objects.all()
     events = Event.objects.all().select_related('class_instance')
-    return render(
-        request,
-        'schedule/event_list.html',
-        {
-            'classes': classes,
-            'events': events
-        }
-    )
+    return render(request, 'schedule/event_list.html', {
+        'classes': classes,
+        'events': events
+    })
 
 
 # ---------- helpers for JSON endpoints ----------
@@ -195,8 +187,10 @@ def create_event(request):
     et = parse_time(data.get('end_time'))
     if not d or not st or not et:
         return _json_bad_request(
-            "Missing or invalid date/start_time/end_time "
-            "(use ISO e.g. 2025-08-25, 14:30:00)"
+            (
+                "Missing or invalid date/start_time/end_time "
+                "(ISO: 2025-08-25, 14:30:00)"
+            )
         )
 
     # ensure end after start (simple check; adjust if events can span midnight)
@@ -322,11 +316,7 @@ def create_class(request):
         emoji=data.get('emoji', '').strip()
     )
     return JsonResponse(
-        {
-            "ok": True,
-            "message": "Class created.",
-            "data": model_to_dict(cls)
-        },
+        {"ok": True, "message": "Class created.", "data": model_to_dict(cls)},
         status=201
     )
 
