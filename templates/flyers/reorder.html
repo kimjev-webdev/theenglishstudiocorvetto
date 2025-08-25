@@ -84,25 +84,26 @@
     const csrftoken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
 
     fetch(url, {
-      method: 'POST',
-      headers: {
-        'X-CSRFToken': csrftoken,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: new URLSearchParams({ order: ids })
-    })
-    .then(r => {
-      if (!r.ok) throw new Error('Bad response');
-      return r.text();
-    })
-    .then(() => {
-      const alertEl = document.getElementById('save-alert');
-      alertEl.classList.remove('d-none');
-      setTimeout(() => alertEl.classList.add('d-none'), 2000);
-    })
-    .catch(() => {
-      alert('{% trans "Failed to save order." %}');
-    });
+  method: 'POST',
+  headers: {
+    'X-CSRFToken': csrftoken,
+    'X-Requested-With': 'XMLHttpRequest', // <-- REQUIRED by your view
+    'Content-Type': 'application/json'     // <-- send JSON
+  },
+  body: JSON.stringify({ order: ids })     // {"order":["12","34","56"]}
+})
+.then(r => {
+  if (!r.ok) throw new Error('Bad response');
+  return r.json(); // your view returns JsonResponse
+})
+.then(() => {
+  const alertEl = document.getElementById('save-alert');
+  alertEl.classList.remove('d-none');
+  setTimeout(() => alertEl.classList.add('d-none'), 2000);
+})
+.catch(() => {
+  alert('{% trans "Failed to save order." %}');
+});
   });
 })();
 </script>
