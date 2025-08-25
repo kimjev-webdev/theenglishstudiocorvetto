@@ -231,6 +231,10 @@ img.footerpic {
   height: 13px;
 }
 
+footer, .row 
+{--bs-gutter-x: 0 !important;
+}
+
 /*--- index.html styles---*/
 /*hero section styles*/
 
@@ -282,13 +286,8 @@ img.footerpic {
   width: 10rem;
   height: 10rem;
 }
-/* =========================================================
-   Flyers & Swiper carousel (homepage)
-   ========================================================= */
 
-/* =========================================================
-   Flyers (homepage) – vanilla coverflow + mobile stack
-   ========================================================= */
+/* flyers (homepage) */
 
 #upcoming { overflow-x: hidden; }
 
