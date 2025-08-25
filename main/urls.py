@@ -10,6 +10,7 @@ urlpatterns = [
     path('calendar/', views.calendar, name='schedule'),
     path('contact/', views.contact, name='contact'),
     path('blog/', include('blog.urls')),
+    path('privacy/', views.privacy, name='privacy'),
 ]
 
 if settings.DEBUG:

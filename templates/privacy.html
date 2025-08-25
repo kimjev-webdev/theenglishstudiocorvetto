@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Privacy Policy" %}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <!-- Page header -->
+  <div class="row align-items-center mb-4">
+    <div class="col">
+      <h1 class="primaryfont head-navy mb-1">{% trans "Privacy Policy" %}</h1>
+      <p class="text-muted mb-0 small">{% trans "Last updated" %}: 25 August 2025</p>
+    </div>
+    <div class="col-auto">
+      <a href="{% url 'contact' %}" class="btn btn-red primaryfont">
+        {% trans "Contact us" %}
+      </a>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- TOC (sticky on md+) -->
+    <aside class="col-md-3 d-none d-md-block">
+      <div class="card shadow-sm position-sticky" style="top: 90px;">
+        <div class="card-body p-3">
+          <div class="fw-bold small text-uppercase text-muted mb-2">{% trans "On this page" %}</div>
+          <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action py-2" href="#who-we-are">{% trans "1) Who we are" %}</a>
+            <a class="list-group-item list-group-item-action py-2" href="#data-we-collect">{% trans "2) Data we collect" %}</a>
+            <a class="list-group-item list-group-item-action py-2" href="#how-we-collect">{% trans "3) How we collect" %}</a>
+            <a class="list-group-item list-group-item-action py-2" href="#purposes-legal-bases">{% trans "4) Purposes & legal bases" %}</a>
+            <a class="list-group-item list-group-item-action py-2" href="#cookies">{% trans "5) Cookies" %}</a>
+            <a class="list-group-item list-group-item-action py-2" href="#sharing">{% trans "6) Sharing your data" %}</a>
+            <a class="list-group-item list-group-item-action py-2" href="#transfers">{% trans "7) International transfers" %}</a>
+            <a class="list-group-item list-group-item-action py-2" href="#retention">{% trans "8) Data retention" %}</a>
+            <a class="list-group-item list-group-item-action py-2" href="#security">{% trans "9) Security" %}</a>
+            <a class="list-group-item list-group-item-action py-2" href="#your-rights">{% trans "10) Your rights" %}</a>
+            <a class="list-group-item list-group-item-action py-2" href="#children">{% trans "11) Children’s privacy" %}</a>
+            <a class="list-group-item list-group-item-action py-2" href="#third-parties">{% trans "12) Third-party links" %}</a>
+            <a class="list-group-item list-group-item-action py-2" href="#changes">{% trans "13) Changes" %}</a>
+            <a class="list-group-item list-group-item-action py-2" href="#contact">{% trans "14) Contact" %}</a>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <div class="col-md-9">
+
+      <!-- 1) Who we are -->
+      <section id="who-we-are" class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="h4 primaryfont navy mb-3">{% trans "1) Who we are (Data Controller)" %}</h2>
+          <p class="body-text navy mb-2"><strong>{% trans "Controller" %}:</strong> The English Studio</p>
+          <p class="body-text navy mb-2"><strong>{% trans "Website" %}:</strong> theenglishstudiocorvetto.com</p>
+          <p class="body-text navy mb-2"><strong>{% trans "Address" %}:</strong> via oglio 3, milan, italy</p>
+          <p class="body-text navy mb-0"><strong>{% trans "Email" %}:</strong> <a href="mailto:theenglishstudio.corvetto@gmail.com">theenglishstudio.corvetto@gmail.com</a></p>
+          <small class="text-muted d-block mt-2">
+            {% trans "We comply with UK GDPR and Data Protection Act 2018. If you are in the EEA, we may appoint an EU representative on request." %}
+          </small>
+        </div>
+      </section>
+
+      <!-- 2) Data we collect -->
+      <section id="data-we-collect" class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="h4 primaryfont navy mb-3">{% trans "2) Personal data we collect" %}</h2>
+          <ul class="body-text navy mb-0">
+            <li><strong>{% trans "Identity & contact" %}:</strong> {% trans "name, email, phone, address" %}.</li>
+            <li><strong>{% trans "Account (portal)" %}:</strong> {% trans "username, hashed password, roles" %}.</li>
+            <li><strong>{% trans "Course & booking" %}:</strong> {% trans "class booked, dates/times, attendance, payment status" %}.</li>
+            <li><strong>{% trans "Child participant (via parent/guardian)" %}:</strong> {% trans "first name, age, special requirements, emergency contact" %}.</li>
+            <li><strong>{% trans "Communications & preferences" %}:</strong> {% trans "messages, feedback, marketing opt-in/out" %}.</li>
+            <li><strong>{% trans "Images & media (optional)" %}:</strong> {% trans "photos/video from events, only with consent where required" %}.</li>
+            <li><strong>{% trans "Technical & usage" %}:</strong> {% trans "IP, device/browser, pages viewed, cookie IDs" %}.</li>
+          </ul>
+          <div class="alert alert-warning mt-3 mb-0">
+            <strong>{% trans "Special category data" %}:</strong>
+            {% trans "we do not intentionally collect special categories (e.g., health) except where you volunteer details for reasonable adjustments. In that case we rely on explicit consent or vital interests." %}
+          </div>
+        </div>
+      </section>
+
+      <!-- 3) How we collect -->
+      <section id="how-we-collect" class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="h4 primaryfont navy mb-3">{% trans "3) How we collect data" %}</h2>
+        <ul class="body-text navy mb-0">
+            <li>{% trans "Directly from you (forms, bookings, portal accounts, email/messages, media consent)" %}.</li>
+            <li>{% trans "Automatically via privacy-preserving logs when you browse our website/portal" %}.</li>
+            <li>{% trans "From third parties (e.g., payment providers, analytics, social platforms)" %}.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 4) Purposes & legal bases -->
+      <section id="purposes-legal-bases" class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="h4 primaryfont navy mb-3">{% trans "4) Why we use your data (purposes & legal bases)" %}</h2>
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>{% trans "Purpose" %}</th>
+                  <th>{% trans "Examples" %}</th>
+                  <th>{% trans "Legal basis" %}</th>
+                </tr>
+              </thead>
+              <tbody class="body-text navy">
+                <tr>
+                  <td>{% trans "Provide our services" %}</td>
+                  <td>{% trans "run classes, manage bookings/accounts, support" %}</td>
+                  <td><span class="badge bg-secondary">{% trans "Contract" %}</span></td>
+                </tr>
+                <tr>
+                  <td>{% trans "Communications" %}</td>
+                  <td>{% trans "enquiry replies, service messages (schedule changes)" %}</td>
+                  <td><span class="badge bg-secondary">{% trans "Legitimate interests / Contract" %}</span></td>
+                </tr>
+                <tr>
+                  <td>{% trans "Marketing" %}</td>
+                  <td>{% trans "newsletters, updates on classes/events" %}</td>
+                  <td><span class="badge bg-secondary">{% trans "Consent / Legitimate interests (PECR-permitted)" %}</span></td>
+                </tr>
+                <tr>
+                  <td>{% trans "Payments" %}</td>
+                  <td>{% trans "processing via payment provider; tax records" %}</td>
+                  <td><span class="badge bg-secondary">{% trans "Contract / Legal obligation" %}</span></td>
+                </tr>
+                <tr>
+                  <td>{% trans "Photos & media" %}</td>
+                  <td>{% trans "showcasing activities on site/socials" %}</td>
+                  <td><span class="badge bg-secondary">{% trans "Consent" %}</span></td>
+                </tr>
+                <tr>
+                  <td>{% trans "Safety & compliance" %}</td>
+                  <td>{% trans "fraud prevention, safeguarding, legal claims" %}</td>
+                  <td><span class="badge bg-secondary">{% trans "Legitimate interests / Legal obligation / Vital interests" %}</span></td>
+                </tr>
+                <tr>
+                  <td>{% trans "Analytics & improvement" %}</td>
+                  <td>{% trans "privacy-preserving, cookieless measurement to improve the site" %}</td>
+                  <td><span class="badge bg-secondary">{% trans "Legitimate interests" %}</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="body-text navy mt-3 mb-0">
+            {% trans "Where we rely on consent, you may withdraw it at any time. Where we rely on legitimate interests, we balance our interests with your rights and expectations." %}
+          </p>
+        </div>
+      </section>
+
+      <!-- 5) Cookies -->
+      <section id="cookies" class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="h4 primaryfont navy mb-3">{% trans "5) Cookies" %}</h2>
+          <p class="body-text navy mb-0">
+            {% trans "We do not use cookies on this website. If this changes, we will update this page and request consent where required." %}
+          </p>
+        </div>
+      </section>
+
+      <!-- 6) Sharing -->
+      <section id="sharing" class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="h4 primaryfont navy mb-3">{% trans "6) Sharing your data" %}</h2>
+          <p class="body-text navy">{% trans "We share personal data only when necessary, with:" %}</p>
+          <ul class="body-text navy">
+            <li><strong>{% trans "Service providers (processors)" %}:</strong> {% trans "hosting, email delivery, cloud media, analytics, payments, forms" %} — {% trans "they act on our instructions and keep it secure" %}.</li>
+            <li><strong>{% trans "Legal/compliance" %}:</strong> {% trans "regulators, law enforcement, courts or advisors when required" %}.</li>
+            <li><strong>{% trans "Business changes" %}:</strong> {% trans "reorganisation/transfer under appropriate safeguards" %}.</li>
+          </ul>
+          <div class="alert alert-info mb-0"><strong>{% trans "We do not sell your personal data." %}</strong></div>
+        </div>
+      </section>
+
+      <!-- 7) Transfers -->
+      <section id="transfers" class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="h4 primaryfont navy mb-3">{% trans "7) International transfers" %}</h2>
+          <p class="body-text navy mb-0">
+            {% trans "Where providers are outside the UK/EEA, we use adequacy decisions, Standard Contractual Clauses (SCCs) with safeguards, or other lawful mechanisms." %}
+          </p>
+        </div>
+      </section>
+
+      <!-- 8) Retention -->
+      <section id="retention" class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="h4 primaryfont navy mb-3">{% trans "8) Data retention" %}</h2>
+          <ul class="body-text navy">
+            <li>{% trans "Accounts & booking records: up to 6 years (tax/audit)" %}</li>
+            <li>{% trans "Marketing subscriptions: until you unsubscribe or after inactivity" %}</li>
+            <li>{% trans "Enquiry emails/messages: 18–24 months" %}</li>
+            <li>{% trans "Event photos/media: until consent is withdrawn or as stated at capture" %}</li>
+            <li>{% trans "Technical logs: up to 12 months (longer if needed for security)" %}</li>
+          </ul>
+          <p class="body-text navy mb-0">{% trans "We will anonymise or securely delete data when no longer needed." %}</p>
+        </div>
+      </section>
+
+      <!-- 9) Security -->
+      <section id="security" class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="h4 primaryfont navy mb-3">{% trans "9) Security" %}</h2>
+          <p class="body-text navy mb-0">
+            {% trans "We use appropriate technical and organisational measures (HTTPS, access controls, backups). No method is 100% secure; we continually improve our safeguards." %}
+          </p>
+        </div>
+      </section>
+
+      <!-- 10) Your rights -->
+      <section id="your-rights" class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="h4 primaryfont navy mb-3">{% trans "10) Your rights" %}</h2>
+          <ul class="body-text navy">
+            <li>{% trans "Access a copy of your data" %}</li>
+            <li>{% trans "Rectify inaccuracies" %}</li>
+            <li>{% trans "Erase your data ('right to be forgotten')" %}</li>
+            <li>{% trans "Restrict certain processing" %}</li>
+            <li>{% trans "Object to processing based on legitimate interests or to direct marketing" %}</li>
+            <li>{% trans "Data portability" %}</li>
+            <li>{% trans "Withdraw consent at any time where processing is based on consent" %}</li>
+          </ul>
+          <p class="body-text navy mb-0">
+            {% trans "To exercise your rights, contact us at" %} <a href="mailto:theenglishstudio.corvetto@gmail.com">theenglishstudio.corvetto@gmail.com</a>. {% trans "You may also complain to the Information Commissioner’s Office (ICO) at ico.org.uk." %}
+          </p>
+        </div>
+      </section>
+
+      <!-- 11) Children -->
+      <section id="children" class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="h4 primaryfont navy mb-3">{% trans "11) Children’s privacy" %}</h2>
+          <p class="body-text navy mb-0">
+            {% trans "Our classes may be aimed at children, but our website/portal are intended for parents/guardians. We do not knowingly collect children’s data online without appropriate consent." %}
+          </p>
+        </div>
+      </section>
+
+      <!-- 12) Third-party links -->
+      <section id="third-parties" class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="h4 primaryfont navy mb-3">{% trans "12) Third-party links" %}</h2>
+          <p class="body-text navy mb-0">
+            {% trans "Our site may link to third-party websites or services. Their privacy practices apply; please review their policies." %}
+          </p>
+        </div>
+      </section>
+
+      <!-- 13) Changes -->
+      <section id="changes" class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="h4 primaryfont navy mb-3">{% trans "13) Changes to this policy" %}</h2>
+          <p class="body-text navy mb-0">
+            {% trans "We may update this policy from time to time. The current version is posted on this page with the effective date." %}
+          </p>
+        </div>
+      </section>
+
+      <!-- 14) Contact -->
+      <section id="contact" class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h2 class="h4 primaryfont navy mb-3">{% trans "14) Contact us" %}</h2>
+          <p class="body-text navy mb-2"><strong>The English Studio</strong></p>
+          <p class="body-text navy mb-1"><strong>{% trans "Email" %}:</strong> <a href="mailto:theenglishstudio.corvetto@gmail.com">theenglishstudio.corvetto@gmail.com</a></p>
+          <p class="body-text navy mb-0"><strong>{% trans "Address" %}:</strong> via oglio 3, milan, italy</p>
+        </div>
+      </section>
+
+      <div class="text-center">
+        <a href="#top" class="btn btn-outline-secondary">{% trans "Back to top" %}</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Optional: smooth scroll for the sidebar links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href');
+    if (id.length > 1) {
+      const el = document.querySelector(id);
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.replaceState(null, '', id);
+      }
+    }
+  });
+});
+</script>
+{% endblock %}
