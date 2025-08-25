@@ -1,14 +1,16 @@
 <h1 align="center"> Welcome to The English Studio </h1>
 
-<img src="main/static/images/logofull.webp" alt="Learn English with The English Studio" width="30%" style="float:left; margin-right: 20px;"/>
+<img src="main/staticfiles/images/logofull.webp" alt="Learn English with The English Studio" width="30%" style="float:left; margin-right: 20px;"/>
 
-The English Studio is a fully functioning, full-stack web application built for a real client launching a new English language school in Corvetto, Milan. 
+The English Studio is a full-stack web application built for a real client launching a new English language school in Corvetto, Milan. 
 
 Designed to support both public users and administrative staff, the site offers a clean, modern user experience with powerful backend functionality tailored to real educational needs.
 
 Key features include:
 * A fully integrated blog system that allows staff to create, edit, and delete posts through a custom frontend portal.
 * A dynamic class and events scheduling system with full CRUD (Create, Read, Update, Delete) operations, enabling administrators to manage weekly lessons, special events, and recurring activities via an intuitive interface.
+* A flyer upload system that allows staff to create, read, update, delete and reorder the flyers.
+* An administrator profile for the owner which allows them to create further staff profiles via their portal login. 
 * A secure staff portal at /portal, providing private access to internal tools without exposing Django’s admin interface.
 * Seamless frontend-backend integration, with JavaScript fetch requests powering smooth, interactive updates to blog posts and schedule entries.
 * All data is stored in a PostgreSQL database hosted on Render, with a clean, normalized schema designed to reflect complex user stories and relationships between classes, events, and recurring schedules.
@@ -30,7 +32,7 @@ By combining professional design with custom backend development, the platform e
 
 * Enable Internal Autonomy by providing school staff with an easy-to-use interface to manage blog content, class offerings, and scheduled events without relying on developers.
 
-* Support School Growth by ensuring the site can scale as the business grows, including room for new features such as  student logins. 
+* Support School Growth by ensuring the site can scale as the business grows, including room for new features such as student logins. 
 
 * Deliver a Professional First Impression by establishing trust with potential clients through a polished, modern design and clear messaging.
 
