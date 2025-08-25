@@ -371,7 +371,7 @@ img.footerpic {
   }
 
 .two-up .two-up-img{
-  height: 60vh;                  /* lock equal heights */
+  height: 45vh;                  /* lock equal heights */
   width: auto;                   /* keep aspect ratio */
   /* no max-width:100% here on purpose */
   object-fit: cover;             /* extra safety if both dims set */
@@ -671,10 +671,20 @@ blog-text a {
   }
 }
 
+@media (min-width: 1000px) {
+      .two-up .two-up-img{
+    height: 60vh;  
+}
+}
 
-@media (min-width: 1440px) {
+@media (min-width: 1200px) {
   .two-up .two-up-img{
-    height: 75vh;                  /* lock equal heights */
+    height: 70vh;                  /* lock equal heights */
   }
 }
 
+@media (min-width: 1400px) {
+  .two-up .two-up-img{
+    height: 80vh;                  /* lock equal heights */
+  }
+}

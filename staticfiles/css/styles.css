@@ -371,7 +371,7 @@ img.footerpic {
   }
 
 .two-up .two-up-img{
-  height: 40vh;                  /* lock equal heights */
+  height: 45vh;                  /* lock equal heights */
   width: auto;                   /* keep aspect ratio */
   /* no max-width:100% here on purpose */
   object-fit: cover;             /* extra safety if both dims set */
@@ -669,20 +669,22 @@ blog-text a {
     aspect-ratio: auto !important; /* Let it size naturally */
     height: 120px; /* or whatever looks best */
   }
+}
 
-  .two-up .two-up-img{
-    height: 55vh;  
+@media (min-width: 1000px) {
+      .two-up .two-up-img{
+    height: 60vh;  
 }
 }
 
 @media (min-width: 1200px) {
   .two-up .two-up-img{
-    height: 65vh;                  /* lock equal heights */
+    height: 70vh;                  /* lock equal heights */
   }
 }
 
 @media (min-width: 1400px) {
   .two-up .two-up-img{
-    height: 75vh;                  /* lock equal heights */
+    height: 80vh;                  /* lock equal heights */
   }
 }
