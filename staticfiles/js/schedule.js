@@ -1,4 +1,4 @@
-// ===== CSRF cookie helper =====
+// ===== CSRF helpers =====
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
@@ -13,7 +13,11 @@ function getCookie(name) {
   }
   return cookieValue;
 }
-const csrftoken = getCookie('csrftoken');
+function getCSRFToken() {
+  return getCookie('csrftoken')
+      || (document.querySelector('meta[name="csrf-token"]')?.content || '')
+      || (document.querySelector('input[name="csrfmiddlewaretoken"]')?.value || '');
+}
 const urls = window.urls;
 
 /* ------------------------------------------------------------------ *
@@ -30,18 +34,15 @@ function ensureToastContainer() {
   }
   return c;
 }
-
 function showToast(message, variant = 'success') {
   const container = ensureToastContainer();
   const wrapper = document.createElement('div');
-  // Map variants to BS classes
   const bg = {
     success: 'bg-success text-white',
     danger: 'bg-danger text-white',
     warning: 'bg-warning',
     info: 'bg-info'
   }[variant] || 'bg-secondary text-white';
-
   wrapper.className = `toast align-items-center border-0 ${bg}`;
   wrapper.setAttribute('role', 'alert');
   wrapper.setAttribute('aria-live', 'assertive');
@@ -59,19 +60,16 @@ function showToast(message, variant = 'success') {
 }
 
 /* ------------------------------------------------------------------ *
- * Fetch helper: JSON in/out + unified errors
+ * Fetch helper
  * ------------------------------------------------------------------ */
 async function fetchJSON(url, options = {}) {
-  const opts = {
-    credentials: 'same-origin',
-    headers: { 'X-CSRFToken': csrftoken, ...(options.headers || {}) },
-    ...options
+  const headers = {
+    'X-CSRFToken': getCSRFToken(),
+    ...(options.headers || {})
   };
-  const res = await fetch(url, opts);
+  const res = await fetch(url, { credentials: 'same-origin', ...options, headers });
   let data = null;
-  try { data = await res.json(); } catch { /* not JSON, leave null */ }
-
-  // Prefer server's {ok:false,error} contract
+  try { data = await res.json(); } catch {}
   if (!res.ok || (data && data.ok === false)) {
     const msg = (data && (data.error || data.message)) || `HTTP ${res.status}`;
     const err = new Error(msg);
@@ -86,16 +84,15 @@ async function fetchJSON(url, options = {}) {
  * Helpers
  * ------------------------------------------------------------------ */
 function buildEventPayloadFromForm() {
-  // Keep raw string values to avoid TZ issues.
-  const repeatUntilStr = document.getElementById('event-repeat-until').value; // "YYYY-MM-DD" | ""
+  const repeatUntilStr = document.getElementById('event-repeat-until').value;
   return {
     class_id: document.getElementById('event-class').value,
-    date: document.getElementById('event-date').value,               // "YYYY-MM-DD"
-    start_time: document.getElementById('event-start').value,        // "HH:MM"
-    end_time: document.getElementById('event-end').value,            // "HH:MM"
-    recurrence: document.getElementById('event-recurrence').value,   // e.g. "weekly"
-    days_of_week: document.getElementById('event-days').value,       // "Mon,Wed,Fri"
-    recurrence_exceptions: document.getElementById('event-exceptions').value, // "YYYY-MM-DD, YYYY-MM-DD"
+    date: document.getElementById('event-date').value,
+    start_time: document.getElementById('event-start').value,
+    end_time: document.getElementById('event-end').value,
+    recurrence: document.getElementById('event-recurrence').value,
+    days_of_week: document.getElementById('event-days').value,
+    recurrence_exceptions: document.getElementById('event-exceptions').value,
     repeat_until: repeatUntilStr || null
   };
 }
@@ -119,21 +116,14 @@ eventForm?.addEventListener('submit', async (e) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-
     showToast(data.message || (eventId ? 'Event updated.' : 'Event created.'), 'success');
-
-    // Reset + close modal then refresh to reflect table/calendar
     eventForm.reset();
     document.getElementById('event-id').value = '';
-    const modalEl = document.getElementById('eventModal');
-    bootstrap.Modal.getInstance(modalEl)?.hide();
-    // If you have a client-side table refresh, call it here instead of reloading
+    bootstrap.Modal.getInstance(document.getElementById('eventModal'))?.hide();
     location.reload();
   } catch (err) {
     console.error('Event save failed:', err);
-    const variant = err.status === 403 ? 'warning' : 'danger';
-    const msg = err.message || 'Error saving event.';
-    showToast(msg, variant);
+    showToast(err.message || 'Error saving event.', err.status === 403 ? 'warning' : 'danger');
   } finally {
     saveBtn && (saveBtn.disabled = false);
   }
@@ -152,22 +142,24 @@ window.editEvent = function (id) {
   const row = document.querySelector(`tr[data-id="${id}"]`);
   if (!row) return;
 
+  // NOTE: dataset keys:
+  // data-class-id -> classId, data-days -> days, data-exceptions -> exceptions, data-repeatuntil -> repeatuntil
   const fieldMap = {
-    class: 'class',
+    class: 'classId',
     date: 'date',
     start: 'start',
     end: 'end',
     recurrence: 'recurrence',
-    days: 'daysofweek',
-    exceptions: 'recurrenceexceptions',
+    days: 'days',
+    exceptions: 'exceptions',
     'repeat-until': 'repeatuntil'
   };
 
-  Object.entries(fieldMap).forEach(([field, dataKey]) => {
+  Object.entries(fieldMap).forEach(([field, key]) => {
     const el = document.getElementById(`event-${field}`);
-    if (el && row.dataset[dataKey] !== undefined) {
-      el.value = row.dataset[dataKey];
-    }
+    if (!el) return;
+    const val = row.dataset[key];
+    if (val !== undefined) el.value = val;
   });
 
   document.getElementById('event-id').value = id;
@@ -212,15 +204,13 @@ classForm?.addEventListener('submit', async (e) => {
       body: JSON.stringify(payload)
     });
 
-    const data = res.data || res; // support either shape
+    const data = res.data || res;
     showToast(res.message || (id ? 'Class updated.' : 'Class created.'), 'success');
 
     if (id) {
-      // Update the existing row without reloading
       const row = document.querySelector(`tr[data-id='${id}']`);
       if (row) {
         const cells = row.querySelectorAll('td');
-        // assuming cols: emoji | name_en | name_it | actions
         cells[0].textContent = (data.emoji ?? payload.emoji ?? '').trim();
         cells[1].textContent = (data.name_en ?? payload.name_en ?? '').trim();
         cells[2].textContent = (data.name_it ?? payload.name_it ?? '').trim();
@@ -228,13 +218,11 @@ classForm?.addEventListener('submit', async (e) => {
       classForm.reset();
       document.getElementById('class-id').value = '';
     } else {
-      // Simplest: refresh to show the new row
       location.reload();
     }
   } catch (err) {
     console.error('Class save failed:', err);
-    const variant = err.status === 403 ? 'warning' : 'danger';
-    showToast(err.message || 'Something went wrong while saving the class.', variant);
+    showToast(err.message || 'Something went wrong while saving the class.', err.status === 403 ? 'warning' : 'danger');
   } finally {
     saveBtn && (saveBtn.disabled = false);
   }
