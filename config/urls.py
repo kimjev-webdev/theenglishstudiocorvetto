@@ -28,13 +28,13 @@ urlpatterns = [
 ]
 
 urlpatterns += i18n_patterns(
+    path("contact/", include("contact.urls")),
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
     path('schedule/', include('schedule.urls')),
     path('portal/', include(('portal.urls', 'portal'), namespace='portal')),
     path('blog/', include('blog.urls')),
     path('flyers/', include('flyers.urls')),
-    path('contact/', include('contact.urls')),
 
 )
 

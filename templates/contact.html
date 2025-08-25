@@ -10,50 +10,123 @@
     <!-- Contact Form -->
     <section class="col-md-6">
       <h2 class="primaryfont red text-center mb-2">{% trans "Contact Us" %}</h2>
-      <form method="POST">
+
+      <form method="POST" novalidate>
         {% csrf_token %}
+
+        {% if messages %}
+          <!-- global messages (optional; base.html may already render them) -->
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} mb-3">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger" role="alert">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+
         <div class="mb-3">
           <label for="fullName" class="form-label body-text navy">{% trans "Full Name" %}*</label>
-          <input type="text" class="form-control body-text navy" id="fullName" name="full_name" required>
+          <input
+            type="text"
+            class="form-control body-text navy {% if form.errors.full_name %}is-invalid{% endif %}"
+            id="fullName"
+            name="full_name"
+            required
+            value="{{ form.full_name.value|default_if_none:'' }}"
+          >
+          {% if form.errors.full_name %}
+            <div class="invalid-feedback">{{ form.errors.full_name.0 }}</div>
+          {% endif %}
         </div>
 
         <div class="mb-3">
           <label for="email" class="form-label body-text navy">{% trans "Email" %}*</label>
-          <input type="email" class="form-control body-text navy" id="email" name="email" required>
+          <input
+            type="email"
+            class="form-control body-text navy {% if form.errors.email %}is-invalid{% endif %}"
+            id="email"
+            name="email"
+            required
+            value="{{ form.email.value|default_if_none:'' }}"
+          >
+          {% if form.errors.email %}
+            <div class="invalid-feedback">{{ form.errors.email.0 }}</div>
+          {% endif %}
         </div>
 
         <div class="mb-3">
-          <label for="phone" class="form-label body-text navy">{% trans "Phone" %}*</label>
-          <input type="tel" class="form-control body-text navy" id="phone" name="phone" required>
+          <label for="phone" class="form-label body-text navy">{% trans "Phone" %}{% comment %} * (client-side) {% endcomment %}*</label>
+          <input
+            type="tel"
+            class="form-control body-text navy {% if form.errors.phone %}is-invalid{% endif %}"
+            id="phone"
+            name="phone"
+            required
+            value="{{ form.phone.value|default_if_none:'' }}"
+          >
+          {% if form.errors.phone %}
+            <div class="invalid-feedback">{{ form.errors.phone.0 }}</div>
+          {% endif %}
         </div>
 
         <div class="mb-3">
           <label for="subject" class="form-label body-text navy">{% trans "Subject" %}*</label>
-          <select class="form-select body-text navy" id="subject" name="subject" required>
+          {# Submit canonical values; show translated labels #}
+          {% with current=form.subject.value|default_if_none:'' %}
+          <select
+            class="form-select body-text navy {% if form.errors.subject %}is-invalid{% endif %}"
+            id="subject"
+            name="subject"
+            required
+          >
             <option value="">{% trans "Select an option" %}</option>
-            <option>{% trans "After School Club" %}</option>
-            <option>{% trans "Private Lessons" %}</option>
-            <option>{% trans "Business English Lessons" %}</option>
-            <option>{% trans "General English Lessons" %}</option>
-            <option>{% trans "IELTS Enquiry" %}</option>
-            <option>{% trans "Events" %}</option>
-            <option>{% trans "Other" %}</option>
+            <option value="After School Club" {% if current == "After School Club" %}selected{% endif %}>{% trans "After School Club" %}</option>
+            <option value="Private Lessons" {% if current == "Private Lessons" %}selected{% endif %}>{% trans "Private Lessons" %}</option>
+            <option value="Business English Lessons" {% if current == "Business English Lessons" %}selected{% endif %}>{% trans "Business English Lessons" %}</option>
+            <option value="General English Lessons" {% if current == "General English Lessons" %}selected{% endif %}>{% trans "General English Lessons" %}</option>
+            <option value="IELTS Enquiry" {% if current == "IELTS Enquiry" %}selected{% endif %}>{% trans "IELTS Enquiry" %}</option>
+            <option value="Events" {% if current == "Events" %}selected{% endif %}>{% trans "Events" %}</option>
+            <option value="Other" {% if current == "Other" %}selected{% endif %}>{% trans "Other" %}</option>
           </select>
+          {% endwith %}
+          {% if form.errors.subject %}
+            <div class="invalid-feedback">{{ form.errors.subject.0 }}</div>
+          {% endif %}
         </div>
 
         <div class="mb-3">
           <label for="message" class="form-label body-text navy">{% trans "Message" %}*</label>
-          <textarea class="form-control body-text navy" id="message" name="message" rows="5" required></textarea>
+          <textarea
+            class="form-control body-text navy {% if form.errors.message %}is-invalid{% endif %}"
+            id="message"
+            name="message"
+            rows="5"
+            required
+          >{{ form.message.value|default_if_none:'' }}</textarea>
+          {% if form.errors.message %}
+            <div class="invalid-feedback">{{ form.errors.message.0 }}</div>
+          {% endif %}
         </div>
 
         <div class="form-check mb-3">
-          <input class="form-check-input btn-red" type="checkbox" id="subscribe" name="subscribe">
+          <input
+            class="form-check-input btn-red"
+            type="checkbox"
+            id="subscribe"
+            name="subscribe"
+            {% if form.subscribe.value %}checked{% endif %}
+          >
           <label class="form-check-label body-text navy" for="subscribe">
             {% trans "Subscribe to newsletter" %}
           </label>
         </div>
 
-        <button type="submit" class="btn center-on-mobile primaryfont btn-red mb-3">{% trans "Send Message" %}</button>
+        <button type="submit" class="btn center-on-mobile primaryfont btn-red mb-3">
+          {% trans "Send Message" %}
+        </button>
       </form>
     </section>
 
@@ -77,7 +150,7 @@
         </ul>
       </div>
 
-      <!-- ✅ Google Map container with data attributes -->
+      <!-- Google Map container with data attributes -->
       <div
         id="map"
         class="map"
@@ -99,13 +172,15 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content text-center p-4">
         <div class="modal-header border-0">
-          <h5 class="modal-title primaryfont red w-100" id="thankYouLabel">Thank you!</h5>
+          <h5 class="modal-title primaryfont red w-100" id="thankYouLabel">{% trans "Thank you!" %}</h5>
         </div>
         <div class="modal-body body-text navy text-center">
-          <p>We look forward to embarking on this exciting journey with you!</p>
-          <p>We aim to reply within 1–2 working days.</p>
+          <p>{% trans "We look forward to embarking on this exciting journey with you!" %}</p>
+          <p>{% trans "We aim to reply within 1–2 working days." %}</p>
         </div>
-        <button type="button" class="btn btn-red primaryfont modal-button" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-red primaryfont modal-button" data-bs-dismiss="modal">
+          {% trans "Close" %}
+        </button>
       </div>
     </div>
   </div>
@@ -117,7 +192,7 @@
   <script src="{% static 'js/maps.js' %}"></script>
   <script src="{% static 'js/contact.js' %}"></script>
 
-  <!-- ✅ Official Google Maps async loader (fixes the 'loaded directly' warning) -->
+  <!-- Official Google Maps async loader -->
   <script>
     (g => {
       var h, a, k, p = "The Google Maps JavaScript API",
@@ -139,7 +214,7 @@
     })({ key: "{{ GOOGLE_MAPS_API_KEY }}", v: "weekly" });
   </script>
 
-  <!-- ✅ Boot the map after DOM is ready and loader is available -->
+  <!-- Boot the map after DOM is ready and loader is available -->
   <script>
     window.addEventListener("DOMContentLoaded", () => {
       if (typeof window.initMap === "function") {
