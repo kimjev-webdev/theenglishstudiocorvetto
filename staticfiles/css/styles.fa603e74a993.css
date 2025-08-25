@@ -231,7 +231,7 @@ img.footerpic {
   height: 13px;
 }
 
-footer, .row 
+.gutterless-row 
 {--bs-gutter-x: 0 !important;
 }
 
