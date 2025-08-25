@@ -1,6 +1,6 @@
 <h1 align="center"> Welcome to The English Studio </h1>
 
-<img src="main/staticfiles/images/logofull.webp" alt="Learn English with The English Studio" width="30%" style="float:left; margin-right: 20px;"/>
+<img src="staticfiles/compressed/logofull.webp" alt="Learn English with The English Studio" width="30%" style="float:left; margin-right: 20px;"/>
 
 The English Studio is a full-stack web application built for a real client launching a new English language school in Corvetto, Milan. 
 
