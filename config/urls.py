@@ -35,7 +35,6 @@ urlpatterns += i18n_patterns(
     path('portal/', include(('portal.urls', 'portal'), namespace='portal')),
     path('blog/', include('blog.urls')),
     path('flyers/', include('flyers.urls')),
-
 )
 
 # Custom error handlers

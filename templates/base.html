@@ -1,7 +1,6 @@
 {% load static %}
 {% load i18n %}
 {% get_current_language as LANGUAGE_CODE %}
-{{ form.media }}
 
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
@@ -17,10 +16,6 @@
   <meta name="keywords" content="English school Milan, English for kids, private English lessons, IELTS test prep Milan, Business English Corvetto, English classes for children, native English teacher Milan">
   <title>{% block title %}{% trans "The English Studio" %}{% endblock %}</title>
 
-
-
-  
-
   <!-- Favicon -->
   <link rel="icon" href="{% static 'compressed/logofull.webp' %}" type="image/webp">
 
@@ -31,50 +26,67 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-K0..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer" />
 
-<!-- Tippy.js styles and scripts -->
-<link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
-<script src="https://unpkg.com/@popperjs/core@2"></script>
-<script src="https://unpkg.com/tippy.js@6"></script>
+  <!-- Tippy.js styles and scripts (optional tooltips) -->
+  <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script src="https://unpkg.com/tippy.js@6"></script>
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body class="d-flex flex-column min-vh-100">
+
+  {% if messages %}
+  <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index:1080;">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
   <header>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg px-4 py-3">
       <div class="container-fluid">
-        <a class="navbar-brand" href="/">
-          <img src="{% static 'compressed/logofull.webp' %}" class="nav_img" aria-label="{% trans 'The English Studio Logo - Navigate Home' %}">
+        <a class="navbar-brand" href="{% url 'index' %}">
+          <img src="{% static 'compressed/logofull.webp' %}" class="nav_img"
+               alt="{% trans 'The English Studio logo' %}"
+               aria-label="{% trans 'The English Studio Logo - Navigate Home' %}">
         </a>
-        <button class="navbar-toggler hamburger" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="navbar toggler">
-  <span></span>
-  <span></span>
-  <span></span>
-</button>
-       <div class="collapse navbar-collapse" id="navbarNav">
-  <ul class="navbar-nav ms-auto text-uppercase fw-bold">
-    <li class="nav-item">
-      <a class="nav-link navy primaryfont focusstyle" href="{% url 'index' %}#about">{% trans "About" %}</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link navy primaryfont focusstyle" href="{% url 'schedule' %}">{% trans "Schedule" %}</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link navy primaryfont focusstyle" href="{% url 'blog_list' %}" class="nav-link">{% trans "Blog" %}</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link navy primaryfont focusstyle" href="{% url 'contact' %}">{% trans "Contact" %}</a>
-    </li>
-  </ul>
-  <div class="ms-3 locale_select">
+
+        <button class="navbar-toggler hamburger" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="navbar toggler" aria-controls="navbarNav" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto text-uppercase fw-bold">
+            <li class="nav-item">
+              <a class="nav-link navy primaryfont focusstyle" href="{% url 'index' %}#about">{% trans "About" %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link navy primaryfont focusstyle" href="{% url 'schedule' %}">{% trans "Schedule" %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link navy primaryfont focusstyle" href="{% url 'blog_list' %}">{% trans "Blog" %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link navy primaryfont focusstyle" href="{% url 'contact' %}">{% trans "Contact" %}</a>
+            </li>
+          </ul>
+
+          <div class="ms-3 locale_select">
             <form action="{% url 'set_language' %}" method="post" style="display:inline;">
               {% csrf_token %}
               <input type="hidden" name="language" value="en">
               <input type="hidden" name="next" value="{{ request.path }}">
-              <button type="submit" class="py-2 lang-but">
+              <button type="submit" class="py-2 lang-but" aria-label="{% trans 'Switch to English' %}">
                 <img src="https://flagcdn.com/16x12/gb.png" alt="{% trans 'English' %}" class="locale_img" style="cursor:pointer;">
               </button>
             </form>
@@ -82,14 +94,13 @@
               {% csrf_token %}
               <input type="hidden" name="language" value="it">
               <input type="hidden" name="next" value="{{ request.path }}">
-              <button type="submit" class="py-2 lang-but">
+              <button type="submit" class="py-2 lang-but" aria-label="{% trans 'Switch to Italian' %}">
                 <img src="https://flagcdn.com/16x12/it.png" class="locale_img" alt="{% trans 'Italian' %}" style="cursor:pointer;">
               </button>
             </form>
           </div>
         </div>
       </div>
-</div>    
     </nav>
   </header>
 
@@ -97,13 +108,13 @@
     {% block content %}{% endblock %}
   </main>
 
-  
   <footer class="container-fluid row-border-red mt-5 pt-4 pb-4 navy-bg">
-    <div class="row text-center text-md-start gutterless-row ">
-
+    <div class="row text-center text-md-start gutterless-row">
       <!-- Logo Column -->
       <div class="col-12 col-lg-3 order-1 d-flex flex-column align-items-center justify-content-center">
-        <img src="{% static 'compressed/logofull.webp' %}" class="footer-logo border" aria-label="{% trans 'The English Studio Logo - Navigate Home' %}">
+        <img src="{% static 'compressed/logofull.webp' %}" class="footer-logo border"
+             alt="{% trans 'The English Studio logo' %}"
+             aria-label="{% trans 'The English Studio Logo - Navigate Home' %}">
       </div>
 
       <!-- Address Column -->
@@ -135,29 +146,46 @@
         <div class="d-flex flex-wrap flex-row flex-lg-column align-items-center justify-content-center text-center">
           <a href="{% url 'index' %}#about" class="focusstyle px-1 body-text off-white">{% trans "About" %}</a>
           <a href="{% url 'blog_list' %}" class="focusstyle px-1 body-text off-white">{% trans "Blog" %}</a>
-          <a href="{% url 'schedule' %}" class="focusstyle px-1  body-text off-white">{% trans "Schedule" %}</a>
+          <a href="{% url 'schedule' %}" class="focusstyle px-1 body-text off-white">{% trans "Schedule" %}</a>
           <a href="{% url 'contact' %}" class="focusstyle px-1 body-text off-white">{% trans "Contact" %}</a>
           <a href="{% url 'portal:portal_login' %}" class="focusstyle px-1 body-text off-white">{% trans "Staff" %}</a>
         </div>
       </div>
-
     </div>
-    <div class="row text-center mt-2">
-        <a href="{% url 'privacy' %}" class="red-hover off-white mini-text">{% trans "Privacy Policy" %}</a>
-        <div class="mt-1 text-center off-white mini-text">
-            © <span id="currentYear"></span> 
-        <span id="currentYear"></span> {% trans "The English Studio" %}
-        </div>
-          <br>
-          <div class="mt-1 text-center off-white mini-text">
-          <a href="https://piffy.studio" target="_blank" rel="noopener" class="red-hover off-white">{% trans "Made with ♥ by Kim Piffy" %}</a>
-        </div>
-</footer>
 
-  <!-- Bootstrap JS -->
+    <div class="row text-center mt-2">
+      <a href="{% url 'privacy' %}" class="red-hover off-white mini-text">{% trans "Privacy Policy" %}</a>
+      <div class="mt-1 text-center off-white mini-text">
+        © <span id="currentYear"></span> {% trans "The English Studio" %}
+      </div>
+      <br>
+      <div class="mt-1 text-center off-white mini-text">
+        <a href="https://piffy.studio" target="_blank" rel="noopener" class="red-hover off-white">{% trans "Made with ♥ by Kim Piffy" %}</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS (bundle includes Popper) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Auto-dismiss alerts AFTER Bootstrap is available -->
+  <script>
+    window.addEventListener('load', function () {
+      if (!window.bootstrap) return;
+      setTimeout(function () {
+        document.querySelectorAll('.alert.show').forEach(function (a) {
+          try { new bootstrap.Alert(a).close(); } catch (e) {}
+        });
+      }, 3000);
+      // Footer year
+      var y = document.getElementById('currentYear');
+      if (y) y.textContent = new Date().getFullYear();
+    });
+  </script>
+
+  <!-- Site JS -->
   <script src="{% static 'js/base.js' %}"></script>
 
-   {% block extra_js %}{% endblock %}
+  {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -2,6 +2,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -72,6 +73,7 @@ def portal_user_create(request):
             form.save()
             messages.success(request, "User created successfully.")
             return redirect('portal:portal_users')
+        messages.error(request, "Please fix the errors below.")
     else:
         form = PortalUserCreateForm()
     return render(request, "portal/create_user.html", {"form": form})
@@ -85,23 +87,21 @@ def portal_user_edit(request, user_id: int):
     is_target_owner = is_portal_owner(target)
 
     if request.method == "POST":
-        form = PortalUserUpdateForm(
-            request.POST,
-            instance=target
-        )
+        form = PortalUserUpdateForm(request.POST, instance=target)
         if form.is_valid():
             if (
                 is_target_owner
                 and not form.cleaned_data.get("is_active", True)
             ):
                 messages.error(
-                    request,
-                    "You cannot deactivate the owner account."
+                    request, "You cannot deactivate the owner account."
                 )
             else:
                 form.save()
                 messages.success(request, "User updated.")
                 return redirect('portal:portal_users')
+        else:
+            messages.error(request, "Please fix the errors below.")
     else:
         form = PortalUserUpdateForm(instance=target)
 
@@ -164,10 +164,16 @@ class BlogListView(LoginRequiredMixin, StaffRequiredMixin, ListView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class BlogCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
+class BlogCreateView(
+    LoginRequiredMixin,
+    StaffRequiredMixin,
+    SuccessMessageMixin,
+    CreateView
+):
     model = BlogPost
     form_class = BlogPostForm
     template_name = 'blog/form.html'
+    success_message = "Post created."
 
     def dispatch(self, request, *args, **kwargs):
         resp = _require_group_or_redirect(request, "BLOG")
@@ -179,11 +185,17 @@ class BlogCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
         return reverse_lazy('portal:blog_edit', kwargs={'pk': self.object.pk})
 
 
-class BlogUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
+class BlogUpdateView(
+    LoginRequiredMixin,
+    StaffRequiredMixin,
+    SuccessMessageMixin,
+    UpdateView
+):
     model = BlogPost
     form_class = BlogPostForm
     template_name = 'blog/form.html'
     success_url = reverse_lazy('portal:blog_list')
+    success_message = "Post updated."
 
     def dispatch(self, request, *args, **kwargs):
         resp = _require_group_or_redirect(request, "BLOG")
@@ -202,6 +214,10 @@ class BlogDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
         if resp:
             return resp
         return super().dispatch(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, "Post deleted.")
+        return super().delete(request, *args, **kwargs)
 
 
 # ===== Flyers CRUD (staff/owner + FLYERS) =====
@@ -270,6 +286,7 @@ class FlyerCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
         print("FILES KEYS:", list(self.request.FILES.keys()))
         print("POST KEYS:", list(self.request.POST.keys()))
         print("FORM ERRORS JSON:", form.errors.as_json())
+        messages.error(self.request, "Please fix the errors below.")
         return super().form_invalid(form)
 
     def form_valid(self, form):
@@ -288,6 +305,7 @@ class FlyerCreateView(LoginRequiredMixin, StaffRequiredMixin, CreateView):
             getattr(img, "name", None),
             getattr(img, "url", None)
         )
+        messages.success(self.request, "Flyer created.")
         return redirect(self.get_success_url())
 
 
@@ -315,6 +333,7 @@ class FlyerUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
         print("FILES KEYS:", list(self.request.FILES.keys()))
         print("POST KEYS:", list(self.request.POST.keys()))
         print("FORM ERRORS JSON:", form.errors.as_json())
+        messages.error(self.request, "Please fix the errors below.")
         return super().form_invalid(form)
 
     def form_valid(self, form):
@@ -327,6 +346,7 @@ class FlyerUpdateView(LoginRequiredMixin, StaffRequiredMixin, UpdateView):
             getattr(img, "name", None),
             getattr(img, "url", None)
         )
+        messages.success(self.request, "Flyer updated.")
         return response
 
 
@@ -340,6 +360,10 @@ class FlyerDeleteView(LoginRequiredMixin, StaffRequiredMixin, DeleteView):
         if resp:
             return resp
         return super().dispatch(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, "Flyer deleted.")
+        return super().delete(request, *args, **kwargs)
 
 
 # ===== Flyers drag-and-drop reorder =====

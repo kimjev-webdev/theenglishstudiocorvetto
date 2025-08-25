@@ -8,14 +8,9 @@
 
   <!-- Page header -->
   <div class="row align-items-center mb-4">
-    <div class="col">
+    <div class="col-12">
       <h1 class="primaryfont head-navy mb-1">{% trans "Privacy Policy" %}</h1>
       <p class="text-muted mb-0 small">{% trans "Last updated" %}: 25 August 2025</p>
-    </div>
-    <div class="col-auto">
-      <a href="{% url 'contact' %}" class="btn btn-red primaryfont">
-        {% trans "Contact us" %}
-      </a>
     </div>
   </div>
 
@@ -269,6 +264,12 @@
           <p class="body-text navy mb-0"><strong>{% trans "Address" %}:</strong> via oglio 3, milan, italy</p>
         </div>
       </section>
+
+       <div class="col-12">
+      <a href="{% url 'contact' %}" class="btn btn-red primaryfont">
+        {% trans "Contact us" %}
+      </a>
+    </div>
 
       <div class="text-center">
         <a href="#top" class="btn btn-outline-secondary">{% trans "Back to top" %}</a>
