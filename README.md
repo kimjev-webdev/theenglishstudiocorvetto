@@ -8,6 +8,8 @@ The English Studio is a fully functioning, full-stack web application built for 
 Key features include:
 * A fully integrated blog system that allows staff to create, edit, and delete posts through a custom frontend portal.
 * A dynamic class and events scheduling system with full CRUD (Create, Read, Update, Delete) operations, enabling administrators to manage weekly lessons, special events, and recurring activities via an intuitive interface.
+* A flyer upload system that allows staff to create, read, update, delete and reorder the flyers.
+* An administrator profile for the owner which allows them to create further staff profiles via their portal login. 
 * A secure staff portal at /portal, providing private access to internal tools without exposing Django’s admin interface.
 * Seamless frontend-backend integration, with JavaScript fetch requests powering smooth, interactive updates to blog posts and schedule entries.
 * All data is stored in a PostgreSQL database hosted on Render, with a clean, normalized schema designed to reflect complex user stories and relationships between classes, events, and recurring schedules.
@@ -35,7 +37,23 @@ By combining professional design with custom backend development, the platform e
 * Streamline Communication through a categorized contact form and optional newsletter sign-up (Mailchimp).
 * Uphold Accessibility and Responsiveness so the site is usable across devices and considerate of diverse user needs.
 
+<<<<<<< HEAD
 <h3>2. User Profiles</h3>
+=======
+* Support School Growth by ensuring the site can scale as the business grows, including room for new features such as student logins. 
+
+* Deliver a Professional First Impression by establishing trust with potential clients through a polished, modern design and clear messaging.
+
+* Promote Local and International Visibility by helping local residents and international users find and learn about the school online through optimized structure and engaging content.
+
+* Ensure Data Security and Stability by storing and manage all backend data reliably using PostgreSQL and Django, with secure staff access through a private portal.
+
+* Streamline Communication by providing a contact form with categorised inquiries and optional newsletter sign-up, reducing manual admin and improving response workflows.
+
+* Uphold Accessibility and Responsiveness by making sure the website is usable across all devices and accessible to users with diverse needs and abilities.
+
+<h3> 2. User Profiles </h3>
+>>>>>>> 827d424a7f2dbd549d526cbddce805690eadc11c
 
 #### Parents of Young Learners (Primary Audience)
 Adults seeking fun, safe, and educational after-school activities for children aged 6–10.
@@ -253,7 +271,9 @@ The primary custom models are: `Class`, `Event`, `BlogPost`, and `Flyer`.
 
 The following ERD visualizes the relationships between the primary models in the project (`Class`, `Event`, `BlogPost`, `Flyer`, and `User`).  
 
-![Entity Relationship Diagram for The English Studio](readmefiles/erd.png)
+<img src="docs/erd.png" alt="Entity Relationship Diagram for The English Studio" width="800"/>
+
+*The diagram above was generated automatically using SchemaCrawler from the live PostgreSQL database.*
 
 <h2> TECHNOLOGIES USED </h2>
 
