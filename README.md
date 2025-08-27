@@ -37,23 +37,7 @@ By combining professional design with custom backend development, the platform e
 * Streamline Communication through a categorized contact form and optional newsletter sign-up (Mailchimp).
 * Uphold Accessibility and Responsiveness so the site is usable across devices and considerate of diverse user needs.
 
-<<<<<<< HEAD
-<h3>2. User Profiles</h3>
-=======
-* Support School Growth by ensuring the site can scale as the business grows, including room for new features such as student logins. 
-
-* Deliver a Professional First Impression by establishing trust with potential clients through a polished, modern design and clear messaging.
-
-* Promote Local and International Visibility by helping local residents and international users find and learn about the school online through optimized structure and engaging content.
-
-* Ensure Data Security and Stability by storing and manage all backend data reliably using PostgreSQL and Django, with secure staff access through a private portal.
-
-* Streamline Communication by providing a contact form with categorised inquiries and optional newsletter sign-up, reducing manual admin and improving response workflows.
-
-* Uphold Accessibility and Responsiveness by making sure the website is usable across all devices and accessible to users with diverse needs and abilities.
-
 <h3> 2. User Profiles </h3>
->>>>>>> 827d424a7f2dbd549d526cbddce805690eadc11c
 
 #### Parents of Young Learners (Primary Audience)
 Adults seeking fun, safe, and educational after-school activities for children aged 6–10.
@@ -269,18 +253,16 @@ The primary custom models are: `Class`, `Event`, `BlogPost`, and `Flyer`.
 
 <h3>3. Entity Relationship Diagram (ERD)</h3>
 
-The following ERD visualizes the relationships between the primary models in the project (`Class`, `Event`, `BlogPost`, `Flyer`, and `User`).  
+The following ERD visualizes the relationships between the models in the project.
 
 <img src="docs/erd.png" alt="Entity Relationship Diagram for The English Studio" width="800"/>
-
-*The diagram above was generated automatically using SchemaCrawler from the live PostgreSQL database.*
 
 <h2> TECHNOLOGIES USED </h2>
 
 <h3> 1. LANGUAGES </h3>
 - Python: Primary programming language for backend development using Django.  
 - HTML: Used for markup and templating in all site pages.  
-- CSS: Used for styling, layout adjustments, and custom visual design.  
+- CSS: Used for styling, layout adjustments, and custom visual design. 
 - JavaScript: Enables dynamic user interactions, form handling, and calendar logic.  
 
 <h3> 2. FRAMEWORKS </h3>
