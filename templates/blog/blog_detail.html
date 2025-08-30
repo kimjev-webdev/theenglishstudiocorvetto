@@ -41,15 +41,14 @@
 {% endif %}
 
       <div class="body-text navy blog-text clearfix">
-        {% if LANGUAGE_CODE == "it" %}
-          {{ post.body_it|clean_paragraphs }}
-        {% else %}
-          {{ post.body_en|clean_paragraphs }}
-        {% endif %}
-        <img src="{% static 'compressed/signature.webp' %}" alt="Leanne's signature" class="signature">
-      </div>
-    </div>
-  </div>
+  {% if LANGUAGE_CODE == "it" %}
+    {{ post.body_it|clean_paragraphs|safe }}
+  {% else %}
+    {{ post.body_en|clean_paragraphs|safe }}
+  {% endif %}
+  <img src="{% static 'compressed/signature.webp' %}" alt="Leanne's signature" class="signature">
+</div>
+
 
   <!-- Blog Post Navigation -->
   <div class="row justify-content-center mt-5">
