@@ -32,7 +32,7 @@ def contact_view(request):
                 f"Message:\n{data['message']}"
             )
 
-            # Sender/recipient from settings (avoid DMARC issues)
+            # Sender/recipient from settings
             from_addr = settings.DEFAULT_FROM_EMAIL
             to_addr = getattr(
                 settings,
@@ -40,10 +40,12 @@ def contact_view(request):
                 settings.DEFAULT_FROM_EMAIL,
             )
 
-            # Send email (fail loud; do not redirect on failure)
+            # Send email (render with error on failure)
             try:
                 msg = EmailMessage(
-                    subject=f"New Contact: {data['subject'].strip()}",
+                    subject=(
+                        f"New Contact: {data['subject'].strip()}"
+                    ),
                     body=body,
                     from_email=from_addr,
                     to=[to_addr],
@@ -60,7 +62,7 @@ def contact_view(request):
                     request,
                     (
                         "We couldn't deliver your message right now. "
-                        "Please try again shortly or email us directly at "
+                        "Please try again shortly or email us at "
                         f"{to_addr}."
                     ),
                 )
@@ -77,18 +79,19 @@ def contact_view(request):
                     status=500,
                 )
 
-            # Optional: subscribe to Mailchimp (non-blocking)
+            # Mailchimp (non-blocking, instant subscribe for new)
             if data.get("subscribe"):
-                api_key = getattr(
-                    settings, "MAILCHIMP_API_KEY", ""
-                ) or ""
-                list_id = getattr(
-                    settings, "MAILCHIMP_AUDIENCE_ID", ""
-                ) or ""
+                api_key = (
+                    getattr(settings, "MAILCHIMP_API_KEY", "") or ""
+                )
+                list_id = (
+                    getattr(settings, "MAILCHIMP_AUDIENCE_ID", "")
+                    or ""
+                )
 
                 if api_key and list_id:
                     try:
-                        dc = api_key.split("-")[-1]        # e.g. 'us9'
+                        dc = api_key.split("-")[-1]
                         email_lower = (
                             data["email"].strip().lower()
                         )
@@ -111,8 +114,9 @@ def contact_view(request):
                             headers=headers,
                             timeout=10,
                         )
+
                         if r.status_code == 404:
-                            # New → create as *subscribed* (instant)
+                            # New → subscribe instantly
                             up = {
                                 "email_address": email_lower,
                                 "status": "subscribed",
@@ -126,56 +130,18 @@ def contact_view(request):
                                 headers=headers,
                                 timeout=10,
                             ).raise_for_status()
+                            logger.info(
+                                "Mailchimp: subscribed new %s",
+                                email_lower,
+                            )
                         else:
                             r.raise_for_status()
                             status = (
                                 r.json().get("status") or ""
                             ).lower()
 
-                            if status != "subscribed":
-                                # Try to force subscribe; on compliance
-                                # failure fall back to "pending".
-                                try:
-                                    requests.put(
-                                        member_url,
-                                        json={
-                                            "status": "subscribed",
-                                            "merge_fields": {
-                                                "FNAME": data[
-                                                    "full_name"
-                                                ]
-                                            },
-                                        },
-                                        headers=headers,
-                                        timeout=10,
-                                    ).raise_for_status()
-                                except requests.HTTPError as e:
-                                    logger.warning(
-                                        "Mailchimp resubscribe blocked "
-                                        "(%s): %s — falling back to "
-                                        "'pending'",
-                                        getattr(
-                                            e.response, "status_code", "?"
-                                        ),
-                                        getattr(
-                                            e.response, "text", ""
-                                        ),
-                                    )
-                                    requests.put(
-                                        member_url,
-                                        json={
-                                            "status": "pending",
-                                            "merge_fields": {
-                                                "FNAME": data[
-                                                    "full_name"
-                                                ]
-                                            },
-                                        },
-                                        headers=headers,
-                                        timeout=10,
-                                    ).raise_for_status()
-                            else:
-                                # Already subscribed → refresh fields
+                            if status == "subscribed":
+                                # Refresh merge fields (best effort)
                                 try:
                                     requests.patch(
                                         member_url,
@@ -195,8 +161,45 @@ def contact_view(request):
                                         "failed",
                                         exc_info=True,
                                     )
+                            else:
+                                # Previously unsubscribed/cleaned → MC
+                                # may reject re-subscribe via API.
+                                try:
+                                    requests.put(
+                                        member_url,
+                                        json={
+                                            "status": "subscribed",
+                                            "merge_fields": {
+                                                "FNAME": data[
+                                                    "full_name"
+                                                ]
+                                            },
+                                        },
+                                        headers=headers,
+                                        timeout=10,
+                                    ).raise_for_status()
+                                    logger.info(
+                                        "Mailchimp: re-subscribed %s",
+                                        email_lower,
+                                    )
+                                except requests.HTTPError as e:
+                                    logger.warning(
+                                        "Mailchimp refused re-subscribe "
+                                        "(%s): %s",
+                                        getattr(
+                                            e.response,
+                                            "status_code",
+                                            "?",
+                                        ),
+                                        getattr(
+                                            e.response,
+                                            "text",
+                                            "",
+                                        ),
+                                    )
+                                    # No pending fallback per spec.
 
-                        # Optional: tag (best-effort)
+                        # Optional tag (best effort)
                         try:
                             requests.post(
                                 f"{base}/members/{sub_hash}/tags",
@@ -230,23 +233,23 @@ def contact_view(request):
                         )
                 else:
                     logger.info(
-                        "Mailchimp skipped: keys not configured"
+                        "Mailchimp skipped: API keys not configured"
                     )
 
-            # Success → trigger thank-you modal via ?sent=1
+            # Success → redirect with ?sent=1 (modal uses this)
             return redirect(f"{request.path}?sent=1")
 
-        # INVALID → show why
-        logger.info(
-            "Contact form invalid: %s",
-            dict(form.errors),
-        )
+        # Invalid form → show errors
         messages.error(
             request,
             "Please fix the errors below.",
         )
+        logger.info(
+            "Contact form invalid: %s",
+            dict(form.errors),
+        )
 
-    # Show modal if redirected with ?sent=1
+    # Modal toggle via query param
     show_modal = request.GET.get("sent") == "1"
 
     return render(
