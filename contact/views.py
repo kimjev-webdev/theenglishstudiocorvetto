@@ -99,7 +99,6 @@ def contact_view(request):
             return redirect(
                 f"{request.path}?sent=1"
             )  # 302 on success
-            return redirect(f"{request.path}?sent=1")  # 302 on success
 
         # INVALID → show why and return 400
         logger.info("Contact form invalid: %s", dict(form.errors))

@@ -50,15 +50,10 @@
         </div>
 
         <div class="mb-3">
-          <label for="phone" class="form-label body-text navy">{% trans "Phone" %}{% comment %} * (client-side) {% endcomment %}*</label>
-          <input
-            type="tel"
-            class="form-control body-text navy {% if form.errors.phone %}is-invalid{% endif %}"
-            id="phone"
-            name="phone"
-            required
-            value="{{ form.phone.value|default_if_none:'' }}"
-          >
+          <label for="phone" class="form-label body-text navy">
+          {% trans "Phone" %} <span class="text-muted">({% trans "optional" %})</span>
+          </label>
+          <input type="tel" class="form-control body-text navy {% if form.phone.errors %}is-invalid{% endif %}" id="phone" name="phone" value="{{ form.phone.value|default_if_none:'' }}" aria-required="false">
           {% if form.errors.phone %}
             <div class="invalid-feedback">{{ form.errors.phone.0 }}</div>
           {% endif %}
