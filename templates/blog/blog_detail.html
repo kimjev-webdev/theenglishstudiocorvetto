@@ -26,32 +26,32 @@
   <div class="row">
     <div class="col-12 col-md-10 offset-md-1 p-3">
       {% if post.featured_image and not post.video %}
-  <img src="{{ post.featured_image.url }}"
+      <img src="{{ post.featured_image.url }}"
        alt="{% if LANGUAGE_CODE == 'it' %}{{ post.title_it }}{% else %}{{ post.title_en }}{% endif %}"
        class="img-fluid w-100 w-md-auto rounded shadow-sm mb-3 me-md-4 float-md-start blogpicture">
-{% endif %}
+      {% endif %}
 
       {% if post.video %}
-  <div class="my-4 text-center">
+    <div class="my-4 text-center">
     <video controls class="w-100 rounded shadow-sm" style="max-width: 800px;">
       <source src="{{ post.video.url }}" type="video/mp4">
       Il tuo browser non supporta il tag video.
     </video>
-  </div>
-{% endif %}
+    </div>
+    {% endif %}
 
-      <div class="body-text navy blog-text clearfix">
-  {% if LANGUAGE_CODE == "it" %}
+    <div class="body-text navy blog-text clearfix">
+    {% if LANGUAGE_CODE == "it" %}
     {{ post.body_it|clean_paragraphs|safe }}
-  {% else %}
+    {% else %}
     {{ post.body_en|clean_paragraphs|safe }}
-  {% endif %}
-  <img src="{% static 'compressed/signature.webp' %}" alt="Leanne's signature" class="signature">
-</div>
+    {% endif %}
+     <img src="{% static 'compressed/signature.webp' %}" alt="Leanne's signature" class="signature">
+    </div>
 
 
-  <!-- Blog Post Navigation -->
-  <div class="row justify-content-center mt-5">
+    <!-- Blog Post Navigation -->
+    <div class="row justify-content-center mt-5">
     <div class="col-auto text-center">
       <div class="d-flex justify-content-center align-items-center gap-3">
         {% if next_post %}
@@ -66,6 +66,7 @@
       </div>
 
       <a href="{% url 'blog_list' %}" class="btn btn-navy primaryfont mt-3">Go Back</a>
+    </div>
     </div>
   </div>
 </div>
