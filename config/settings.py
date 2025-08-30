@@ -241,9 +241,12 @@ EMAIL_HOST_PASSWORD = os.getenv(
     "EMAIL_HOST_PASSWORD", ""
 )    # 16-char Gmail App Password
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "true").strip().lower() == "true"
-EMAIL_USE_SSL = (
-    os.getenv("EMAIL_USE_SSL", "false").strip().lower() == "true"
-)  # <-- FIXED
+EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "false").strip().lower() == "true"
+
+# guard (fail fast if misconfigured)
+if EMAIL_USE_TLS and EMAIL_USE_SSL:
+    raise RuntimeError("EMAIL_USE_TLS/EMAIL_USE_SSL are mutually exclusive.")
+
 EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "20"))
 
 # Keep From EXACTLY the authenticated account to avoid DMARC rejections
@@ -256,6 +259,10 @@ CONTACT_TO_EMAIL = os.getenv("CONTACT_TO_EMAIL", EMAIL_HOST_USER)
 # Safety: don't allow TLS and SSL at the same time
 if EMAIL_USE_TLS and EMAIL_USE_SSL:
     raise RuntimeError("Configure either TLS or SSL, not both")
+
+
+MAILCHIMP_API_KEY = os.getenv("MAILCHIMP_API_KEY", "")
+MAILCHIMP_AUDIENCE_ID = os.getenv("MAILCHIMP_AUDIENCE_ID", "")
 
 # ──────────────────────────────────────────────────────────────────────────────
 # CKEditor
