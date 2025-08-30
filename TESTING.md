@@ -56,8 +56,8 @@ https://www.instagram.com/theenglishstudio.corvetto
 https://www.facebook.com/ - unpersonalised will update when client creates business page
 
 ### JavaScript Console
-**Method:** Chrome DevTools → Console on each public page + portal pages.  
-**Scope:** Carousel interactions, tooltips, calendar navigation, portal forms (fetch).  
+**Method:** Chrome DevTools → Console on each public page + portal pages. Inline JS was also passed through JSHint
+
 **Result:** _<paste summary of errors/warnings found or “none”>_
 
 ### Accessibility (Lighthouse)

@@ -1,3 +1,6 @@
+/* jshint esversion: 6, node: true, devel: true, asi: true */
+/* jshint -W030, -W033 */
+
 // ===== CSRF helpers =====
 function getCookie(name) {
   let cookieValue = null;

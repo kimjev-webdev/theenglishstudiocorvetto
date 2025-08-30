@@ -1,3 +1,6 @@
+/* jshint esversion: 6, node: true, devel: true, asi: true */
+/* jshint -W030, -W033 */
+
 // main/static/js/flyers.js
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.querySelector('.flyer-cf');

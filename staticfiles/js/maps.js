@@ -1,3 +1,6 @@
+/* jshint esversion: 6, node: true, devel: true, asi: true */
+/* jshint -W030, -W033 */
+
 // main/static/js/maps.js
 
 // Exposed so the Google async loader (in the template) can call it safely.

@@ -1,3 +1,6 @@
+/* jshint esversion: 6, node: true, devel: true, asi: true */
+/* jshint -W030, -W033 */
+
 require("dotenv").config(); // Load .env variables
 
 const fs = require("fs");

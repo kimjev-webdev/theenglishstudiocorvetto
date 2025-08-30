@@ -1,3 +1,6 @@
+/* jshint esversion: 6, node: true, devel: true, asi: true */
+/* jshint -W030, -W033 */
+
 const burger = document.querySelector('.hamburger');
 const navbar = document.getElementById('navbarNav');
 
