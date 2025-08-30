@@ -2,26 +2,114 @@
 {% block content %}
 <div class="container mt-5">
   <h2>Create User</h2>
+
   <form method="post" novalidate>
     {% csrf_token %}
-    {{ form.non_field_errors }}
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger" role="alert">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
     <div class="row">
       <div class="col-md-6">
-        <div class="mb-3">{{ form.username.label_tag }} {{ form.username }} {{ form.username.errors }}</div>
-        <div class="mb-3">{{ form.email.label_tag }} {{ form.email }} {{ form.email.errors }}</div>
-        <div class="mb-3">{{ form.first_name.label_tag }} {{ form.first_name }} {{ form.first_name.errors }}</div>
-        <div class="mb-3">{{ form.last_name.label_tag }} {{ form.last_name }} {{ form.last_name.errors }}</div>
-        <div class="form-check mb-3">{{ form.is_active }} {{ form.is_active.label_tag }}</div>
+
+        <div class="mb-3">
+          {{ form.username.label_tag }}
+          {{ form.username }}
+          {% if form.username.help_text %}
+            <div id="{{ form.username.id_for_label }}_helptext" class="form-text">
+              {{ form.username.help_text|safe }}
+            </div>
+          {% endif %}
+          {{ form.username.errors }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.email.label_tag }}
+          {{ form.email }}
+          {% if form.email.help_text %}
+            <div id="{{ form.email.id_for_label }}_helptext" class="form-text">
+              {{ form.email.help_text|safe }}
+            </div>
+          {% endif %}
+          {{ form.email.errors }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.first_name.label_tag }}
+          {{ form.first_name }}
+          {% if form.first_name.help_text %}
+            <div id="{{ form.first_name.id_for_label }}_helptext" class="form-text">
+              {{ form.first_name.help_text|safe }}
+            </div>
+          {% endif %}
+          {{ form.first_name.errors }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.last_name.label_tag }}
+          {{ form.last_name }}
+          {% if form.last_name.help_text %}
+            <div id="{{ form.last_name.id_for_label }}_helptext" class="form-text">
+              {{ form.last_name.help_text|safe }}
+            </div>
+          {% endif %}
+          {{ form.last_name.errors }}
+        </div>
+
+        <div class="form-check mb-3">
+          {{ form.is_active }}
+          {{ form.is_active.label_tag }}
+          {% if form.is_active.help_text %}
+            <div id="{{ form.is_active.id_for_label }}_helptext" class="form-text">
+              {{ form.is_active.help_text|safe }}
+            </div>
+          {% endif %}
+          {{ form.is_active.errors }}
+        </div>
+
       </div>
       <div class="col-md-6">
         <h5>Password</h5>
-        <div class="mb-3">{{ form.password1.label_tag }} {{ form.password1 }} {{ form.password1.errors }}</div>
-        <div class="mb-3">{{ form.password2.label_tag }} {{ form.password2 }} {{ form.password2.errors }}</div>
+
+        <div class="mb-3">
+          {{ form.password1.label_tag }}
+          {{ form.password1 }}
+          {% if form.password1.help_text %}
+            <div id="{{ form.password1.id_for_label }}_helptext" class="form-text">
+              {{ form.password1.help_text|safe }}
+            </div>
+          {% endif %}
+          {{ form.password1.errors }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.password2.label_tag }}
+          {{ form.password2 }}
+          {% if form.password2.help_text %}
+            <div id="{{ form.password2.id_for_label }}_helptext" class="form-text">
+              {{ form.password2.help_text|safe }}
+            </div>
+          {% endif %}
+          {{ form.password2.errors }}
+        </div>
+
         <hr>
         <h5>Feature Access</h5>
-        <div class="mb-3">{{ form.features }} {{ form.features.errors }}</div>
+        <div class="mb-3">
+          {{ form.features }}
+          {% if form.features.help_text %}
+            <div id="{{ form.features.id_for_label }}_helptext" class="form-text">
+              {{ form.features.help_text|safe }}
+            </div>
+          {% endif %}
+          {{ form.features.errors }}
+        </div>
       </div>
     </div>
+
     <button type="submit" class="btn btn-primary">Create</button>
     <a href="{% url 'portal:portal_dashboard' %}" class="btn btn-secondary">Cancel</a>
   </form>
