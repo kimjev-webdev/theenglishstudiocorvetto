@@ -11,7 +11,13 @@
     <section class="col-md-6">
       <h2 class="primaryfont red text-center mb-2">{% trans "Contact Us" %}</h2>
 
-      <form method="POST" novalidate>
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} mb-3" role="alert">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="POST" action="{% url 'contact' %}" novalidate>
         {% csrf_token %}
         {% if form.non_field_errors %}
           <div class="alert alert-danger" role="alert">
@@ -20,54 +26,60 @@
         {% endif %}
 
         <div class="mb-3">
-          <label for="fullName" class="form-label body-text navy">{% trans "Full Name" %}*</label>
+          <label for="fullName" class="form-label body-text navy">{% trans "Full Name" %}{% if form.full_name.field.required %}<span class="text-danger">*</span>{% endif %}</label>
           <input
             type="text"
-            class="form-control body-text navy {% if form.errors.full_name %}is-invalid{% endif %}"
+            class="form-control body-text navy {% if form.full_name.errors %}is-invalid{% endif %}"
             id="fullName"
             name="full_name"
-            required
+            {% if form.full_name.field.required %}required{% endif %}
             value="{{ form.full_name.value|default_if_none:'' }}"
           >
-          {% if form.errors.full_name %}
-            <div class="invalid-feedback">{{ form.errors.full_name.0 }}</div>
+          {% if form.full_name.errors %}
+            <div class="invalid-feedback">{{ form.full_name.errors.0 }}</div>
           {% endif %}
         </div>
 
         <div class="mb-3">
-          <label for="email" class="form-label body-text navy">{% trans "Email" %}*</label>
+          <label for="email" class="form-label body-text navy">{% trans "Email" %}{% if form.email.field.required %}<span class="text-danger">*</span>{% endif %}</label>
           <input
             type="email"
-            class="form-control body-text navy {% if form.errors.email %}is-invalid{% endif %}"
+            class="form-control body-text navy {% if form.email.errors %}is-invalid{% endif %}"
             id="email"
             name="email"
-            required
+            {% if form.email.field.required %}required{% endif %}
             value="{{ form.email.value|default_if_none:'' }}"
           >
-          {% if form.errors.email %}
-            <div class="invalid-feedback">{{ form.errors.email.0 }}</div>
+          {% if form.email.errors %}
+            <div class="invalid-feedback">{{ form.email.errors.0 }}</div>
           {% endif %}
         </div>
 
         <div class="mb-3">
           <label for="phone" class="form-label body-text navy">
-          {% trans "Phone" %} <span class="text-muted">({% trans "optional" %})</span>
+            {% trans "Phone" %} <span class="text-muted">({% trans "optional" %})</span>
           </label>
-          <input type="tel" class="form-control body-text navy {% if form.phone.errors %}is-invalid{% endif %}" id="phone" name="phone" value="{{ form.phone.value|default_if_none:'' }}" aria-required="false">
-          {% if form.errors.phone %}
-            <div class="invalid-feedback">{{ form.errors.phone.0 }}</div>
+          <input
+            type="tel"
+            class="form-control body-text navy {% if form.phone.errors %}is-invalid{% endif %}"
+            id="phone"
+            name="phone"
+            value="{{ form.phone.value|default_if_none:'' }}"
+            aria-required="false"
+          >
+          {% if form.phone.errors %}
+            <div class="invalid-feedback">{{ form.phone.errors.0 }}</div>
           {% endif %}
         </div>
 
         <div class="mb-3">
-          <label for="subject" class="form-label body-text navy">{% trans "Subject" %}*</label>
-          {# Submit canonical values; show translated labels #}
+          <label for="subject" class="form-label body-text navy">{% trans "Subject" %}{% if form.subject.field.required %}<span class="text-danger">*</span>{% endif %}</label>
           {% with current=form.subject.value|default_if_none:'' %}
           <select
-            class="form-select body-text navy {% if form.errors.subject %}is-invalid{% endif %}"
+            class="form-select body-text navy {% if form.subject.errors %}is-invalid{% endif %}"
             id="subject"
             name="subject"
-            required
+            {% if form.subject.field.required %}required{% endif %}
           >
             <option value="">{% trans "Select an option" %}</option>
             <option value="After School Club" {% if current == "After School Club" %}selected{% endif %}>{% trans "After School Club" %}</option>
@@ -79,22 +91,22 @@
             <option value="Other" {% if current == "Other" %}selected{% endif %}>{% trans "Other" %}</option>
           </select>
           {% endwith %}
-          {% if form.errors.subject %}
-            <div class="invalid-feedback">{{ form.errors.subject.0 }}</div>
+          {% if form.subject.errors %}
+            <div class="invalid-feedback">{{ form.subject.errors.0 }}</div>
           {% endif %}
         </div>
 
         <div class="mb-3">
-          <label for="message" class="form-label body-text navy">{% trans "Message" %}*</label>
+          <label for="message" class="form-label body-text navy">{% trans "Message" %}{% if form.message.field.required %}<span class="text-danger">*</span>{% endif %}</label>
           <textarea
-            class="form-control body-text navy {% if form.errors.message %}is-invalid{% endif %}"
+            class="form-control body-text navy {% if form.message.errors %}is-invalid{% endif %}"
             id="message"
             name="message"
             rows="5"
-            required
+            {% if form.message.field.required %}required{% endif %}
           >{{ form.message.value|default_if_none:'' }}</textarea>
-          {% if form.errors.message %}
-            <div class="invalid-feedback">{{ form.errors.message.0 }}</div>
+          {% if form.message.errors %}
+            <div class="invalid-feedback">{{ form.message.errors.0 }}</div>
           {% endif %}
         </div>
 
@@ -137,7 +149,6 @@
         </ul>
       </div>
 
-      <!-- Google Map container with data attributes -->
       <div
         id="map"
         class="map"
@@ -175,7 +186,6 @@
 {% endblock %}
 
 {% block extra_js %}
-  <!-- Your site JS -->
   <script src="{% static 'js/maps.js' %}"></script>
   <script src="{% static 'js/contact.js' %}"></script>
 
@@ -183,30 +193,37 @@
   <script>
     (g => {
       var h, a, k, p = "The Google Maps JavaScript API",
-        c = "google", l = "importLibrary", q = "__ib__", m = document, b = window;
+          c = "google", l = "importLibrary", q = "__ib__", m = document, b = window;
       b = b[c] || (b[c] = {});
       var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams,
-        u = () => h || (h = new Promise(async (f, n) => {
-          await (a = m.createElement("script"));
-          e.set("libraries", [...r] + "");
-          for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]);
-          e.set("callback", c + ".maps." + q);
-          a.src = `https://maps.googleapis.com/maps/api/js?` + e;
-          d[q] = f; a.onerror = () => h = n(Error(p + " could not load."));
-          a.nonce = m.querySelector("script[nonce]")?.nonce || "";
-          m.head.append(a);
-        }));
+          u = () => h || (h = new Promise(async (f, n) => {
+            await (a = m.createElement("script"));
+            e.set("libraries", [...r] + "");
+            for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]);
+            e.set("callback", c + ".maps." + q);
+            a.src = `https://maps.googleapis.com/maps/api/js?` + e;
+            d[q] = f; a.onerror = () => h = n(Error(p + " could not load."));
+            a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+            m.head.append(a);
+          }));
       d[l] ? console.warn(p + " only loads once. Ignoring:", g) :
-        d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n));
+             d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n));
     })({ key: "{{ GOOGLE_MAPS_API_KEY }}", v: "weekly" });
   </script>
 
-  <!-- Boot the map after DOM is ready and loader is available -->
+  <!-- Bullet-proof modal trigger -->
   <script>
-    window.addEventListener("DOMContentLoaded", () => {
-      if (typeof window.initMap === "function") {
-        window.initMap();
+    (function () {
+      function showThankYou() {
+        var el = document.getElementById('thankYouModal');
+        if (!el) return;
+        var shouldShow = (el.getAttribute('data-show') || '').toLowerCase() === 'true';
+        if (!shouldShow) return;
+        if (window.bootstrap && window.bootstrap.Modal) {
+          new bootstrap.Modal(el).show();
+        }
       }
-    });
+      window.addEventListener('load', showThankYou);
+    }());
   </script>
 {% endblock %}
