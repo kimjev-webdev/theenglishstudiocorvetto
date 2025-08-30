@@ -230,22 +230,32 @@ EMAIL_BACKEND = os.getenv(
     else "django.core.mail.backends.smtp.EmailBackend"
 )
 
-# SMTP values are used when EMAIL_BACKEND is SMTP (Render/prod)
+# Gmail SMTP over STARTTLS (port 587)
 EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+EMAIL_HOST_USER = os.getenv(
+    "EMAIL_HOST_USER",
+    ""
+)  # your Gmail/Workspace address
 EMAIL_HOST_PASSWORD = os.getenv(
     "EMAIL_HOST_PASSWORD", ""
-)  # Gmail App Password
+)    # 16-char Gmail App Password
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "true").strip().lower() == "true"
-EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "false").strip().lower() == "false"
+EMAIL_USE_SSL = (
+    os.getenv("EMAIL_USE_SSL", "false").strip().lower() == "true"
+)  # <-- FIXED
 EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "20"))
 
-DEFAULT_FROM_EMAIL = os.getenv(
-    "DEFAULT_FROM_EMAIL",
-    EMAIL_HOST_USER or "noreply@theenglishstudiocorvetto.com"
-)
+# Keep From EXACTLY the authenticated account to avoid DMARC rejections
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
 SERVER_EMAIL = os.getenv("SERVER_EMAIL", DEFAULT_FROM_EMAIL)
+
+# Optional: where contact form should deliver
+CONTACT_TO_EMAIL = os.getenv("CONTACT_TO_EMAIL", EMAIL_HOST_USER)
+
+# Safety: don't allow TLS and SSL at the same time
+if EMAIL_USE_TLS and EMAIL_USE_SSL:
+    raise RuntimeError("Configure either TLS or SSL, not both")
 
 # ──────────────────────────────────────────────────────────────────────────────
 # CKEditor

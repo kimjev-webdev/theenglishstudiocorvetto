@@ -4,8 +4,7 @@
 The English Studio website has undergone extensive manual testing to ensure functionality, accessibility, and a smooth UX across devices. This document records **methods**, **steps**, and **results** for each area.
 
 - Codebase validated where applicable (HTML/CSS), and forms & views tested end-to-end.
-- Non-technical testers used the live site to simulate real usage.
-- Particular focus areas: **Calendar & Recurrence**, **Contact + Mailchimp**, **Blog CRUD**, **Flyers ordering**, **Portal auth**.
+- The website owner was the primary manual tester recorded herin. Other informal manual testers were enlisted and provided feedback on their experience, their findings are not recorded. 
 - A detailed bug/change log is maintained in **BUGLOG.md**.
 
 ---
@@ -13,19 +12,48 @@ The English Studio website has undergone extensive manual testing to ensure func
 ## 2. Validation <a id="validation"></a>
 
 ### HTML (W3C HTML5)
-**Method:** https://validator.w3.org/  
-**Scope:** `index.html`, `blog_list.html`, `blog_detail.html`, `calendar.html`, `contact.html`, `base.html`, and any portal templates you expose publicly.  
-**Result:** _<paste summary + key screenshots/notes>_
+**Results:** 
+
+| Page                    | Result                                                                                                           |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| blog/blog_detail.html   | <img src="readmefiles\devicetesting\htmltesting\blog_detail.html.png" width="250" style="object-fit:contain;"/> |
+| blog/blog_list.html     | <img src="readmefiles\devicetesting\htmltesting\blog_list.html.png" width="250" style="object-fit:contain;"/>   |
+| blog/form.html          | <img src="readmefiles\devicetesting\htmltesting\form.html.png" width="250" style="object-fit:contain;"/>        |
+| blog/list.html          | <img src="readmefiles\devicetesting\htmltesting\list.html.png" width="250" style="object-fit:contain;"/>        |
+| contact.html            | <img src="readmefiles\devicetesting\htmltesting\contact.html.png" width="250" style="object-fit:contain;"/>     |
+| flyers/flyer_form.html  | <img src="readmefiles\devicetesting\htmltesting\flyer_form.html.png" width="250" style="object-fit:contain;"/>  |
+| flyers/flyers_list.html | <img src="readmefiles\devicetesting\htmltesting\flyers_list.html.png" width="250" style="object-fit:contain;"/> |
+| flyers/reorder.html     | <img src="readmefiles\devicetesting\htmltesting\reorder.html.png" width="250" style="object-fit:contain;"/>     |
+| index.html              | <img src="readmefiles\devicetesting\htmltesting\index.html.png" width="250" style="object-fit:contain;"/>       |
+| portal/create_user.html | <img src="readmefiles\devicetesting\htmltesting\create_user.html.png" width="250" style="object-fit:contain;"/> |
+| portal/dashboard.html   | <img src="readmefiles\devicetesting\htmltesting\dashboard.html.png" width="250" style="object-fit:contain;"/>   |
+| portal/edit_user.html   | <img src="readmefiles\devicetesting\htmltesting\edit_user.html.png" width="250" style="object-fit:contain;"/>   |
+| portal/login.html       | <img src="readmefiles\devicetesting\htmltesting\login.html.png" width="250" style="object-fit:contain;"/>       |
+| portal/user_list.html   | <img src="readmefiles\devicetesting\htmltesting\user_list.html.png" width="250" style="object-fit:contain;"/>   |
+| schedule/calendar.html  | <img src="readmefiles\devicetesting\htmltesting\calendar.html.png" width="250" style="object-fit:contain;"/>    |
+| schedule/event_list.html| <img src="readmefiles\devicetesting\htmltesting\event_list.html.png" width="250" style="object-fit:contain;"/>  |
 
 ### CSS (W3C Jigsaw)
 **Method:** https://jigsaw.w3.org/css-validator/  
-**Scope:** All compiled CSS served in production (include any Bootstrap overrides).  
-**Result:** _<paste summary>_
+**Scope:** All compiled CSS served in production (including any Bootstrap overrides).  
+**Result:** 
+CSS passed through the jigsaw validation checker with no errors. To better understand the purpose of each rule in the CSS file, refer to the comments which accompany every rule. 
+<p>
+    <a href="https://jigsaw.w3.org/css-validator/check/referer">
+        <img style="border:0;width:88px;height:31px"
+            src="https://jigsaw.w3.org/css-validator/images/vcss"
+            alt="Valid CSS!" />
+    </a>
+</p>
 
 ### Links (W3C Link Checker)
 **Method:** https://validator.w3.org/checklink  
-**Scope:** Public pages (Home, Blog, Schedule, Contact, Privacy).  
-**Result:** _<paste summary>_
+**Result:** 
+All links passed through the validator with the exception of 3 social links located in the footer (located at base.html) due to robots exclusion rules.
+These 3 links were manually tested and validated:
+https://www.linkedin.com/ - unpersonalised will update when client creates an account.
+https://www.instagram.com/theenglishstudio.corvetto
+https://www.facebook.com/ - unpersonalised will update when client creates business page
 
 ### JavaScript Console
 **Method:** Chrome DevTools → Console on each public page + portal pages.  
@@ -78,9 +106,8 @@ contact.html | <img src="readmefiles\devicetesting\public\contact.html\iPhone-13
 
 ---
 
-## 4. Manual Testing <a id="manual"></a>
+## 4. Manual Testing by Business Owner <a id="manual"></a>
 
-> Fill Expected vs Actual for each test. Attach screenshots where helpful.
 
 ### A. Internationalization (EN/IT)
 | Step | Expected | Actual | Pass | Notes |
