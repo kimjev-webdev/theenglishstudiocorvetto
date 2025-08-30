@@ -6,6 +6,7 @@ from django.core.mail import EmailMessage
 from .forms import ContactForm
 import requests
 import logging
+import hashlib
 
 logger = logging.getLogger(__name__)
 
@@ -27,15 +28,13 @@ def contact_view(request):
                 f"Message:\n{data['message']}"
             )
 
-            # Use settings; don't hard-code Gmail here
+            # Sender/recipient from settings (avoid DMARC issues)
             from_addr = settings.DEFAULT_FROM_EMAIL
             to_addr = getattr(
-                settings,
-                "CONTACT_TO_EMAIL",
-                settings.DEFAULT_FROM_EMAIL,
+                settings, "CONTACT_TO_EMAIL", settings.DEFAULT_FROM_EMAIL
             )
 
-            # Try to send the email; if it fails, stay on page and show error
+            # Send email (fail loud; do not redirect on failure)
             try:
                 msg = EmailMessage(
                     subject=f"New Contact: {data['subject'].strip()}",
@@ -50,57 +49,100 @@ def contact_view(request):
             except Exception:
                 logger.exception("Contact email failed to send")
                 messages.error(
-                    request,
-                    "We couldn't deliver your message right now. "
                     f"Please try again shortly or email us directly at "
                     f"{to_addr}."
+                    "We couldn't deliver your message right now. "
+                    (
+                        f"Please try again shortly or email us directly at "
+                        f"{to_addr}."
+                    )
                 )
-                return render(
-                    request,
-                    "contact.html",
-                    {
-                        "form": form,
-                        "show_modal": False,
-                        "GOOGLE_MAPS_API_KEY": settings.GOOGLE_MAPS_API_KEY,
-                    },
-                    status=500,
-                )
+            return render(
+                request,
+                "contact.html",
+                {
+                    "form": form,
+                    "show_modal": False,
+                    "GOOGLE_MAPS_API_KEY": settings.GOOGLE_MAPS_API_KEY,
+                },
+            )
+            # Optional: subscribe to Mailchimp (non-blocking,
+            # idempotent upsert)
 
-            # Optional: subscribe to Mailchimp (non-blocking)
+            # Optional: subscribe to Mailchimp (non-blocking,
+            # idempotent upsert)
             if data.get("subscribe"):
-                api_key = getattr(settings, "MAILCHIMP_API_KEY", None)
-                list_id = getattr(settings, "MAILCHIMP_AUDIENCE_ID", None)
+                api_key = getattr(settings, "MAILCHIMP_API_KEY", "") or ""
+                list_id = getattr(settings, "MAILCHIMP_AUDIENCE_ID", "") or ""
                 if api_key and list_id:
                     try:
-                        dc = api_key.split("-")[-1]
-                        url = (
+                        dc = api_key.split("-")[-1]  # e.g. 'us9'
+                        email_lower = data["email"].strip().lower()
+                        sub_hash = hashlib.md5(
+                            email_lower.encode()
+                        ).hexdigest()
+                        base = (
                             f"https://{dc}.api.mailchimp.com/3.0/lists/"
-                            f"{list_id}/members"
+                            f"{list_id}"
                         )
+                        url = f"{base}/members/{sub_hash}"
                         payload = {
-                            "email_address": data["email"],
-                            "status": "subscribed",
+                            "email_address": email_lower,
+                            "status_if_new": "pending",
                             "merge_fields": {"FNAME": data["full_name"]},
                         }
                         headers = {"Authorization": f"apikey {api_key}"}
-                        r = requests.post(
+                        r = requests.put(
                             url,
                             json=payload,
                             headers=headers,
                             timeout=10,
                         )
                         r.raise_for_status()
+
+                        # Optional: tag the contact (ignore failures)
+                        try:
+                            tags_url = f"{base}/members/{sub_hash}/tags"
+                            requests.post(
+                                tags_url,
+                                json={
+                                    "tags": [
+                                        {
+                                            "name": "Website",
+                                            "status": "active"
+                                        }
+                                    ]
+                                },
+                                headers=headers,
+                                timeout=10,
+                            )
+                        except Exception:
+                            logger.info(
+                                "Mailchimp tag add failed", exc_info=True
+                            )
+
+                    except requests.HTTPError as e:
+                        # Log exact Mailchimp error
+                        try:
+                            err_text = e.response.text
+                        except Exception:
+                            err_text = "<no response body>"
+                        logger.warning(
+                            "Mailchimp upsert failed %s: %s",
+                            getattr(e.response, "status_code", "?"),
+                            err_text,
+                        )
                     except Exception:
-                        # Log but don't block the flow
                         logger.warning(
                             "Mailchimp subscribe failed", exc_info=True
                         )
+                else:
+                    logger.info("Mailchimp skipped: keys not configured")
 
-            return redirect(
-                f"{request.path}?sent=1"
-            )  # 302 on success
+            # Success
+            return redirect(f"{request.path}?sent=1")  # 302 on success
 
-        # INVALID → show why and return 400
+        # INVALID → show why
         logger.info("Contact form invalid: %s", dict(form.errors))
         messages.error(request, "Please fix the errors below.")
 
