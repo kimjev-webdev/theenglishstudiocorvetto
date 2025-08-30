@@ -37,7 +37,11 @@ By combining professional design with custom backend development, the platform e
 * Streamline Communication through a categorized contact form and optional newsletter sign-up (Mailchimp).
 * Uphold Accessibility and Responsiveness so the site is usable across devices and considerate of diverse user needs.
 
+<<<<<<< HEAD
 <h3>2. User Profiles</h3>
+=======
+<h3> 2. User Profiles </h3>
+>>>>>>> 04e39eb87039c81ee08f5667b55ec1bdef6eadde
 
 #### Parents of Young Learners (Primary Audience)
 Adults seeking fun, safe, and educational after-school activities for children aged 6–10.
@@ -253,18 +257,16 @@ The primary custom models are: `Class`, `Event`, `BlogPost`, and `Flyer`.
 
 <h3>3. Entity Relationship Diagram (ERD)</h3>
 
-The following ERD visualizes the relationships between the primary models in the project (`Class`, `Event`, `BlogPost`, `Flyer`, and `User`).  
+The following ERD visualizes the relationships between the models in the project.
 
 <img src="docs/erd.png" alt="Entity Relationship Diagram for The English Studio" width="800"/>
-
-*The diagram above was generated automatically using SchemaCrawler from the live PostgreSQL database.*
 
 <h2> TECHNOLOGIES USED </h2>
 
 <h3> 1. LANGUAGES </h3>
 - Python: Primary programming language for backend development using Django.  
 - HTML: Used for markup and templating in all site pages.  
-- CSS: Used for styling, layout adjustments, and custom visual design.  
+- CSS: Used for styling, layout adjustments, and custom visual design. 
 - JavaScript: Enables dynamic user interactions, form handling, and calendar logic.  
 
 <h3> 2. FRAMEWORKS </h3>
