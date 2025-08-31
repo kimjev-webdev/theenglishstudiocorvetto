@@ -61,11 +61,7 @@ https://www.instagram.com/theenglishstudio.corvetto
 https://www.facebook.com/ - unpersonalised will update when client creates business page.
 
 ### JavaScript Console
-**Method:** Chrome DevTools → Console on each public page + portal pages. 
-
-**Result:** 
-
-Inline JS was also passed through JSHint
+**Method:** Inline JS was passed through JSHint.
 
 **Results:** 
 | Page                  | Screenshot                                                                                 | Notes |
@@ -131,8 +127,10 @@ contact.html | <img src="readmefiles\devicetesting\public\contact.html\iPhone-13
 
 ---
 
-## 4. Manual Testing by Business Owner <a id="manual"></a>
+## 4. Manual Device Testing by Business Owner <a id="manual"></a>
 
+
+## 5. Manual Testing Checklist 
 
 ### A. Internationalization (EN/IT)
 | Step | Expected | Actual | Pass | Notes |
@@ -217,7 +215,7 @@ contact.html | <img src="readmefiles\devicetesting\public\contact.html\iPhone-13
 
 ---
 
-## 5. User Story Testing <a id="user"></a>
+## 6. User Story Testing <a id="user"></a>
 
 Map each story in the README to concrete tests above.
 
@@ -235,27 +233,11 @@ _Add any extra stories you listed and link to the table rows above._
 
 ---
 
-## 6. Performance (Lighthouse)
-Run Lighthouse (Mobile + Desktop) on: Home, Blog Detail, Calendar, Contact.  
-Record scores and any remediation done.
-
-| Page | Perf | Access | Best Prac | SEO | Notes/Actions |
-|------|------|--------|-----------|-----|---------------|
-| Home | _ | _ | _ | _ | _ |
-| Blog Detail | _ | _ | _ | _ | _ |
-| Calendar | _ | _ | _ | _ | _ |
-| Contact | _ | _ | _ | _ | _ |
-
----
-
 ## 7. Known Issues & Bug Log
 - See **BUGLOG.md** for a detailed overview of bugs which have been addressed throughout the project build.
 - Outstanding issues (snapshot):  
   - 'collectstatic' leaves un-hashed duplicates (e.g., js/base.js) alongside hashed assets (e.g., js/base.43e960740ca8.js) inside the staticfiles folder. This has no impact at runtime because templates resolve hashed paths via {% static %} and WhiteNoise serves the manifest-fingerprinted files. This is simply a cosmetic mess in STATIC_ROOT which remains unresolved due to the project deadline. 
   - Semantics are often generalized throughout this project, primarily opting for 'div' - this issue does not relate to the project focus on database management and will therefore be handled post project deadline. The developer has a good understanding of semantics and intends to update the specificity across all templates from October 2025. 
+  - CSS styling is not applied universally throughout the portal pages. Some styling improvements could be made to enhance the UX for the site owner. Styling contingency for the portal will be implemented post hand in from October 2025. 
 
 
-
-## 8. User Story Testing
-
-### Django Unit Tests
