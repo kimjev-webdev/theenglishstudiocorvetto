@@ -252,6 +252,10 @@ Date        | Bug                                               | Focus         
 | 2025-08-31 | Thank-you modal script inline in contact template  | JS (Contact)  | Rebuilt into `contact.js`, with fallback checks for Bootstrap load.                                            | Modal displays correctly on form submission; bullet-proof trigger.     |
 | 2025-08-31 | Smooth scroll sidebar links inline in privacy page | JS (Privacy)  | Extracted into `privacy.js`, attached `DOMContentLoaded` listener.                                             | Sidebar anchors scroll smoothly; headings update URL fragment cleanly. |
 | 2025-08-31 | Google Maps loader + init block inline in template | JS (Maps)     | Drafted consolidated `maps.js` (async loader + init). Key remains inline via config object.                    | Optional; map renders via `maps.js`; template reduced to config only.  |
+| 2025-08-31 | Restored pre-split files for stability       | Git/Deploy      | `git restore --source=2ee1377` for `schedule.js` and `event_list.html`; redeployed.                | Admin pages back to known-good baseline. |                           |
+| 2025-08-31 | Event/Class delete previously 404 → now 200  | URLs/Backend    | Confirmed by logs: \`POST /en/schedule/portal/\_/(events                                           | classes)/<id>/delete/\` returns **200**. | Delete actions succeeded. |
+| 2025-08-31 | Contact modal leaves page dark after closing | Bootstrap Modal | Double `show()` (DOM ready + window load). Added single-show guard + cleanup on `hidden.bs.modal`. | Overlay/backdrop no longer persists.     |                           |
+
 
 
 
