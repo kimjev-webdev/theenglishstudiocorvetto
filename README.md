@@ -228,7 +228,7 @@ The navy/red are slightly muted to feel professional; the off-white background s
   | Page                    | Result                                                                                           |
 | ----------------------- | ------------------------------------------------------------------------------------------------ |
 | blog/blog_detail.html   | <img src="readmefiles/blog_detail.JPG" width="250"/>                                             |
-| blog/blog_list.html     | <img src="readmefiles/blog_list.html.JPG" width="250"/>                                          |
+| blog/blog_list.html     | <img src="readmefiles/blog_list.JPG" width="250"/>                                          |
 | blog/form.html          | <img src="readmefiles/form.JPG" width="250"/>                                                    |
 | blog/list.html          | <img src="readmefiles/list.JPG" width="250"/>                                                    |
 | contact.html            | <img src="readmefiles/contact.JPG" width="250"/>                                                 |
