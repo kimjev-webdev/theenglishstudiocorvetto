@@ -224,24 +224,27 @@ The navy/red are slightly muted to feel professional; the off-white background s
 
 
 <details><summary>WIREFRAMES:</summary>
-| Page  | Result |
-| ----------------------- | ----------------------- | 
-| blog/blog_detail.html   | <img src="readmefiles\blog_detail.JPG" width="250" style="object-fit:contain;"/> |
-| blog/blog_list.html     | <img src="readmefiles\blog_list.html.JPG" width="250" style="object-fit:contain;"/>   |
-| blog/form.html          | <img src="readmefiles\form.JPG" width="250" style="object-fit:contain;"/>        |
-| blog/list.html          | <img src="readmefiles\list.JPG" width="250" style="object-fit:contain;"/>        |
-| contact.html            | <img src="readmefiles\contact.JPG" width="250" style="object-fit:contain;"/>     |
-| flyers/flyer_form.html  | <img src="readmefiles\flyer_form.JPG" width="250" style="object-fit:contain;"/>  |
-| flyers/flyers_list.html | <img src="readmefiles\flyers_list.JPG" width="250" style="object-fit:contain;"/> |
-| flyers/reorder.html     | I did not draw a wireframe for this I just assumed I would use a drag and drop list  |
-| index.html              | <img src="readmefiles\index1.JPG" width="250" style="object-fit:contain;"/> <img src="readmefiles\index2.JPG" width="250" style="object-fit:contain;"/>     |
-| portal/create_user.html | <img src="readmefiles\create_user.JPG" width="250" style="object-fit:contain;"/> |
-| portal/dashboard.html   | <img src="readmefiles\dashboard.JPG" width="250" style="object-fit:contain;"/>   |
-| portal/edit_user.html   | <img src="readmefiles\edit_user.JPG" width="250" style="object-fit:contain;"/>   |
-| portal/login.html       | <img src="readmefiles\login.JPG" width="250" style="object-fit:contain;"/>       |
-| portal/user_list.html   | <img src="readmefiles\user_list.JPG" width="250" style="object-fit:contain;"/>   |
-| schedule/calendar.html  | <img src="readmefiles\calendar.JPG" width="250" style="object-fit:contain;"/>    |
-| schedule/event_list.html| <img src="readmefiles\event_list.JPG" width="250" style="object-fit:contain;"/>  |
+
+  | Page                    | Result                                                                                           |
+| ----------------------- | ------------------------------------------------------------------------------------------------ |
+| blog/blog_detail.html   | <img src="readmefiles/blog_detail.JPG" width="250"/>                                             |
+| blog/blog_list.html     | <img src="readmefiles/blog_list.html.JPG" width="250"/>                                          |
+| blog/form.html          | <img src="readmefiles/form.JPG" width="250"/>                                                    |
+| blog/list.html          | <img src="readmefiles/list.JPG" width="250"/>                                                    |
+| contact.html            | <img src="readmefiles/contact.JPG" width="250"/>                                                 |
+| flyers/flyer_form.html  | <img src="readmefiles/flyer_form.JPG" width="250"/>                                              |
+| flyers/flyers_list.html | <img src="readmefiles/flyers_list.JPG" width="250"/>                                             |
+| flyers/reorder.html     | I did not draw a wireframe for this; I just assumed I would use a drag and drop list             |
+| index.html              | <img src="readmefiles/index1.JPG" width="250"/> <img src="readmefiles/index2.JPG" width="250"/>  |
+| portal/create_user.html | <img src="readmefiles/create_user.JPG" width="250"/>                                             |
+| portal/dashboard.html   | <img src="readmefiles/dashboard.JPG" width="250"/>                                               |
+| portal/edit_user.html   | <img src="readmefiles/edit_user.JPG" width="250"/>                                               |
+| portal/login.html       | <img src="readmefiles/login.JPG" width="250"/>                                                   |
+| portal/user_list.html   | <img src="readmefiles/user_list.JPG" width="250"/>                                               |
+| schedule/calendar.html  | <img src="readmefiles/calendar.JPG" width="250"/>                                                |
+| schedule/event_list.html| <img src="readmefiles/event_list.JPG" width="250"/>                                              |
+
+
 </details>
 
 ---
