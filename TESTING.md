@@ -13,6 +13,8 @@ The English Studio website has undergone extensive manual testing to ensure func
 ## 2. Validation <a id="validation"></a>
 
 ### HTML (W3C HTML5)
+**Method:** https://validator.w3.org/  
+**Scope:** All compiled CSS served in production (including any Bootstrap overrides).  
 **Results:** 
 
 | Page                    | Result                                                                                                           |
@@ -66,15 +68,15 @@ https://www.facebook.com/ - unpersonalised will update when client creates busin
 **Results:** 
 | Page                  | Screenshot                                                                                 | Notes |
 |-----------------------|--------------------------------------------------------------------------------------------|-------|
-| base.js      | <img src="readmefiles\devicetesting\jstesting\base.jpg" width="250"/>          |       |
-| calendar.js    | <img src="readmefiles\devicetesting\jstesting\calendar.jpg" width="250"/>            |       |
-| compress.js           | <img src="readmefiles\devicetesting\jstesting\compress.jpg" width="250"/>                 |       |
-| contact.js           | <img src="readmefiles\devicetesting\jstesting\contact.jpg" width="250"/>                 |       |
-| event.js        | <img src="readmefiles\devicetesting\jstesting\event.jpg" width="250"/>              |       |
-| flyes.js     | <img src="readmefiles\devicetesting\jstesting\flyers.jpg" width="250"/>           |       |
-| maps.js      | <img src="readmefiles\devicetesting\jstesting\maps.jpg" width="250"/>          |       |
-| reorder.js         | <img src="readmefiles\devicetesting\jstesting\reorder.jpg" width="250"/>              |       |
-| schedule.js        | <img src="readmefiles\devicetesting\jstesting\schedule.jpg" width="250"/>                |       |
+| base.js      | <img src="readmefiles\devicetesting\jstesting\base.jpg" width="250"/>          |   PASS    |
+| calendar.js    | <img src="readmefiles\devicetesting\jstesting\calendar.jpg" width="250"/>            |   PASS    |
+| compress.js           | <img src="readmefiles\devicetesting\jstesting\compress.jpg" width="250"/>                 |   PASS    |
+| contact.js           | <img src="readmefiles\devicetesting\jstesting\contact.jpg" width="250"/>                 |    PASS   |
+| event.js        | <img src="readmefiles\devicetesting\jstesting\event.jpg" width="250"/>              |  PASS     |
+| flyes.js     | <img src="readmefiles\devicetesting\jstesting\flyers.jpg" width="250"/>           |   PASS    |
+| maps.js      | <img src="readmefiles\devicetesting\jstesting\maps.jpg" width="250"/>          |  PASS     |
+| reorder.js         | <img src="readmefiles\devicetesting\jstesting\reorder.jpg" width="250"/>              |    PASS   |
+| schedule.js        | <img src="readmefiles\devicetesting\jstesting\schedule.jpg" width="250"/>                |  PASS     |
 
 
 Where feasible all inline JS is avoided. The only instances where inline JS is found is due to unavoidable Django variables ({% url %}, {{ csrf_token }}, {{ GOOGLE_MAPS_API_KEY }}), which must be rendered server-side. These stay as tiny inline config objects, for the external JS to consume.
@@ -103,6 +105,8 @@ Where feasible all inline JS is avoided. The only instances where inline JS is f
 | user_list.html      | ![user_list](readmefiles\devicetesting\lighthouse\user_list.jpg)                            |  PASS     |
 
 ## 3. Mobile & Desktop Testing <a id="mobiletesting"></a>
+
+The entire site was build on a widescreen desktop PC - for this reason only devices from phones upto laptop size screens are recorded in this testing document. The developer is adamant that the site is responsive to desktop sizing. Throughout the build DevTools has been used to test site wide responsivity across different viewport widths.
 
 ### Public pages testing table
 
@@ -133,11 +137,11 @@ contact.html | <img src="readmefiles\devicetesting\public\contact.html\iPhone-13
 ### Browser Compatibility
 | Page / Feature | Chrome | Safari | Firefox | Edge | Notes |
 |----------------|--------|--------|---------|------|-------|
-| Home (carousel, i18n flags) | PASS | PASS | PASS | PASS | Browser tests conducted manually on windows desktop pc |
-| Blog list/detail | PASS | PASS | PASS | PASS | Browser tests conducted manually on windows desktop pc |
-| Calendar (month nav, tooltips) | PASS | PASS | PASS | PASS | Browser tests conducted manually on windows desktop pc |
-| Portal login/dashboard | PASS | PASS | PASS | PASS | Browser tests conducted manually on windows desktop pc |
-| Portal blog/flyers/schedule forms | PASS | PASS | PASS | PASS | Browser tests conducted manually on windows desktop pc |
+| Home (carousel, i18n flags) | PASS | PASS | PASS | PASS | Browser tests conducted manually on windows desktop PC |
+| Blog list/detail | PASS | PASS | PASS | PASS | Browser tests conducted manually on windows desktop PC |
+| Calendar (month nav, tooltips) | PASS | PASS | PASS | PASS | Browser tests conducted manually on windows desktop PC |
+| Portal login/dashboard | PASS | PASS | PASS | PASS | Browser tests conducted manually on windows desktop PC |
+| Portal blog/flyers/schedule forms | PASS | PASS | PASS | PASS | Browser tests conducted manually on windows desktop PC |
 
 ---
 
@@ -147,18 +151,18 @@ contact.html | <img src="readmefiles\devicetesting\public\contact.html\iPhone-13
 ## 5. Manual Testing Checklist 
 
 ### A. Internationalization (EN/IT)
-| Step | Expected | Actual | Pass | Notes |
+| Step | Expected | Pass | Notes |
 |-----|----------|--------|------|------|
-| Click IT flag on Home | All content switches to Italian | _ | _ | _ |
-| Switch EN→IT on Blog List & Detail | Titles/bodies follow locale | _ | _ | _ |
-| Switch EN→IT on Calendar | Class names reflect chosen locale | _ | _ | _ |
+| Click IT flag on Home | All content switches to Italian | PASS | All customer facing/public pages show full translations. Staff portal pages don't implement translations.  | 
+| Switch EN→IT on Blog List & Detail | Titles/bodies follow locale | PASS | All customer facing/public pages show full translations. Staff portal pages don't implement translations.  | 
+| Switch EN→IT on Calendar | Class names reflect chosen locale | PASS |All customer facing/public pages show full translations. Staff portal pages don't implement translations.   |
 
 ### B. Homepage (carousel, classes section, flyers feed)
-| Step | Expected | Actual | Pass | Notes |
+| Step | Expected |  Pass | Notes |
 |-----|----------|--------|------|------|
-| Carousel auto/arrow nav | Smooth transition, no console errors | _ | _ | _ |
-| Class icons (AI icons) | Icons visible; labels readable | _ | _ | _ |
-| Flyers order | Matches `sort_order` (portal) | _ | _ | _ |
+| Carousel auto/arrow nav | Smooth transition, no console errors | PASS | _ | 
+| Class icons (AI icons) | Icons visible; labels readable | PASS | _ | _ |
+| Flyers order | Matches `sort_order` (portal) | PASS | _ | 
 
 ### C. Blog (public)
 | Step | Expected | Actual | Pass | Notes |
