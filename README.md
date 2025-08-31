@@ -238,7 +238,6 @@ The navy/red are slightly muted to feel professional; the off-white background s
 | index.html              | <img src="readmefiles/index1.JPG" width="250"/> <img src="readmefiles/index2.JPG" width="250"/>  |
 | portal/create_user.html | <img src="readmefiles/create_user.JPG" width="250"/>                                             |
 | portal/dashboard.html   | <img src="readmefiles/dashboard.JPG" width="250"/>                                               |
-| portal/edit_user.html   | <img src="readmefiles/edit_user.JPG" width="250"/>                                               |
 | portal/login.html       | <img src="readmefiles/login.JPG" width="250"/>                                                   |
 | portal/user_list.html   | <img src="readmefiles/user_list.JPG" width="250"/>                                               |
 | schedule/calendar.html  | <img src="readmefiles/calendar.JPG" width="250"/>                                                |
