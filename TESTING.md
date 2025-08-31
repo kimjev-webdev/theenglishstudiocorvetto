@@ -82,11 +82,25 @@ Where feasible all inline JS is avoided. The only instances where inline JS is f
 
 ### Accessibility (Lighthouse)
 **Method:** Chrome DevTools → Lighthouse (Desktop & Mobile)  
-**Scope:** Home, Blog Detail, Calendar, Contact  
-**Record:** Accessibility, Performance, Best Practices, SEO  
-**Result:** _<scores + notes + screenshots>_
-
----
+**Record:** Accessibility & SEO  
+**Result:** 
+| Page                | Screenshot                                                                                   | Notes |
+|---------------------|---------------------------------------------------------------------------------------------|-------|
+| blog_detail.html    | ![blog_detail](readmefiles\devicetesting\lighthouse\blog_detail.jpg)                        |  PASS     |
+| blog_list.html      | ![blog_list](readmefiles\devicetesting\lighthouse\blog_list.jpg)                            |    PASS   |
+| contact.html        | ![contact](readmefiles\devicetesting\lighthouse\contact.jpg)                                |  PASS     |
+| create_user.html    | ![create_user](readmefiles\devicetesting\lighthouse\create_user.jpg)                        |  PASS     |
+| dashboard.html      | ![dashboard](readmefiles\devicetesting\lighthouse\dashboard.jpg)                            |   PASS    |
+| edit_user.html      | ![edit_user](readmefiles\devicetesting\lighthouse\edit_user.jpg)                            |   PASS    |
+| event_list.html     | ![event_list](readmefiles\devicetesting\lighthouse\event_list.jpg)                          |   PASS    |
+| flyer_form.html     | ![flyer_form](readmefiles\devicetesting\lighthouse\flyer_form.jpg)                          |  PASS     |
+| flyers_list.html    | ![flyers_list](readmefiles\devicetesting\lighthouse\flyers_list.jpg)                        |  PASS     |
+| form.html           | ![form](readmefiles\devicetesting\lighthouse\form.jpg)                                      | PASS      |
+| index.html          | ![index](readmefiles\devicetesting\lighthouse\index.jpg)                                    |   PASS    |
+| list.html           | ![list](readmefiles\devicetesting\lighthouse\list.jpg)                                      |   PASS    |
+| login.html          | ![login](readmefiles\devicetesting\lighthouse\login.jpg)                                    |   PASS    |
+| schedule.html       | ![schedule](readmefiles\devicetesting\lighthouse\schedule.jpg)                              |    PASS   |
+| user_list.html      | ![user_list](readmefiles\devicetesting\lighthouse\user_list.jpg)                            |  PASS     |
 
 ## 3. Mobile & Desktop Testing <a id="mobiletesting"></a>
 
@@ -238,5 +252,6 @@ _Add any extra stories you listed and link to the table rows above._
   - 'collectstatic' leaves un-hashed duplicates (e.g., js/base.js) alongside hashed assets (e.g., js/base.43e960740ca8.js) inside the staticfiles folder. This has no impact at runtime because templates resolve hashed paths via {% static %} and WhiteNoise serves the manifest-fingerprinted files. This is simply a cosmetic mess in STATIC_ROOT which remains unresolved due to the project deadline. 
   - Semantics are often generalized throughout this project, primarily opting for 'div' - this issue does not relate to the project focus on database management and will therefore be handled post project deadline. The developer has a good understanding of semantics and intends to update the specificity across all templates from October 2025. 
   - CSS styling is not applied universally throughout the portal pages. Some styling improvements could be made to enhance the UX for the site owner. Styling contingency for the portal will be implemented post hand in from October 2025. 
+  - All CRUD actions give feedback however in some instances there are duplicated in the form of a modal and a notification on the page. This is under the decision that it's better safe than sorry. It doesn't cause any real impact to the UX but this duplicate notification issue will be ironed out post hand in from October 2025. 
 
 
