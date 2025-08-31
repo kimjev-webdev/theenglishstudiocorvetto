@@ -3,6 +3,20 @@
   <img src="staticfiles/compressed/logofull.webp" alt="Learn English with The English Studio" width="10%" style="margin: 0 auto; display: block;"/>
 </p>
 
+The English Studio is a fully functioning, full-stack web application built for a real client launching a new English language school in Corvetto, Milan. Designed to support both public users and administrative staff, the site offers a clean, modern user experience with powerful backend functionality tailored to real educational needs.
+
+**Key features include:**
+- A fully integrated blog system that allows staff to create, edit, and delete posts through a custom frontend portal.
+- A dynamic class and events scheduling system with full CRUD (Create, Read, Update, Delete) operations, enabling administrators to manage weekly lessons, special events, and recurring activities via an intuitive interface.
+- A flyer upload system that allows staff to create, read, update, delete and reorder the flyers.
+- An administrator profile for the owner which allows them to create further staff profiles via their portal login.
+- A secure staff portal at `/portal`, providing private access to internal tools without exposing Django’s admin interface.
+- Seamless frontend-backend integration, with JavaScript `fetch` powering smooth, interactive updates to blog posts and schedule entries.
+- All data is stored in a PostgreSQL database hosted on Render, with a clean, normalised schema designed to reflect complex user stories and relationships between classes, events, and recurring schedules.
+- The application demonstrates professional-grade quality, both in functionality and design, and is production-ready.
+
+---
+
 ### Table of Contents
 
 <details><summary><strong>UX – Goals</strong></summary>
@@ -102,19 +116,6 @@
 <details><summary><strong>License</strong></summary></details>
 
 <details><summary><strong>Credit & Contact</strong></summary></details>
-
-
-The English Studio is a fully functioning, full-stack web application built for a real client launching a new English language school in Corvetto, Milan. Designed to support both public users and administrative staff, the site offers a clean, modern user experience with powerful backend functionality tailored to real educational needs.
-
-**Key features include:**
-- A fully integrated blog system that allows staff to create, edit, and delete posts through a custom frontend portal.
-- A dynamic class and events scheduling system with full CRUD (Create, Read, Update, Delete) operations, enabling administrators to manage weekly lessons, special events, and recurring activities via an intuitive interface.
-- A flyer upload system that allows staff to create, read, update, delete and reorder the flyers.
-- An administrator profile for the owner which allows them to create further staff profiles via their portal login.
-- A secure staff portal at `/portal`, providing private access to internal tools without exposing Django’s admin interface.
-- Seamless frontend-backend integration, with JavaScript `fetch` powering smooth, interactive updates to blog posts and schedule entries.
-- All data is stored in a PostgreSQL database hosted on Render, with a clean, normalised schema designed to reflect complex user stories and relationships between classes, events, and recurring schedules.
-- The application demonstrates professional-grade quality, both in functionality and design, and is production-ready.
 
 ---
 
