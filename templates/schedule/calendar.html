@@ -21,43 +21,60 @@
     {% trans "Use the form on our contact page to book your spot. We are happy to help with anything from bookings to general enquiries." %}
   </p>
 
-  <div class="calendar-grid">
-    <div class="weekday navy-bg off-white primaryfont">{% trans "Mon" %}</div>
-    <div class="weekday navy-bg off-white primaryfont">{% trans "Tue" %}</div>
-    <div class="weekday navy-bg off-white primaryfont">{% trans "Wed" %}</div>
-    <div class="weekday navy-bg off-white primaryfont">{% trans "Thu" %}</div>
-    <div class="weekday navy-bg off-white primaryfont">{% trans "Fri" %}</div>
-    <div class="weekday navy-bg off-white primaryfont">{% trans "Sat" %}</div>
-    <div class="weekday navy-bg off-white primaryfont">{% trans "Sun" %}</div>
+<div class="calendar-grid" role="grid" aria-label="{% trans 'Monthly schedule' %}">
+  <div class="weekday navy-bg off-white primaryfont" role="columnheader" aria-label="{% trans 'Monday' %}">{% trans "Mon" %}</div>
+  <div class="weekday navy-bg off-white primaryfont" role="columnheader" aria-label="{% trans 'Tuesday' %}">{% trans "Tue" %}</div>
+  <div class="weekday navy-bg off-white primaryfont" role="columnheader" aria-label="{% trans 'Wednesday' %}">{% trans "Wed" %}</div>
+  <div class="weekday navy-bg off-white primaryfont" role="columnheader" aria-label="{% trans 'Thursday' %}">{% trans "Thu" %}</div>
+  <div class="weekday navy-bg off-white primaryfont" role="columnheader" aria-label="{% trans 'Friday' %}">{% trans "Fri" %}</div>
+  <div class="weekday navy-bg off-white primaryfont" role="columnheader" aria-label="{% trans 'Saturday' %}">{% trans "Sat" %}</div>
+  <div class="weekday navy-bg off-white primaryfont" role="columnheader" aria-label="{% trans 'Sunday' %}">{% trans "Sun" %}</div>
 
-   {% for week in weeks %}
-  {% for day in week %}
-    {% with day_events=events_by_day|get_item:day %}
-      <div class="day{% if day.month != month_number %} other-month{% endif %}"
-           {% if day_events %}
-           data-tippy-content="
-             {% for event in day_events %}
-               {% if LANGUAGE_CODE == 'it' %}
-                 {{ event.class_instance.name_it }}
-               {% else %}
-                 {{ event.class_instance.name_en }}
-               {% endif %}
-               ({{ event.start_time }}–{{ event.end_time }})<br>
-             {% endfor %}
-           "
-           {% endif %}>
-        <div class="date red primaryfont">{{ day.day }}</div>
-        <div class="emoji-wrapper">
-          {% for event in day_events %}
-            <div class="emoji">{{ event.class_instance.emoji }}</div>
-          {% endfor %}
-        </div>
-      </div>
-    {% endwith %}
+  {% for week in weeks %}
+    <div class="week" role="row">
+      {% for day in week %}
+        {% with day_events=events_by_day|get_item:day %}
+          <div
+            class="day{% if day.month != month_number %} other-month{% endif %}"
+            role="gridcell"
+            {% if day_events %}
+              data-tippy-content="
+                {% for event in day_events %}
+                  {% if LANGUAGE_CODE == 'it' %}
+                    {{ event.class_instance.name_it }}
+                  {% else %}
+                    {{ event.class_instance.name_en }}
+                  {% endif %}
+                  ({{ event.start_time }}–{{ event.end_time }})<br>
+                {% endfor %}
+              "
+            {% endif %}
+            aria-label="{{ day|date:'Y-m-d' }}"
+          >
+            <div class="date red primaryfont">{{ day.day }}</div>
+            <div class="emoji-wrapper" aria-hidden="true">
+              {% for event in day_events %}
+                <div class="emoji">{{ event.class_instance.emoji }}</div>
+              {% endfor %}
+            </div>
+            {% if day_events %}
+              <span class="visually-hidden">
+                {% for event in day_events %}
+                  {% if LANGUAGE_CODE == 'it' %}
+                    {{ event.class_instance.name_it }}
+                  {% else %}
+                    {{ event.class_instance.name_en }}
+                  {% endif %}
+                  ({{ event.start_time }}–{{ event.end_time }}){% if not forloop.last %}; {% endif %}
+                {% endfor %}
+              </span>
+            {% endif %}
+          </div>
+        {% endwith %}
+      {% endfor %}
+    </div>
   {% endfor %}
-{% endfor %}
-
-  </div>
+</div>
 
   <nav class="d-flex justify-content-center align-items-center mt-4">
     <p class="navy primaryfont fs-4">

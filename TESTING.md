@@ -61,8 +61,18 @@ https://www.instagram.com/theenglishstudio.corvetto
 https://www.facebook.com/ - unpersonalised will update when client creates business page.
 
 ### JavaScript Console
-**Method:** Chrome DevTools → Console on each public page + portal pages. Inline JS was also passed through JSHint
+**Method:** Chrome DevTools → Console on each public page + portal pages. 
+
 **Result:** 
+
+Inline JS was also passed through JSHint
+
+**Result:** 
+
+
+
+Where feasible all inline JS is avoided. The only instances where inline JS is found is due to unavoidable Django variables ({% url %}, {{ csrf_token }}, {{ GOOGLE_MAPS_API_KEY }}), which must be rendered server-side. These stay as tiny inline config objects, for the external JS to consume.
+
 
 ### Accessibility (Lighthouse)
 **Method:** Chrome DevTools → Lighthouse (Desktop & Mobile)  
