@@ -58,14 +58,14 @@
           <a href="{% url 'blog_detail' slug=next_post.slug %}" class="fs-3 red">&lt;</a>
         {% endif %}
 
-        <span class="navy primaryfont">MORE POSTS</span>
+        <span class="navy primaryfont">{% trans "MORE POSTS" %}</span>
 
         {% if previous_post %}
           <a href="{% url 'blog_detail' slug=previous_post.slug %}" class="fs-3 red">&gt;</a>
         {% endif %}
       </div>
 
-      <a href="{% url 'blog_list' %}" class="btn btn-navy primaryfont mt-3">Go Back</a>
+      <a href="{% url 'blog_list' %}" class="btn btn-navy primaryfont mt-3">{% trans "Go Back" %}</a>
     </div>
     </div>
   </div>

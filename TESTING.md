@@ -129,6 +129,7 @@ contact.html | <img src="readmefiles\devicetesting\public\contact.html\iPhone-13
 | portal/dashboard.html | <img src="readmefiles\devicetesting\staff\portal\dashboard.html\iPhone-13-(iOS-15)-theenglishstudiocorvetto.com (2).png" height="280" style="object-fit:contain;"/> | <img src="readmefiles\devicetesting\staff\portal\dashboard.html\Huawei-P30-PRO-theenglishstudiocorvetto.com (6).png" height="280" style="object-fit:contain;"/> | <img src="readmefiles\devicetesting\staff\portal\dashboard.html\iPad-PRO-11-theenglishstudiocorvetto.com (6).png" height="280" style="object-fit:contain;"/> | <img src="readmefiles\devicetesting\staff\portal\dashboard.html\Galaxy-Tab-S7-theenglishstudiocorvetto.com (5).png" height="280" style="object-fit:contain;"/> | <img src="readmefiles\devicetesting\staff\portal\dashboard.html\Macbook-Air-theenglishstudiocorvetto.com (7).png" height="280" style="object-fit:contain;"/> |  |
 | portal/event_list.html | <img src="readmefiles\devicetesting\staff\portal\event_list.html\iPhone-13-(iOS-15)-theenglishstudiocorvetto.com.png" height="280" style="object-fit:contain;"/> <img src="readmefiles\devicetesting\staff\portal\event_list.html\iPhone-13-(iOS-15)-theenglishstudiocorvetto.com (1).png" height="280" style="object-fit:contain;"/> <img src="readmefiles\devicetesting\staff\portal\event_list.html\iPhone-13-(iOS-15)-theenglishstudiocorvetto.com (1).png" height="280" style="object-fit:contain;"/> | <img src="readmefiles\devicetesting\staff\portal\event_list.html\Huawei-P30-PRO-theenglishstudiocorvetto.com (4).png" height="280" style="object-fit:contain;"/> <img src="readmefiles\devicetesting\staff\portal\event_list.html\Huawei-P30-PRO-theenglishstudiocorvetto.com (5).png" height="280" style="object-fit:contain;"/> <img src="readmefiles\devicetesting\staff\portal\event_list.html\Huawei-P30-PRO-theenglishstudiocorvetto.com (6).png" height="280" style="object-fit:contain;"/> | <img src="readmefiles\devicetesting\staff\portal\event_list.html\iPad-PRO-11-theenglishstudiocorvetto.com (4).png" height="280" style="object-fit:contain;"/> <img src="readmefiles\devicetesting\staff\portal\event_list.html\iPad-PRO-11-theenglishstudiocorvetto.com (5).png" height="280" style="object-fit:contain;"/> | <img src="readmefiles\devicetesting\staff\portal\event_list.html\Galaxy-Tab-S7-theenglishstudiocorvetto.com (3).png" height="280" style="object-fit:contain;"/> <img src="readmefiles\devicetesting\staff\portal\event_list.html\Galaxy-Tab-S7-theenglishstudiocorvetto.com (4).png" height="280" style="object-fit:contain;"/> | <img src="readmefiles\devicetesting\staff\portal\event_list.html\Macbook-Air-theenglishstudiocorvetto.com (5).png" height="280" style="object-fit:contain;"/> <img src="readmefiles\devicetesting\staff\portal\event_list.html\Macbook-Air-theenglishstudiocorvetto.com (6).png" height="280" style="object-fit:contain;"/> |  |
 
+
 ### Browser Compatibility
 | Page / Feature | Chrome | Safari | Firefox | Edge | Notes |
 |----------------|--------|--------|---------|------|-------|
@@ -220,11 +221,11 @@ contact.html | <img src="readmefiles\devicetesting\public\contact.html\iPhone-13
 | Edit/Delete event | Calendar updates accordingly | _ | _ | _ |
 
 ### J. User Management (Django Auth)
-| Step | Expected | Actual | Pass | Notes |
-|-----|----------|--------|------|------|
-| Create user (staff) | Can log into portal | _ | _ | _ |
-| Change permissions | Access reflects new roles | _ | _ | _ |
-| Delete user | Access revoked, can’t login | _ | _ | _ |
+| Step | Expected | Result | Notes |
+|-----|----------|--------|------|
+| Create user (staff) | Can log into portal | PASS | _ | 
+| Change permissions | Access reflects new roles | PASS | _ |
+| Delete user | Access revoked, can’t login | PASS | _ | 
 
 ---
 
@@ -242,7 +243,7 @@ Map each story in the README to concrete tests above.
 | Visitor selects contact category & subscribes | E |
 | Newsletter subscriber receives updates | E |
 
-_Add any extra stories you listed and link to the table rows above._
+
 
 ---
 
@@ -253,5 +254,6 @@ _Add any extra stories you listed and link to the table rows above._
   - Semantics are often generalized throughout this project, primarily opting for 'div' - this issue does not relate to the project focus on database management and will therefore be handled post project deadline. The developer has a good understanding of semantics and intends to update the specificity across all templates from October 2025. 
   - CSS styling is not applied universally throughout the portal pages. Some styling improvements could be made to enhance the UX for the site owner. Styling contingency for the portal will be implemented post hand in from October 2025. 
   - All CRUD actions give feedback however in some instances there are duplicated in the form of a modal and a notification on the page. This is under the decision that it's better safe than sorry. It doesn't cause any real impact to the UX but this duplicate notification issue will be ironed out post hand in from October 2025. 
+  - Italian translation feature is not implemented across the portal pages. Currently the only staff are native English speakers. All front end pages (customer facing) have been checked and ensure that translation is complete. The only exception to this is on the 'FOLLOW US' text in the footer. The translations will be implemented across the portal pages from October 2025. 
 
 

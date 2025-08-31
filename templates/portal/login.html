@@ -1,46 +1,46 @@
+{% load static %}
+{% load i18n %}
 {% extends "base.html" %}
 {% block content %}
-{% load static %}
 
 <div class="container vh-100 mt-5">
-    <img src="{% static 'compressed/logofull.webp' %}" alt="The English Studio Logo" class="mb-4" style="max-width: 300px; display: block; margin-left: auto; margin-right: auto;">
-    
-    <h2 class="primaryfont text-center navy">Staff Login</h2>
+  <img src="{% static 'compressed/logofull.webp' %}" alt="{% trans 'The English Studio Logo' %}" class="mb-4" style="max-width: 300px; display: block; margin-left: auto; margin-right: auto;">
+  
+  <h2 class="primaryfont text-center navy">{% trans "Staff Login" %}</h2>
 
-    {# Show logout or redirect messages #}
-    {% if messages %}
-      <div class="mt-3">
-        {% for message in messages %}
-          <div class="alert alert-success text-center body-text shadow-sm rounded" role="alert">
-            {{ message }}
-          </div>
-        {% endfor %}
+  {# Show logout or redirect messages #}
+  {% if messages %}
+    <div class="mt-3">
+    {% for message in messages %}
+      <div class="alert alert-success text-center body-text shadow-sm rounded" role="alert">
+      {{ message }}
       </div>
-    {% endif %}
+    {% endfor %}
+    </div>
+  {% endif %}
 
-    {# Show custom error if credentials are wrong #}
-    {% if form.errors %}
-      <div class="alert alert-danger text-center mt-4 mx-auto" style="max-width: 400px;">
-        Incorrect credentials. Please check your username and password and try again.
-      </div>
-    {% endif %}
+  {# Show custom error if credentials are wrong #}
+  {% if form.errors %}
+    <div class="alert alert-danger text-center mt-4 mx-auto" style="max-width: 400px;">
+    {% trans "Incorrect credentials. Please check your username and password and try again." %}
+    </div>
+  {% endif %}
 
-    <form method="post" class="d-flex flex-column align-items-center mt-3">
-        {% csrf_token %}
-        <div class="mb-3 w-100" style="max-width: 400px;">
-            <label for="id_username" class="form-label">Username:</label>
-            {{ form.username }}
-        </div>
-        <div class="mb-3 w-100" style="max-width: 400px;">
-            <label for="id_password" class="form-label">Password:</label>
-            {{ form.password }}
-        </div>
-        <button type="submit" class="btn btn-red d-block mx-auto">Login</button>
-        <p class="mt-3">
-  <a href="{% url 'portal:password_reset' %}" class="navy">Forgot your password?</a>
-</p>
-
-    </form>
+  <form method="post" class="d-flex flex-column align-items-center mt-3">
+    {% csrf_token %}
+    <div class="mb-3 w-100" style="max-width: 400px;">
+      <label for="id_username" class="form-label">{% trans "Username:" %}</label>
+      {{ form.username }}
+    </div>
+    <div class="mb-3 w-100" style="max-width: 400px;">
+      <label for="id_password" class="form-label">{% trans "Password:" %}</label>
+      {{ form.password }}
+    </div>
+    <button type="submit" class="btn btn-red d-block mx-auto">{% trans "Login" %}</button>
+    <p class="mt-3">
+      <a href="{% url 'portal:password_reset' %}" class="navy">{% trans "Forgot your password?" %}</a>
+    </p>
+  </form>
 </div>
 
 {% endblock %}

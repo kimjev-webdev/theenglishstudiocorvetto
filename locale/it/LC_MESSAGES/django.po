@@ -48,6 +48,12 @@ msgstr "Blog"
 msgid "Blog Posts"
 msgstr ""
 
+msgid "Go Back"
+msgstr "TORNA INDIETRO"
+
+msgid "MORE POSTS"
+msgstr "ALTRI POST"
+
 #: .\schedule\models.py:12
 msgid "Class Name (EN)"
 msgstr ""
@@ -171,7 +177,7 @@ msgstr "Seguici sui social media"
 
 #: .\templates\base.html:140
 msgid "Staff"
-msgstr ""
+msgstr "Personale"
 
 #: .\templates\base.html:146 .\templates\privacy.html:4
 #: .\templates\privacy.html:12
@@ -237,15 +243,15 @@ msgstr "Altro"
 
 #: .\templates\contact.html:45
 msgid "Message"
-msgstr ""
+msgstr "Messaggio"
 
 #: .\templates\contact.html:52
 msgid "Subscribe to newsletter"
-msgstr ""
+msgstr "Iscriviti alla newsletter"
 
 #: .\templates\contact.html:56
 msgid "Send Message"
-msgstr ""
+msgstr "Invia messaggio"
 
 #: .\templates\contact.html:63
 msgid "Where to find us"
@@ -255,6 +261,15 @@ msgstr "Dove trovarci"
 #: .\templates\privacy.html:269
 msgid "Address"
 msgstr "Indirizzo"
+
+msgid "Thank you!"
+msgstr "Grazie!"
+
+msgid "We look forward to embarking on this exciting journey with you!"
+msgstr "Non vediamo l'ora di intraprendere questo entusiasmante viaggio con voi!"
+
+msgid "We aim to reply within 1–2 working days."
+msgstr "Puntiamo a rispondere entro 1-2 giorni lavorativi."
 
 #: .\templates\flyers\flyer_confirm_delete.html:4
 #: .\templates\flyers\flyer_confirm_delete.html:8
@@ -353,7 +368,7 @@ msgstr "Eventi in Arrivo"
 
 #: .\templates\flyers\homepage_flyers.html:10
 msgid "Click on a flyer to find out more"
-msgstr ""
+msgstr "Clicca su un volantino per saperne di più"
 
 #: .\templates\flyers\homepage_flyers.html:39
 msgid "Previous"
@@ -681,7 +696,7 @@ msgstr ""
 
 #: .\templates\index.html:161
 msgid "CONTACT US"
-msgstr ""
+msgstr "Contattaci"
 
 #: .\templates\privacy.html:13
 msgid "Last updated"
@@ -1236,3 +1251,4 @@ msgstr "PRENOTA ORA"
 
 #~ msgid "Contact Me"
 #~ msgstr "Contattami"
+
