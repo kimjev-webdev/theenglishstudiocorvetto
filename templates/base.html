@@ -5,20 +5,65 @@
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="index, follow">
+ <title>The English Studio Corvetto | Learn English in Milan</title>
 
-  <title>The English Studio Corvetto | English Lessons in Milan</title>
-  <!-- SEO Meta Tags -->
-  <meta name="author" content="The English Studio">
-  <meta name="google" content="notranslate">
-  <meta name="description" content="Learn English in Milan with our expert teacher and friendly community.">
-  <meta name="keywords" content="English school Milan, English for kids, private English lessons, IELTS test prep Milan, Business English Corvetto, English classes for children, native English teacher Milan">
-  <title>{% block title %}{% trans "The English Studio" %}{% endblock %}</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Favicon -->
-  <link rel="icon" href="{% static 'compressed/logofull.webp' %}" type="image/webp">
+<meta name="description" content="Learn English in Milan (Corvetto) with The English Studio. British mother-tongue teacher, fun lessons for kids and adults, exam prep, conversation, and custom courses.">
+<meta name="keywords" content="English lessons Milan, English school Corvetto, British teacher Milan, ESL Milan, Cambridge exam prep, English for kids Milan">
+<meta name="author" content="The English Studio Corvetto">
+<meta name="robots" content="index,follow">
+
+<link rel="canonical" href="https://theenglishstudiocorvetto.com/">
+
+<!-- Favicons -->
+<link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-touch-icon.png' %}">
+<link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32x32.png' %}">
+<link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}">
+<link rel="manifest" href="{% static 'site.webmanifest' %}">
+<link rel="shortcut icon" href="/favicon.ico">
+
+<!-- Social sharing -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://theenglishstudiocorvetto.com/">
+<meta property="og:title" content="The English Studio Corvetto">
+<meta property="og:description" content="British mother-tongue English lessons in Milan. Kids, adults, conversation, and exam prep.">
+<meta property="og:image" content="https://theenglishstudiocorvetto.com/staticfiles/compressed/logofull.webp">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The English Studio Corvetto">
+<meta name="twitter:description" content="British mother-tongue English lessons in Milan. Kids, adults, conversation, and exam prep.">
+<meta name="twitter:image" content="https://theenglishstudiocorvetto.com/staticfiles/compressed/logofull.webp">
+
+<!-- LocalBusiness schema with coords + same webp logo -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": "https://theenglishstudiocorvetto.com/#org",
+  "name": "The English Studio Corvetto",
+  "url": "https://theenglishstudiocorvetto.com/",
+  "telephone": "+39 389 182 8174",
+  "logo": "https://theenglishstudiocorvetto.com/staticfiles/compressed/logofull.webp",
+  "image": ["https://theenglishstudiocorvetto.com/staticfiles/compressed/logofull.webp"],
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Via Oglio, 3",
+    "addressLocality": "Milano",
+    "postalCode": "20139",
+    "addressCountry": "IT"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 45.441239,
+    "longitude": 9.220639
+  },
+  "sameAs": [
+    "https://www.instagram.com/theenglishstudio.corvetto/"
+  ]
+}
+</script>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Cabin&display=swap" rel="stylesheet">
