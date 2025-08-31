@@ -214,6 +214,8 @@ STORAGES = {
     },
 }
 
+WHITENOISE_KEEP_ONLY_HASHED = True
+
 # Cloudinary credentials (use env vars in production)
 CLOUDINARY_STORAGE = {
     "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),

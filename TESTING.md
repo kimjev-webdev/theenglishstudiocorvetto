@@ -50,15 +50,18 @@ CSS passed through the jigsaw validation checker with no errors. To better under
 **Method:** https://validator.w3.org/checklink  
 **Result:** 
 All links passed through the validator with the exception of 3 social links located in the footer (located at base.html) due to robots exclusion rules.
+
 These 3 links were manually tested and validated:
+
 https://www.linkedin.com/ - unpersonalised will update when client creates an account.
+
 https://www.instagram.com/theenglishstudio.corvetto
-https://www.facebook.com/ - unpersonalised will update when client creates business page
+
+https://www.facebook.com/ - unpersonalised will update when client creates business page.
 
 ### JavaScript Console
 **Method:** Chrome DevTools → Console on each public page + portal pages. Inline JS was also passed through JSHint
-
-**Result:** _<paste summary of errors/warnings found or “none”>_
+**Result:** 
 
 ### Accessibility (Lighthouse)
 **Method:** Chrome DevTools → Lighthouse (Desktop & Mobile)  
@@ -224,17 +227,13 @@ Record scores and any remediation done.
 ---
 
 ## 7. Known Issues & Bug Log
-- See **BUGLOG.md** for the full log and unresolved items.
+- See **BUGLOG.md** for a detailed overview of bugs which have been addressed throughout the project build.
 - Outstanding issues (snapshot):  
-  - _<list any still-open bugs here>_
+  - 'collectstatic' leaves un-hashed duplicates (e.g., js/base.js) alongside hashed assets (e.g., js/base.43e960740ca8.js) inside the staticfiles folder. This has no impact at runtime because templates resolve hashed paths via {% static %} and WhiteNoise serves the manifest-fingerprinted files. This is simply a cosmetic mess in STATIC_ROOT which remains unresolved due to the project deadline. 
+  - Semantics are often generalized throughout this project, primarily opting for 'div' - this issue does not relate to the project focus on database management and will therefore be handled post project deadline. The developer has a good understanding of semantics and intends to update the specificity across all templates from October 2025. 
 
----
 
-## 8. Automated Testing (Optional / Not Configured Yet)
-> You do **not** currently have unit tests or CI configured in this repo. If you add them later:
+
+## 8. User Story Testing
 
 ### Django Unit Tests
-```bash
-python manage.py test
-# or keep DB between runs
-python manage.py test --keepdb

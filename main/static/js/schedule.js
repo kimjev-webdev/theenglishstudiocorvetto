@@ -1,5 +1,6 @@
-/* jshint esversion: 11, node: true, devel: true, asi: true */
-/* jshint -W030, -W033 */
+/* jshint esversion: 11, browser: true, devel: true, asi: true */
+/* global bootstrap */
+/* jshint -W030, -W033, -W014 */
 
 // ===== CSRF helpers =====
 function getCookie(name) {
@@ -16,11 +17,15 @@ function getCookie(name) {
   }
   return cookieValue;
 }
+
 function getCSRFToken() {
-  return getCookie('csrftoken') || 
-      (document.querySelector('meta[name="csrf-token"]')?.content || '') || 
-      (document.querySelector('input[name="csrfmiddlewaretoken"]')?.value || '');
+  return (
+    getCookie('csrftoken') ||
+    (document.querySelector('meta[name="csrf-token"]')?.content || '') ||
+    (document.querySelector('input[name="csrfmiddlewaretoken"]')?.value || '')
+  );
 }
+
 const urls = window.urls;
 
 /* ------------------------------------------------------------------ *
@@ -37,6 +42,7 @@ function ensureToastContainer() {
   }
   return c;
 }
+
 function showToast(message, variant = 'success') {
   const container = ensureToastContainer();
   const wrapper = document.createElement('div');
@@ -53,7 +59,8 @@ function showToast(message, variant = 'success') {
   wrapper.innerHTML = `
     <div class="d-flex">
       <div class="toast-body">${message}</div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto"
+              data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   `;
   container.appendChild(wrapper);
@@ -70,7 +77,11 @@ async function fetchJSON(url, options = {}) {
     'X-CSRFToken': getCSRFToken(),
     ...(options.headers || {})
   };
-  const res = await fetch(url, { credentials: 'same-origin', ...options, headers });
+  const res = await fetch(url, {
+    credentials: 'same-origin',
+    ...options,
+    headers
+  });
   let data = null;
   try { data = await res.json(); } catch {}
   if (!res.ok || (data && data.ok === false)) {
@@ -104,10 +115,11 @@ function buildEventPayloadFromForm() {
  * EVENT HANDLERS
  * ------------------------------------------------------------------ */
 const eventForm = document.getElementById('event-form');
+
 eventForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const saveBtn = eventForm.querySelector('button[type="submit"]');
-  saveBtn && (saveBtn.disabled = true);
+  if (saveBtn) saveBtn.disabled = true;
 
   const eventId = document.getElementById('event-id').value;
   const url = eventId ? urls.updateEvent(eventId) : urls.createEvent;
@@ -119,16 +131,23 @@ eventForm?.addEventListener('submit', async (e) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    showToast(data.message || (eventId ? 'Event updated.' : 'Event created.'), 'success');
+    showToast(
+      data.message || (eventId ? 'Event updated.' : 'Event created.'),
+      'success'
+    );
     eventForm.reset();
     document.getElementById('event-id').value = '';
-    bootstrap.Modal.getInstance(document.getElementById('eventModal'))?.hide();
+    bootstrap.Modal
+      .getInstance(document.getElementById('eventModal'))?.hide();
     location.reload();
   } catch (err) {
     console.error('Event save failed:', err);
-    showToast(err.message || 'Error saving event.', err.status === 403 ? 'warning' : 'danger');
+    showToast(
+      err.message || 'Error saving event.',
+      err.status === 403 ? 'warning' : 'danger'
+    );
   } finally {
-    saveBtn && (saveBtn.disabled = false);
+    if (saveBtn) saveBtn.disabled = false;
   }
 });
 
@@ -145,8 +164,7 @@ window.editEvent = function (id) {
   const row = document.querySelector(`tr[data-id="${id}"]`);
   if (!row) return;
 
-  // NOTE: dataset keys:
-  // data-class-id -> classId, data-days -> days, data-exceptions -> exceptions, data-repeatuntil -> repeatuntil
+  // dataset keys: classId, date, start, end, recurrence, days, exceptions, repeatuntil
   const fieldMap = {
     class: 'classId',
     date: 'date',
@@ -186,15 +204,16 @@ window.deleteEvent = async function (id) {
  * CLASS HANDLERS
  * ------------------------------------------------------------------ */
 const classForm = document.getElementById('class-form');
+
 classForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const saveBtn = classForm.querySelector('button[type="submit"]');
-  saveBtn && (saveBtn.disabled = true);
+  if (saveBtn) saveBtn.disabled = true;
 
   const payload = {
     name_en: document.getElementById('class-name-en').value,
     name_it: document.getElementById('class-name-it').value,
-    emoji: document.getElementById('class-emoji').value,
+    emoji: document.getElementById('class-emoji').value
   };
 
   const id = document.getElementById('class-id').value;
@@ -208,7 +227,10 @@ classForm?.addEventListener('submit', async (e) => {
     });
 
     const data = res.data || res;
-    showToast(res.message || (id ? 'Class updated.' : 'Class created.'), 'success');
+    showToast(
+      res.message || (id ? 'Class updated.' : 'Class created.'),
+      'success'
+    );
 
     if (id) {
       const row = document.querySelector(`tr[data-id='${id}']`);
@@ -225,9 +247,12 @@ classForm?.addEventListener('submit', async (e) => {
     }
   } catch (err) {
     console.error('Class save failed:', err);
-    showToast(err.message || 'Something went wrong while saving the class.', err.status === 403 ? 'warning' : 'danger');
+    showToast(
+      err.message || 'Something went wrong while saving the class.',
+      err.status === 403 ? 'warning' : 'danger'
+    );
   } finally {
-    saveBtn && (saveBtn.disabled = false);
+    if (saveBtn) saveBtn.disabled = false;
   }
 });
 
