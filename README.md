@@ -224,8 +224,8 @@ The navy/red are slightly muted to feel professional; the off-white background s
 
 
 <details><summary>WIREFRAMES:</summary>
-  | Page  | Result |
-| ----------------------- | | ----------------------- | 
+| Page  | Result |
+| ----------------------- | ----------------------- | 
 | blog/blog_detail.html   | <img src="readmefiles\blog_detail.JPG" width="250" style="object-fit:contain;"/> |
 | blog/blog_list.html     | <img src="readmefiles\blog_list.html.JPG" width="250" style="object-fit:contain;"/>   |
 | blog/form.html          | <img src="readmefiles\form.JPG" width="250" style="object-fit:contain;"/>        |
