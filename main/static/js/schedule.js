@@ -1,4 +1,4 @@
-/* jshint esversion: 6, node: true, devel: true, asi: true */
+/* jshint esversion: 11, node: true, devel: true, asi: true */
 /* jshint -W030, -W033 */
 
 // ===== CSRF helpers =====
@@ -17,9 +17,9 @@ function getCookie(name) {
   return cookieValue;
 }
 function getCSRFToken() {
-  return getCookie('csrftoken')
-      || (document.querySelector('meta[name="csrf-token"]')?.content || '')
-      || (document.querySelector('input[name="csrfmiddlewaretoken"]')?.value || '');
+  return getCookie('csrftoken') || 
+      (document.querySelector('meta[name="csrf-token"]')?.content || '') || 
+      (document.querySelector('input[name="csrfmiddlewaretoken"]')?.value || '');
 }
 const urls = window.urls;
 

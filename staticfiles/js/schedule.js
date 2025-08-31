@@ -1,4 +1,4 @@
-/* jshint esversion: 6, node: true, devel: true, asi: true */
+/* jshint esversion: 11, node: true, devel: true, asi: true */
 /* jshint -W030, -W033 */
 
 // ===== CSRF helpers =====
