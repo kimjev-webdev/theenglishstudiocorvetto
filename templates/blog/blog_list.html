@@ -24,7 +24,7 @@
     <div class="card-body">
       <p class="mini-text red body-text mb-1">{{ post.published_at|date:"F j, Y" }}</p>
 
-      <h3 class="card-title navy primaryfont mb-0">
+      <p class="card-title navy primaryfont mb-0">
         <a href="{% url 'blog_detail' slug=post.slug %}"
            class="stretched-link text-reset text-decoration-none">
           {% if LANGUAGE_CODE == "it" %}
@@ -33,7 +33,7 @@
             {{ post.title_en }}
           {% endif %}
         </a>
-      </h3>
+      </p>
     </div>
   </article>
 </div>

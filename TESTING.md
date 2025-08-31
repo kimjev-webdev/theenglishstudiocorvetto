@@ -67,7 +67,18 @@ https://www.facebook.com/ - unpersonalised will update when client creates busin
 
 Inline JS was also passed through JSHint
 
-**Result:** 
+**Results:** 
+| Page                  | Screenshot                                                                                 | Notes |
+|-----------------------|--------------------------------------------------------------------------------------------|-------|
+| base.js      | <img src="readmefiles\devicetesting\jstesting\base.jpg" width="250"/>          |       |
+| calendar.js    | <img src="readmefiles\devicetesting\jstesting\calendar.jpg" width="250"/>            |       |
+| compress.js           | <img src="readmefiles\devicetesting\jstesting\compress.jpg" width="250"/>                 |       |
+| contact.js           | <img src="readmefiles\devicetesting\jstesting\contact.jpg" width="250"/>                 |       |
+| event.js        | <img src="readmefiles\devicetesting\jstesting\event.jpg" width="250"/>              |       |
+| flyes.js     | <img src="readmefiles\devicetesting\jstesting\flyers.jpg" width="250"/>           |       |
+| maps.js      | <img src="readmefiles\devicetesting\jstesting\maps.jpg" width="250"/>          |       |
+| reorder.js         | <img src="readmefiles\devicetesting\jstesting\reorder.jpg" width="250"/>              |       |
+| schedule.js        | <img src="readmefiles\devicetesting\jstesting\schedule.jpg" width="250"/>                |       |
 
 
 
