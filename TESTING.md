@@ -13,8 +13,7 @@ The English Studio website has undergone extensive manual testing to ensure func
 ## 2. Validation <a id="validation"></a>
 
 ### HTML (W3C HTML5)
-**Method:** https://validator.w3.org/  
-**Scope:** All compiled CSS served in production (including any Bootstrap overrides).  
+**Method:** https://validator.w3.org/   
 **Results:** 
 
 | Page                    | Result                                                                                                           |
@@ -145,54 +144,53 @@ contact.html | <img src="readmefiles\devicetesting\public\contact.html\iPhone-13
 
 ---
 
-## 4. Manual Device Testing by Business Owner <a id="manual"></a>
+## 4. Manual Testing 
 
-
-## 5. Manual Testing Checklist 
+### Manual Testing Checklist 
 
 ### A. Internationalization (EN/IT)
-| Step | Expected | Pass | Notes |
-|-----|----------|--------|------|------|
+| Step | Expected |  Result | Notes |
+|-----|----------|--------|------|
 | Click IT flag on Home | All content switches to Italian | PASS | All customer facing/public pages show full translations. Staff portal pages don't implement translations.  | 
 | Switch EN→IT on Blog List & Detail | Titles/bodies follow locale | PASS | All customer facing/public pages show full translations. Staff portal pages don't implement translations.  | 
 | Switch EN→IT on Calendar | Class names reflect chosen locale | PASS |All customer facing/public pages show full translations. Staff portal pages don't implement translations.   |
 
 ### B. Homepage (carousel, classes section, flyers feed)
-| Step | Expected |  Pass | Notes |
-|-----|----------|--------|------|------|
-| Carousel auto/arrow nav | Smooth transition, no console errors | PASS | _ | 
-| Class icons (AI icons) | Icons visible; labels readable | PASS | _ | _ |
-| Flyers order | Matches `sort_order` (portal) | PASS | _ | 
+| Step | Expected | Result | 
+|-----|----------|--------|
+| Carousel auto/arrow nav | Smooth transition, no console errors | PASS | 
+| Class icons (AI icons) | Icons visible; labels readable | PASS | 
+| Flyers order | Matches `sort_order` (portal) | PASS | | 
 
 ### C. Blog (public)
-| Step | Expected | Actual | Pass | Notes |
-|-----|----------|--------|------|------|
-| Blog list shows cards | Title, image, date visible | _ | _ | _ |
-| Card → detail | Slugged URL, content + media loads | _ | _ | _ |
-| Prev/Next links | Navigate chronologically | _ | _ | _ |
+| Step | Expected | Result | 
+|-----|----------|--------|
+| Blog list shows cards | Title, image, date visible | PASS | 
+| Card → detail | Slugged URL, content + media loads | PASS | 
+| Prev/Next links | Navigate chronologically | PASS | 
 
 ### D. Schedule (public calendar)
-| Step | Expected | Actual | Pass | Notes |
-|-----|----------|--------|------|------|
-| Month navigation | Previous/next months load | _ | _ | _ |
-| Emoji per event | Emojis show in correct dates | _ | _ | _ |
-| Tooltip on hover/tap | Shows one or multiple events for that date | _ | _ | _ |
-| Recurrence display | Weekly/biweekly/monthly instances generated | _ | _ | _ |
-| Exceptions | Skipped dates are **not** shown | _ | _ | _ |
+| Step | Expected |  Pass | 
+|-----|----------|--------|
+| Month navigation | Previous/next months load | PASS | 
+| Emoji per event | Emojis show in correct dates | PASS | 
+| Tooltip on hover/tap | Shows one or multiple events for that date | PASS | 
+| Recurrence display | Weekly/biweekly/monthly instances generated | PASS | 
+| Exceptions | Skipped dates are **not** shown | PASS |  
 
 ### E. Contact + Newsletter + Map
-| Step | Expected | Actual | Pass | Notes |
-|-----|----------|--------|------|------|
-| Submit valid form | Success message; redirect with `?sent=1` | _ | _ | _ |
-| Email delivery | Email received with correct `reply_to` | _ | _ | _ |
-| Mailchimp opt-in checked | Subscriber added to list | _ | _ | _ |
-| Mailchimp opt-in unchecked | No list entry created | _ | _ | _ |
-| Invalid form | Errors shown; no submission | _ | _ | _ |
-| Google Map loads | Custom pin visible; no console API errors | _ | _ | _ |
+| Step | Expected | Result |
+|-----|----------|--------|
+| Submit valid form | Success message; redirect with `?sent=1` | PASS | 
+| Email delivery | Email received with correct `reply_to` | PASS | 
+| Mailchimp opt-in checked | Subscriber added to list | PASS | 
+| Mailchimp opt-in unchecked | No list entry created | PASS | 
+| Invalid form | Errors shown; no submission | PASS | 
+| Google Map loads | Custom pin visible; no console API errors | PASS | 
 
 ### F. Portal: Authentication & Security
-| Step | Expected | Actual | Pass | Notes |
-|-----|----------|--------|------|------|
+| Step | Expected | Result | 
+|-----|----------|--------|
 | Visit `/portal/` logged out | Redirect to login | _ | _ | _ |
 | Login valid user | Dashboard visible | _ | _ | _ |
 | Logout | Session cleared; login required again | _ | _ | _ |
