@@ -223,9 +223,9 @@ Off-white (bg): `#fdfbf6`
 The navy/red are slightly muted to feel professional; the off-white background softens the overall feel (book-page vibe).
 
 
-<details><summary>WIREFRAMES:</summary>
+<details><summary>WIREFRAMES</summary>
 
-  | Page                    | Result                                                                                           |
+  | Page                    | Rough Sketch                                                                                   |
 | ----------------------- | ------------------------------------------------------------------------------------------------ |
 | blog/blog_detail.html   | <img src="readmefiles/blog_detail.JPG" width="250"/>                                             |
 | blog/blog_list.html     | <img src="readmefiles/blog_list.JPG" width="250"/>                                          |
