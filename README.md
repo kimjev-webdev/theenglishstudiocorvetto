@@ -228,13 +228,13 @@ The navy/red are slightly muted to feel professional; the off-white background s
   | Page                    | Rough Sketch                                                                                   |
 | ----------------------- | ------------------------------------------------------------------------------------------------ |
 | blog/blog_detail.html   | <img src="readmefiles/blog_detail.JPG" width="250"/>                                             |
-| blog/blog_list.html     | <img src="readmefiles/blog_list.JPG" width="250"/>                                          |
+| blog/blog_list.html     | <img src="readmefiles/blog_list.JPG" width="250"/>                                               |
 | blog/form.html          | <img src="readmefiles/form.JPG" width="250"/>                                                    |
 | blog/list.html          | <img src="readmefiles/list.JPG" width="250"/>                                                    |
 | contact.html            | <img src="readmefiles/contact.JPG" width="250"/>                                                 |
 | flyers/flyer_form.html  | <img src="readmefiles/flyer_form.JPG" width="250"/>                                              |
 | flyers/flyers_list.html | <img src="readmefiles/flyers_list.JPG" width="250"/>                                             |
-| flyers/reorder.html     | I did not draw a wireframe for this; I just assumed I would use a drag and drop list             |
+| flyers/reorder.html     | No wireframe - assume seperate page with list using js drag and drop function.                   |
 | index.html              | <img src="readmefiles/index1.JPG" width="250"/> <img src="readmefiles/index2.JPG" width="250"/>  |
 | portal/create_user.html | <img src="readmefiles/create_user.JPG" width="250"/>                                             |
 | portal/dashboard.html   | <img src="readmefiles/dashboard.JPG" width="250"/>                                               |
