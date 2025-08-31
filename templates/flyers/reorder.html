@@ -55,56 +55,5 @@
 
 {# ---- Lightweight drag & drop + POST (no /media/ anywhere) ---- #}
 <script src="https://unpkg.com/sortablejs@1.15.2/Sortable.min.js" crossorigin="anonymous"></script>
-<script>
-(function() {
-  const list = document.getElementById('flyers-list');
-  if (!list) return;
-
-  const sortable = Sortable.create(list, {
-    handle: '.handle',
-    animation: 150,
-    onEnd: updateBadges
-  });
-
-  function updateBadges() {
-    document.querySelectorAll('#flyers-list .order-index').forEach((el, i) => {
-      el.textContent = i + 1;
-    });
-  }
-
-  const form = document.getElementById('save-order-form');
-  form.addEventListener('submit', function(ev) {
-    ev.preventDefault();
-
-    const ids = Array.from(document.querySelectorAll('#flyers-list [data-id]'))
-      .map(li => li.getAttribute('data-id'));
-    document.getElementById('order-input').value = ids.join(',');
-
-    const url = form.getAttribute('action');
-    const csrftoken = document.querySelector('input[name=csrfmiddlewaretoken]').value;
-
-    fetch(url, {
-  method: 'POST',
-  headers: {
-    'X-CSRFToken': csrftoken,
-    'X-Requested-With': 'XMLHttpRequest', // <-- REQUIRED by your view
-    'Content-Type': 'application/json'     // <-- send JSON
-  },
-  body: JSON.stringify({ order: ids })     // {"order":["12","34","56"]}
-})
-.then(r => {
-  if (!r.ok) throw new Error('Bad response');
-  return r.json(); // your view returns JsonResponse
-})
-.then(() => {
-  const alertEl = document.getElementById('save-alert');
-  alertEl.classList.remove('d-none');
-  setTimeout(() => alertEl.classList.add('d-none'), 2000);
-})
-.catch(() => {
-  alert('{% trans "Failed to save order." %}');
-});
-  });
-})();
-</script>
+<script src="{% static 'js/reorder.js' %}"></script>
 {% endblock %}

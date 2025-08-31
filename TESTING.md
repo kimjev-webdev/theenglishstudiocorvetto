@@ -5,6 +5,7 @@ The English Studio website has undergone extensive manual testing to ensure func
 
 - Codebase validated where applicable (HTML/CSS), and forms & views tested end-to-end.
 - The website owner was the primary manual tester recorded herin. Other informal manual testers were enlisted and provided feedback on their experience, their findings are not recorded. 
+- privacy.html, 500.html, and 404.html are not included in the testing process. 
 - A detailed bug/change log is maintained in **BUGLOG.md**.
 
 ---

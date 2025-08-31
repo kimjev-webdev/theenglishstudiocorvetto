@@ -181,22 +181,17 @@
   </div>
 </div>
 
-{# Expose CSRF for JS without an invalid <meta> in body #}
 <script>
-  window.csrfToken = '{{ csrf_token }}';
-</script>
-
-{# Dynamic URLs #}
-<script>
+  window.csrfToken = "{{ csrf_token }}";
   window.urls = {
     createClass: "{% url 'create_class' %}",
-    updateClass: (id) => `{% url 'update_class' 0 %}`.replace('0', id),
-    deleteClass: (id) => `{% url 'delete_class' 0 %}`.replace('0', id),
+    updateClass: (id) => "{% url 'update_class' 0 %}".replace('0', id),
+    deleteClass: (id) => "{% url 'delete_class' 0 %}".replace('0', id),
     createEvent: "{% url 'create_event' %}",
-    updateEvent: (id) => `{% url 'update_event' 0 %}`.replace('0', id),
-    deleteEvent: (id) => `{% url 'delete_event' 0 %}`.replace('0', id),
+    updateEvent: (id) => "{% url 'update_event' 0 %}".replace('0', id),
+    deleteEvent: (id) => "{% url 'delete_event' 0 %}".replace('0', id),
   };
 </script>
-
+<script src="{% static 'js/event.js' %}"></script>
 <script src="{% static 'js/schedule.js' %}"></script>
 {% endblock %}
