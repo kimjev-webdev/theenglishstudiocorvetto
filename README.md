@@ -1,25 +1,128 @@
 <h1 align="center"> Welcome to The English Studio </h1>
 <p align="center">
-   <img src="staticfiles/compressed/logofull.webp" alt="Learn English with The English Studio" width="10%" style="margin: 0 auto; display: block;"/>
+  <img src="staticfiles/compressed/logofull.webp" alt="Learn English with The English Studio" width="10%" style="margin: 0 auto; display: block;"/>
 </p>
+
+### Table of Contents
+
+<details><summary><strong>UX – Goals</strong></summary>
+
+- Business Goals
+  - Primary Goal
+  - Further Business Goals
+- User Profiles
+- User Stories
+</details>
+
+<details><summary><strong>UX – Visual Design</strong></summary>
+
+- Fonts & Colours
+- Wireframes 
+</details>
+
+<details><summary><strong>Features – All Pages (base.html)</strong></summary>
+
+- Navbar
+- Footer
+</details>
+
+<details><summary><strong>Features – Technical</strong></summary>
+
+- Language Switching
+- Custom form handling
+- Environment variables
+- Media handling
+- Security
+- Deployment
+- Custom Recurrence Logic
+</details>
+
+<details><summary><strong>Features – Public</strong></summary>
+
+- Homepage (index.html)
+- Blog (blog_list.html / blog_detail.html)
+- Interactive Schedule Calendar (calendar.html)
+- Contact Form with Mailchimp Integration (contact.html)
+</details>
+
+<details><summary><strong>Features – Staff Portal (/portal)</strong></summary>
+
+- Login Page (portal/login)
+- Dashboard (portal)
+- Blog Post Management
+- Schedule Management
+- Upcoming Events Flyers Management
+- User Management
+</details>
+
+<details><summary><strong>Information Architecture</strong></summary>
+
+- Database Structure
+- Database Models
+  - Class
+  - Event
+  - BlogPost
+  - Flyer
+</details>
+
+<details><summary><strong>Environment Variables</strong></summary></details>
+
+<details><summary><strong>Portal URL Map</strong></summary></details>
+
+<details><summary><strong>i18n</strong></summary></details>
+
+<details><summary><strong>Security & Privacy</strong></summary></details>
+
+<details><summary><strong>Technologies Used</strong></summary>
+
+- Languages
+- Frameworks
+- Django / Python Packages
+- Third-Party Services
+- Database
+- Deployment & Dev Tools
+</details>
+
+<details><summary><strong>Testing</strong></summary>
+
+- About Testing
+- Validation
+- Mobile & Desktop Testing
+- Manual Testing
+- User Story Testing
+- Bugs
+</details>
+
+<details><summary><strong>Deployment</strong></summary>
+
+- Local Development
+- Production (Render)
+</details>
+
+<details><summary><strong>License</strong></summary></details>
+
+<details><summary><strong>Credit & Contact</strong></summary></details>
+
 
 The English Studio is a fully functioning, full-stack web application built for a real client launching a new English language school in Corvetto, Milan. Designed to support both public users and administrative staff, the site offers a clean, modern user experience with powerful backend functionality tailored to real educational needs.
 
-Key features include:
-* A fully integrated blog system that allows staff to create, edit, and delete posts through a custom frontend portal.
-* A dynamic class and events scheduling system with full CRUD (Create, Read, Update, Delete) operations, enabling administrators to manage weekly lessons, special events, and recurring activities via an intuitive interface.
-* A flyer upload system that allows staff to create, read, update, delete and reorder the flyers.
-* An administrator profile for the owner which allows them to create further staff profiles via their portal login. 
-* A secure staff portal at /portal, providing private access to internal tools without exposing Django’s admin interface.
-* Seamless frontend-backend integration, with JavaScript fetch requests powering smooth, interactive updates to blog posts and schedule entries.
-* All data is stored in a PostgreSQL database hosted on Render, with a clean, normalized schema designed to reflect complex user stories and relationships between classes, events, and recurring schedules.
-* The resulting application demonstrates professional-grade quality, both in functionality and design, and is ready to be deployed and used by the business.
+**Key features include:**
+- A fully integrated blog system that allows staff to create, edit, and delete posts through a custom frontend portal.
+- A dynamic class and events scheduling system with full CRUD (Create, Read, Update, Delete) operations, enabling administrators to manage weekly lessons, special events, and recurring activities via an intuitive interface.
+- A flyer upload system that allows staff to create, read, update, delete and reorder the flyers.
+- An administrator profile for the owner which allows them to create further staff profiles via their portal login.
+- A secure staff portal at `/portal`, providing private access to internal tools without exposing Django’s admin interface.
+- Seamless frontend-backend integration, with JavaScript `fetch` powering smooth, interactive updates to blog posts and schedule entries.
+- All data is stored in a PostgreSQL database hosted on Render, with a clean, normalised schema designed to reflect complex user stories and relationships between classes, events, and recurring schedules.
+- The application demonstrates professional-grade quality, both in functionality and design, and is production-ready.
 
-<h2>UX - GOALS</h2>
+---
+
+<h2>UX – GOALS</h2>
 
 <h3>1. Business Goals</h3>
 
-<h3>Primary Goal</h3>
+<h4>Primary Goal</h4>
 
 The primary objective of The English Studio website is to establish a strong and credible online presence from the school’s foundation, giving prospective students clear information that is easy to find and digest, which builds immediate trust — reflecting that the school can teach English in an easy, non-intimidating way.
 
@@ -27,381 +130,592 @@ The site should provide prospective students and administrative staff with clear
 
 By combining professional design with custom backend development, the platform empowers staff to run the school independently while offering potential students an accessible, user-friendly introduction to the school's values, activities, and educational offerings.
 
-<h3>Further Business Goals</h3>
+<h4>Further Business Goals</h4>
 
-* Enable Internal Autonomy by providing staff with an easy-to-use portal to manage blog content, flyers, and scheduled events without relying on developers.
-* Support School Growth by ensuring the site can scale with new features (e.g. optional future student logins).
-* Deliver a Professional First Impression through a polished, modern design and clear messaging.
-* Promote Local and International Visibility with an optimized structure, engaging content, and a clear public calendar.
-* Ensure Data Security and Stability by storing and managing data with PostgreSQL and Django, and restricting staff access via a private portal.
-* Streamline Communication through a categorized contact form and optional newsletter sign-up (Mailchimp).
-* Uphold Accessibility and Responsiveness so the site is usable across devices and considerate of diverse user needs.
+- Enable Internal Autonomy by providing staff with an easy-to-use portal to manage blog content, flyers, and scheduled events without relying on developers.
+- Support School Growth by ensuring the site can scale with new features (e.g., optional future student logins).
+- Deliver a Professional First Impression through a polished, modern design and clear messaging.
+- Promote Local and International Visibility with an optimised structure, engaging content, and a clear public calendar.
+- Ensure Data Security and Stability by storing and managing data with PostgreSQL and Django, and restricting staff access via a private portal.
+- Streamline Communication through a categorised contact form and optional newsletter sign-up (Mailchimp).
+- Uphold Accessibility and Responsiveness so the site is usable across devices and considerate of diverse user needs.
 
-<<<<<<< HEAD
 <h3>2. User Profiles</h3>
-=======
-<h3> 2. User Profiles </h3>
->>>>>>> 04e39eb87039c81ee08f5667b55ec1bdef6eadde
 
-#### Parents of Young Learners (Primary Audience)
-Adults seeking fun, safe, and educational after-school activities for children aged 6–10.
-- <b>Needs</b>: A clear, visual schedule with fun event listings and details.
-- <b>Goals</b>: Help children engage joyfully with English while managing family schedules.
+**Parents of Young Learners (Primary Audience)**  
+Adults seeking fun, safe, and educational after-school activities for children aged 6–10.  
+- **Needs:** A clear, visual schedule with fun event listings and details.  
+- **Goals:** Help children engage joyfully with English while managing family schedules.
 
-#### Adult English Learners
-Students preparing for <b>IELTS</b>, improving <b>Business English</b>, or seeking <b>private lessons</b>.
-- <b>Needs</b>: Course/event information, flexible options, accessible contact.
-- <b>Goals</b>: Quickly find a path that fits professional or immigration requirements.
+**Adult English Learners**  
+Students preparing for **IELTS**, improving **Business English**, or seeking **private lessons**.  
+- **Needs:** Course/event information, flexible options, accessible contact.  
+- **Goals:** Quickly find a path that fits professional or immigration requirements.
 
-#### School Owner / Director
-Administrator overseeing the school’s public image and day-to-day updates.
-- <b>Needs</b>: A unified portal to manage posts, flyers, classes, and events (without Django admin exposure to the public).
-- <b>Goals</b>: Keep content fresh and ensure the public calendar is accurate.
+**School Owner / Director**  
+- **Needs:** A unified portal to manage posts, flyers, classes, and events (without public Django admin).  
+- **Goals:** Keep content fresh and ensure the public calendar is accurate.
 
-#### English School Teacher / Club Organisers
-Internal users managing recurring lessons, prep courses, and events.
-- <b>Needs</b>: A secure portal to add/edit class schedules and event details.
-- <b>Goals</b>: Keep the public calendar current with minimal friction.
+**English School Teacher / Club Organisers**  
+- **Needs:** A secure portal to add/edit class schedules and event details.  
+- **Goals:** Keep the public calendar current with minimal friction.
 
-#### Sponsors & Professional Partners
-Visitors evaluating collaboration or support.
-- <b>Needs</b>: Clear mission, professionalism, and evidence of community engagement.
-- <b>Goals</b>: Assess credibility and fit before offering support.
+**Sponsors & Professional Partners**  
+- **Needs:** Clear mission, professionalism, and evidence of community engagement.  
+- **Goals:** Assess credibility and fit before offering support.
 
-#### Prospective Student / Newsletter Subscriber
-Visitors who want periodic updates rather than checking the site frequently.
-- <b>Needs</b>: Simple newsletter opt-in and reassurance on data handling.
-- <b>Goals</b>: Receive timely updates on new classes, events, and announcements.
+**Prospective Student / Newsletter Subscriber**  
+- **Needs:** Simple newsletter opt-in and reassurance on data handling.  
+- **Goals:** Receive timely updates on new classes, events, and announcements.
 
 <h3>3. User Stories</h3>
 
-* As <i>a teacher</i>, I want to create and update a monthly schedule with weekly lessons and one-off events, so the calendar always reflects the latest plan.
-* As <i>a parent</i>, I want to browse upcoming events with my child (e.g., Halloween party, Art Workshop), so we can choose activities and prepare.
-* As <i>the owner</i>, I want to manage blog posts, flyers, and event entries from an internal portal, so I don’t need developer help or the public Django admin.
-* As <i>a student planning to study in the UK</i>, I want to find IELTS prep and contact the school for private lesson availability tailored to my needs.
-* As <i>a working professional</i>, I want to quickly see Business English options (group or private) so I can prepare for meetings or team training.
-* As <i>a prospective sponsor/partner</i>, I want to see a professional, well-organised site with examples of work, so I feel confident collaborating.
-* As <i>a visitor</i>, I want to select a category in the contact form (e.g., general inquiry, private lesson, event booking) so my message reaches the right staff member.
-* As <i>a prospective student or parent</i>, I want to sign up for the newsletter so I can receive updates on classes and events without checking the site manually.
+- As *a teacher*, I want to create and update a monthly schedule with weekly lessons and one-off events, so the calendar always reflects the latest plan.  
+- As *a parent*, I want to browse upcoming events with my child (e.g., Halloween party, Art Workshop), so we can choose activities and prepare.  
+- As *the owner*, I want to manage blog posts, flyers, and event entries from an internal portal, so I don’t need developer help or the public Django admin.  
+- As *a student planning to study in the UK*, I want to find IELTS prep and contact the school for private lesson availability tailored to my needs.  
+- As *a working professional*, I want to quickly see Business English options (group or private) so I can prepare for meetings or team training.  
+- As *a prospective sponsor/partner*, I want to see a professional, well-organised site with examples of work, so I feel confident collaborating.  
+- As *a visitor*, I want to select a category in the contact form so my message reaches the right staff member.  
+- As *a prospective student or parent*, I want to sign up for the newsletter so I can receive updates on classes and events without checking the site manually.
 
-<h2> UX - VISUAL DESIGN </h2>
+---
 
-SECTION WITH WIREFRAMES, BRANDING (FONTS, ICONS, COLOURS)
+<h2> UX – VISUAL DESIGN </h2>
 
-<h2> FEATURES - ALL PAGES (loaded by base.html) </h2>
+<p>
+  <img src="staticfiles/compressed/logofull.webp" alt="The English Studio Logo" width="10%" style="margin: 0 auto; display: block;"/>
+</p>
 
-<h3> 1. Navbar </h3>
-<h3> 2. Footer </h3> 
+- All branding including logo design, font selection and colours were designed by the developer. These elements naturally reflect the Union Jack palette and symbolise “English.”
 
-<h2> FEATURES - TECHNICAL </h2>
+<p>
+  <img src="main/static/compressed/privatelessons.webp" width="20%" alt="Private Lessons"/> 
+  <img src="main/static/compressed/studyenglish.webp" width="20%" alt="Study English"/> 
+  <img src="main/static/compressed/businessandgeneral.webp" width="20%" alt="Business and General English"/> 
+  <img src="main/static/compressed/afterschoolclub.webp" width="20%" alt="After School Club"/>
+</p>
 
-1. Language Switching: Internationalization (i18n) enabled, with Italian and English support.
-2. Custom form handling: Both blog and schedule management use Django forms enhanced with JavaScript fetch for interactive validation and smooth submission.
-3. Environment variables: Sensitive settings (e.g., Cloudinary, Mailchimp API keys) are stored securely and never hard-coded.
-4. Media Handling: Cloudinary used for image/video hosting.
-5. Security: Portal routes are protected from public access.
-6. Deployment: Live site hosted on Render with PostgreSQL, secure API keys, and Mailchimp integration managed via environment variables.
-7. Custom Recurrence Logic: Event scheduling logic uses datetime and calendar modules to calculate all valid recurrence dates dynamically.
+Carousel images were rendered by the developer to fit the professional academic feel of the site using OpenAI prompts matching the four class styles: private lessons, after school club, test prep, and business English.
 
-<h2> FEATURES - PUBLIC </h2>
-<h3> 1. Homepage (index.html) </h3>
+Icons used in the “WHAT WE OFFER” section reference the brand to create descriptive symbols that complement the logo and reinforce brand identity.
 
-* Professionally designed landing page includes hero carousel with AI generated images to match the schools clean aesthetic. The hero carousel uses overlay formed of headings and a single sentence description to highlight class options and ‘LEARN MORE’ CTA on each slide link to the details on ‘WHAT WE OFFER’ section further down the page. 
-* A personal feel is instantly created by introducing the teacher in the ‘LEARN ENGLISH WITH LEANNE’ section below - trust is gained through displaying notable experience. A signature to sign of the paragraph instills that personal feeling. 
-* After formal introduction the user can browse the class selection. AI generated icons offer supplement to the information in a table format which highlight the selection of classes and events on offer.
-* All content on the homepage can be translated between English and Italian via the flags located in the navigation bar. 
+<p>
+  <img src="main/static/compressed/apple.webp" style="height: 200px;" alt="Apple Icon"/> 
+  <img src="main/static/compressed/balloons.webp" style="height: 200px;" alt="Balloons Icon"/> 
+  <img src="main/static/compressed/book.webp" style="height: 200px;" alt="Book Icon"/> 
+  <img src="main/static/compressed/chat.webp" style="height: 200px;" alt="Chat Icon"/> 
+  <img src="main/static/compressed/crafts.webp" style="height: 200px;" alt="Crafts Icon"/> 
+  <img src="main/static/compressed/rosette.webp" style="height: 200px;" alt="Rosette Icon"/>
+</p>
 
-<h3> 2. Blog (blog_list.html / blog_detail.html) </h3>
+<h3>FONTS & COLOURS</h3>
 
-* Upon navigating to the blog users are met with the ‘list’ of blog enteries. 
-* Each blog entry is displayed as a ‘card’ with a feature image, title, and date.
-* When users click on a ‘card’ to read a blog post they navigate to a page on which the feature image is enlarged and presented next to the text content of the blog.
-* Blog posts can also support video alongside the text content. 
-* Previous/Next navigation appears at the bottom of each post so that users may browse through the available posts in chronological order 
-* Alternatively users can return to the ‘blog list’ view via a button underneath each post. 
-* URLs are SEO-friendly via auto-generated slugs.
-* Just like the homepage all content on the blog can be translated between English and Italian via the flags located in the navigation bar.
+- The `primaryfont` is **Archivo Black** (from the logo).  
+- The body font is **Cabin**, a smart, minimal sans-serif.
 
-<h3> 3. Interactive Schedule Calendar (calendar.html)</h3>
+Navy (text): `#37376B`
+Red (accents): `#B30000`
+Off-white (bg): `#fdfbf6`
 
-* Events and classes are displayed in a custom calendar view via the ‘SCHEDULE’ button in the sites navigation. 
-* The calendar on the site utlizes Emoji-based icons are used to represent different types of classes (e.g., 🎨 Art Workshop, 🎃 Halloween Party), for several reasons
-1. It is fun! Appealing to the primary audience (parents & school children)
-2.  It is designed so that children are encouraged to invest in their English learning and plan activities with their parents. Involving the children in the decision making progress to instill their sense of autonomy and actively promoting engagement. 
-3. Emojis allow the schedule to be really dynamic - the text information is then displayed within a tooltip which appears when a date field is hovered or tapped.
 
-* To improve UX a date which contains mutliple events/ emojis - shows details for all of the events on that day within a single tooltip. This also improves accessibility by creating a larger touch target.
-* Calendar includes month-switching logic with dynamic date navigation, so users can see what has happened in previous months, but also plan way ahead into the future/look at what events start happening during term time. 
+The navy/red are slightly muted to feel professional; the off-white background softens the overall feel (book-page vibe).
 
-<h3> 4.  Contact Form with Mailchimp Integration (contact.html) </h3>
+WIREFRAMES: 
 
-* Accessible form collects name, email, phone, subject, and message.
-* Emails are sent with reply_to headers to the school address.
-* Users can opt in to a newsletter via Mailchimp API integration.
-* Google Maps API is embedded to show the school’s location with a custom pin which uses the schools branding. 
 
-<h2> FEATURES - STAFF PORTAL (/portal) </h2>
+---
 
-<h3> 1. Login Page (portal/login) </h3>
+<h2> FEATURES – ALL PAGES (loaded by base.html) </h2>
 
-* Secure, password-protected login view built using Django’s authentication system.
-* Customised frontend styling for a consistent user experience.
-* On successful login, users are redirected to the main dashboard.
+All pages feature a responsive navbar and footer.
 
-<h3> 2. Dashboard (portal) </h3>
+<h3>1. Navbar</h3>
 
-* Acts as a central hub for navigating between blog and schedule management.
-* Accessible via /portal/ after login.
-* Includes super quick links and visual cues to streamline admin workflows.
+<div style="display: flex; align-items: flex-start; gap: 24px; flex-wrap: wrap;">
+  <img src="readmefiles/navbarphone.jpg" alt="Navbar Phone" style="max-width: 220px; width: 100%; border-radius: 8px; margin-bottom: 12px; flex-shrink: 0;">
+  <img src="readmefiles/navbardesktop.jpg" alt="Navbar Desktop" style="max-width: 800px; width: 100%; border-radius: 8px; margin-bottom: 12px; flex-shrink: 0;">
+</div>
 
-<h3> 3. Blog Post Management </h3>
+- Look & feel: super minimal, lots of breathing room. Off-white background, navy text, red accent. Brand-first.  
+- Desktop: round logo on the left; right-aligned uppercase links — **ABOUT · SCHEDULE · BLOG · CONTACT**; GB/IT flags far right.  
+- Mobile: right-side overlay menu; links stack vertically; hamburger morphs to a red **X** close button; flags inside the menu.  
+- Hierarchy: logo → primary links → language.
+
+<h3>2. Footer</h3>
+
+<div style="display: flex; align-items: flex-start; gap: 24px; flex-wrap: wrap;">
+  <img src="readmefiles/footerphone.jpg" alt="Footer Phone" style="max-width: 220px; width: 100%; border-radius: 8px; margin-bottom: 12px; flex-shrink: 0;">
+  <img src="readmefiles/footerdesktop.jpg" alt="Footer Desktop" style="max-width: 800px; width: 100%; border-radius: 8px; margin-bottom: 12px; flex-shrink: 0;">
+</div>
+
+- Solid navy panel with a thin red top border. White text; red “FOLLOW US ON” accent.  
+- Desktop: three columns — (1) logo; (2) address + socials + legal; (3) quick links.  
+- Mobile: everything centers and stacks; quick links become a single row; legal/meta at the bottom.
+
+---
+
+<h2> FEATURES – TECHNICAL </h2>
+
+1. **Language Switching:** i18n enabled; English/Italian with locale prefixes.  
+2. **Custom form handling:** Blog and schedule use Django forms + `fetch` for smooth UX.  
+3. **Environment variables:** Sensitive settings via `.env` only.  
+4. **Media handling:** Cloudinary for images/video.  
+5. **Security:** Portal routes protected from public access.  
+6. **Deployment:** Render (web service + Postgres).  
+7. **Custom Recurrence Logic:** Datetime/calendar logic for recurring events with exceptions.
+
+---
+
+<h2> FEATURES – PUBLIC </h2>
+
+<h3>1. Homepage (index.html)</h3>
+
+<p>
+  <img src="readmefiles/devicetesting/public/index.html/Macbook-Air-theenglishstudiocorvetto.com.png" style="max-width: 300px; border-radius: 8px;">
+  <img src="readmefiles/devicetesting/public/index.html/Macbook-Air-theenglishstudiocorvetto.com (1).png" style="max-width: 300px; border-radius: 8px;">
+  <img src="readmefiles/devicetesting/public/index.html/Macbook-Air-theenglishstudiocorvetto.com (2).png" style="max-width: 300px; border-radius: 8px;">
+  <img src="readmefiles/devicetesting/public/index.html/Macbook-Air-theenglishstudiocorvetto.com (3).png" style="max-width: 300px; border-radius: 8px;">
+</p>
+
+- Professionally designed landing page with hero carousel; overlay headings and CTA link to “WHAT WE OFFER.”  
+- “Learn English with Leanne” introduces the teacher to build trust; signature adds a personal touch.  
+- Class selection with custom icons complements the information and reinforces branding.  
+- All homepage content is bilingual (EN/IT) via the flags in the navbar.
+
+<h3>2. Blog (blog_list.html / blog_detail.html)</h3>
+
+<p>
+  <img src="readmefiles/devicetesting/public/blog/blog_list.html/Macbook-Air-theenglishstudiocorvetto.com (5).png" style="max-width: 300px; border-radius: 8px;">
+  <img src="readmefiles/devicetesting/public/blog/blog_detail.html/Macbook-Air-theenglishstudiocorvetto.com (6).png" style="max-width: 300px; border-radius: 8px;">
+</p>
+
+- Blog list shows feature image, title, and date per post (card layout).  
+- Detail page enlarges the image and presents content; video supported.  
+- Prev/Next navigation and a button back to the list.  
+- SEO-friendly slugs.  
+- Fully bilingual content.
+
+<h3>3. Interactive Schedule Calendar (calendar.html)</h3>
+
+<p>
+  <img src="readmefiles/devicetesting/public/calendar.html/Macbook-Air-theenglishstudiocorvetto.com (5).png" style="max-width: 300px; border-radius: 8px;">
+  <img src="readmefiles/devicetesting/public/calendar.html/Macbook-Air-theenglishstudiocorvetto.com (6).png" style="max-width: 300px; border-radius: 8px;">
+</p>
+
+- Custom calendar view via **SCHEDULE**.  
+- Emoji icons represent different classes/events; tooltips show details (multiple events listed together).  
+- Month switching for past/future planning.
+
+<h3>4. Contact Form with Mailchimp Integration (contact.html)</h3>
+
+<p>
+  <img src="readmefiles/devicetesting/public/contact.html/Macbook-Air-theenglishstudiocorvetto.com (5).png" style="max-width: 300px; border-radius: 8px;">
+</p>
+
+- Accessible form: name, email, phone, subject, message.  
+- Emails sent with `reply_to` headers to the school address.  
+- Optional newsletter opt-in (Mailchimp).  
+- Google Maps API with custom branded pin.
+
+---
+
+<h2> FEATURES – STAFF PORTAL (/portal)</h2>
+
+<h3>1. Login Page (portal/login)</h3>
+
+<p>
+  <img src="readmefiles/devicetesting/staff/portal/login.html/Macbook-Air-theenglishstudiocorvetto.com (5).png" style="max-width: 300px; border-radius: 8px;">
+</p>
+
+- Secure login via Django auth; custom UI; redirects to dashboard on success.
+
+<h3>2. Dashboard (portal)</h3>
+
+<p>
+  <img src="readmefiles/devicetesting/staff/portal/dashboard.html/Macbook-Air-theenglishstudiocorvetto.com (7).png" style="max-width: 300px; border-radius: 8px;">
+</p>
+
+- Central hub for blog and schedule management with quick links.
+
+<h3>3. Blog Post Management</h3>
+
+<p>
+  <img src="readmefiles/devicetesting/staff/portal/blog/form.html/Macbook-Air-theenglishstudiocorvetto.com (9).png" style="max-width: 300px; border-radius: 8px;">
+  <img src="readmefiles/devicetesting/staff/portal/blog/list.html/Macbook-Air-theenglishstudiocorvetto.com (8).png" style="max-width: 300px; border-radius: 8px;">
+  <img src="readmefiles/devicetesting/staff/portal/blog/confirm_delete.html/Macbook-Air-theenglishstudiocorvetto.com (10).png" style="max-width: 300px; border-radius: 8px;">
+</p>
 
 Staff can:
-* Create new posts with sections to populate in English and Italian so the site remains bilingual.
-* Upload images and video to Cloudinary.
-* Edit or delete posts.
-* Backdate posts
-* Toggle post status between draft and published.
-* Posts are updated asynchronously using JavaScript fetch requests for a smooth experience.
+- Create bilingual posts (EN/IT).  
+- Upload images/video to Cloudinary.  
+- Edit, delete, backdate, toggle status (draft/published).  
+- JS `fetch` for smooth saves.
 
-<h3> 4. Schedule Management </h3>
+<h3>4. Schedule Management</h3>
 
-* Full CRUD support for both models:
-1. Classes can be created with a name and emoji, and translated into Italian.
-2. Events can be created, edited, or deleted and linked to any class.
+<p>
+  <img src="readmefiles/devicetesting/staff/portal/event_list.html/Macbook-Air-theenglishstudiocorvetto.com (5).png" style="max-width: 300px; border-radius: 8px;">
+  <img src="readmefiles/devicetesting/staff/portal/event_list.html/Macbook-Air-theenglishstudiocorvetto.com (6).png" style="max-width: 300px; border-radius: 8px;">
+</p>
 
-* Events support multiple recurrence options: One time, weekly, biweekly, monthly or custom days. Recurrence options are fully customisable via the portal.
-* Admins can specify recurrence exceptions (e.g., no class during holidays) this also drastically improves the UX as it prevents a lot of admin in the backend - otherwise  reoccurring events would need to be deleted due to calendar clashes with a one off event.
-* Form validation ensures valid date/time input and prevents scheduling conflicts.
+- Full CRUD for **Classes** (name + emoji; bilingual) and **Events** (time slots linked to classes).  
+- Recurrence options: one-time, weekly, biweekly, monthly, custom days; with **exception dates**.  
+- Validation to prevent bad date/time ranges.
 
-<h3> 5. Upcoming Events Flyers Management </h3>
-Staff can:  
-* Create new flyers with bilingual fields (EN/IT).  
-* Upload flyer images and optional PDF attachments.  
-* Toggle flyer visibility and reorder flyers using `sort_order`, so the homepage displays them in the desired sequence.  
-* Edit or delete flyers directly from the portal.  
+<h3>5. Upcoming Events Flyers Management</h3>
 
-<h3> 6. User Management </h3>
-Staff with the correct privileges can:  
-* Create new user accounts.  
-* Delete users or reset their passwords.  
-* Assign or update user roles and permissions (staff/superuser).  
-* Manage access rights without exposing the public Django admin.  
+<p>
+  <img src="readmefiles/devicetesting/staff/portal/flyers/flyer_form.html/Macbook-Air-theenglishstudiocorvetto.com (5).png" style="max-width: 300px; border-radius: 8px;">
+  <img src="readmefiles/devicetesting/staff/portal/flyers/flyers_list.html/Macbook-Air-theenglishstudiocorvetto.com (7).png" style="max-width: 300px; border-radius: 8px;">
+  <img src="readmefiles/devicetesting/staff/portal/flyers/reorder.html/Macbook-Air-theenglishstudiocorvetto.com (5).png" style="max-width: 300px; border-radius: 8px;">
+</p>
+
+Staff can:
+- Create flyers with bilingual fields (EN/IT).  
+- Upload flyer images (and optional PDFs, if enabled).  
+- Reorder flyers via `sort_order` for homepage sequence.  
+- Edit or delete flyers.
+
+<h3>6. User Management</h3>
+
+- Create/delete users, reset passwords, assign roles/permissions (staff/superuser).  
+- Owner-created users can reset their own password via the portal login.  
+- No public Django admin exposure.
+
+---
 
 <h2> INFORMATION ARCHITECTURE </h2>
 
 <h3>1. Database Structure</h3>
-The English Studio website uses a PostgreSQL database hosted via Render.  
-The schema reflects real-world relationships between classes, events, flyers, and blog content.
 
-Key relationships:
-- Each Event is linked to a Class via a ForeignKey.  
-- Events support advanced recurrence logic with exceptions.  
-- BlogPosts are multilingual and media-rich, linked to the User model.  
-- Flyers store bilingual descriptions and control homepage ordering.  
+The following ERD visualises relationships between the models.
 
-The primary custom models are: `Class`, `Event`, `BlogPost`, and `Flyer`.  
+![ERD](readmefiles/erd.png)
+
+**Key relationships**
+- Each **Event** belongs to a **Class** (`ForeignKey`).  
+- Events support **recurrence** with **exception dates** and optional **repeat-until**.  
+- **BlogPost** is multilingual and authored by a Django **User**.  
+- **Flyer** stores bilingual text and uses `sort_order` for manual homepage ordering.
+
+Primary custom models: **Class**, **Event**, **BlogPost**, **Flyer**.
 
 <h3>2. Database Models</h3>
 
-#### Class Model
-| Field Name | Field Type | Info |
-|------------|------------|------|
-| name_en    | CharField  | English name |
-| name_it    | CharField  | Italian name (optional) |
-| emoji      | CharField  | Emoji icon for calendar |
-| __str__()  | Method     | Returns name in current language with emoji |
+### Class
 
-#### Event Model
-| Field Name            | Field Type           | Info |
-|-----------------------|----------------------|------|
-| class_instance        | ForeignKey(Class)    | Links event to a class |
-| date                  | DateField            | Date of the event |
-| start_time            | TimeField            | Start time |
-| end_time              | TimeField            | End time |
-| recurrence            | CharField (choices)  | One-time, weekly, biweekly, monthly, custom_days |
-| days_of_week          | CharField            | Stores weekdays if recurrence = custom_days |
-| recurrence_exceptions | ArrayField           | Dates to skip for recurring events |
-| __str__()             | Method               | Returns readable event summary |
+| Field        | Type        | Notes |
+|--------------|-------------|-------|
+| `name_en`    | `CharField` | English name (required) |
+| `name_it`    | `CharField` | Italian name (optional) |
+| `emoji`      | `CharField` | Single emoji used in calendar/tooltips |
+| `__str__()`  | method      | Readable label (emoji + name) |
 
-#### BlogPost Model
-| Field Name      | Field Type        | Info |
-|-----------------|-------------------|------|
-| title_en        | CharField         | English title |
-| title_it        | CharField         | Italian title (optional) |
-| slug            | SlugField         | SEO-friendly URL |
-| body_en         | RichTextField     | English content |
-| body_it         | RichTextField     | Italian content |
-| featured_image  | CloudinaryField   | Header image |
-| video           | CloudinaryField   | Optional video |
-| author          | ForeignKey(User)  | Blog post author |
-| status          | CharField         | Draft or Published |
-| created_at      | DateTimeField     | Creation time |
-| updated_at      | DateTimeField     | Last update |
-| published_at    | DateTimeField     | Publication control |
-| get_absolute_url() | Method          | Returns URL based on slug |
+### Event
 
-#### Flyer Model
-| Field Name     | Field Type       | Info |
-|----------------|------------------|------|
-| title_en       | CharField        | English title |
-| title_it       | CharField        | Italian title |
-| description_en | CharField        | English description |
-| description_it | CharField        | Italian description |
-| image          | CloudinaryField  | Flyer image |
-| file           | CloudinaryField  | PDF upload (optional) |
-| event_date     | DateField        | Event date |
-| publish        | BooleanField     | Controls visibility |
-| sort_order     | IntegerField     | Controls homepage order |
-| created_at     | DateTimeField    | Creation timestamp |
+| Field                   | Type                           | Notes |
+|-------------------------|--------------------------------|-------|
+| `class_instance`        | `ForeignKey(Class)`            | `on_delete=CASCADE` |
+| `date`                  | `DateField`                    | Anchor date for one-offs/first occurrence |
+| `start_time`            | `TimeField`                    | Local start |
+| `end_time`              | `TimeField`                    | Local end |
+| `recurrence`            | `CharField(choices)`           | `none`, `weekly`, `biweekly`, `monthly`, `custom_days` |
+| `days_of_week`          | `CharField`                    | Comma list when `recurrence="custom_days"` (e.g., `Mon,Wed,Fri`) |
+| `repeat_until`          | `DateField(null=True)`         | Optional final date |
+| `recurrence_exceptions` | `ArrayField(Date)` / `JSONField` | Dates to skip (Postgres) |
+| `__str__()`             | method                         | Readable summary |
 
-<h3>3. Entity Relationship Diagram (ERD)</h3>
+**Indexes / performance (recommended)**
+- Composite `(date, class_instance)` for calendar queries.  
+- Partial index for future events: `WHERE date >= CURRENT_DATE`.
 
-The following ERD visualizes the relationships between the models in the project.
+### BlogPost
 
-<img src="docs/erd.png" alt="Entity Relationship Diagram for The English Studio" width="800"/>
+| Field              | Type                        | Notes |
+|--------------------|-----------------------------|-------|
+| `title_en`         | `CharField`                 | English title |
+| `title_it`         | `CharField`                 | Italian title (optional) |
+| `slug`             | `SlugField(unique)`         | Used in URLs |
+| `body_en`          | rich text (`TextField`/editor) | English content |
+| `body_it`          | rich text                   | Optional Italian content |
+| `featured_image`   | `ImageField`                | Cloud-hosted header image |
+| `video`            | optional media field        | Optional |
+| `author`           | `ForeignKey(User)`          | Post author |
+| `status`           | `CharField`                 | Draft / Published |
+| `created_at`       | `DateTimeField`             | Auto timestamp |
+| `updated_at`       | `DateTimeField`             | Auto timestamp |
+| `published_at`     | `DateTimeField`             | Controls visibility/order |
+| `get_absolute_url()` | method                    | Returns `/blog/<slug>/` |
 
-<h2> TECHNOLOGIES USED </h2>
+> The list template uses `featured_image`, `title_en/it`, `published_at`, and `slug`.
 
-<h3> 1. LANGUAGES </h3>
-- Python: Primary programming language for backend development using Django.  
-- HTML: Used for markup and templating in all site pages.  
-- CSS: Used for styling, layout adjustments, and custom visual design. 
-- JavaScript: Enables dynamic user interactions, form handling, and calendar logic.  
+### Flyer
 
-<h3> 2. FRAMEWORKS </h3>
-- Django (v5.2.1): Full-stack web framework used to build models, views, templates, forms, and the custom portal interface.  
-- Bootstrap 5: CSS framework for responsive grid layout and form components.  
-- CKEditor (via django-ckeditor): Rich text editor integrated into the blog system for staff content creation.  
+```python
+class Flyer(models.Model):
+    title_en = models.CharField(max_length=200)
+    title_it = models.CharField(max_length=200, blank=True, default="")
+    description_en = models.TextField(blank=True, default="")
+    description_it = models.TextField(blank=True, default="")
+    extra_info_en = models.CharField(max_length=255, blank=True, default="")
+    extra_info_it = models.CharField(max_length=255, blank=True, default="")
+    image = models.ImageField(upload_to="flyers/", blank=True, default="")
+    event_date = models.DateField(blank=True, null=True)
+    sort_order = models.PositiveIntegerField(default=0, db_index=True)
+    created_at = models.DateTimeField(default=timezone.now, editable=False)
 
-<h3> 3. DJANGO / PYTHON PACKAGES </h3>
-- cloudinary: Handles image and video uploads to a cloud-hosted media CDN.  
-- django-cloudinary-storage: Connects Django's storage system to Cloudinary.  
-- django-ckeditor: Enables WYSIWYG blog content editing.  
-- dj-database-url: Parses database connection strings from environment variables.  
-- gunicorn: WSGI server for production deployment on Render.  
-- pillow: Image processing library required by Django for image fields.  
-- psycopg2-binary: PostgreSQL database adapter.  
-- python-decouple / python-dotenv: Manages environment variables and API keys securely.  
-- python-dateutil: Provides advanced date and time utilities, used in scheduling recurring classes and events.  
-- requests: Used to send subscriber data to the Mailchimp API from the contact form.  
-- whitenoise: Efficient static file serving in production.  
-- sqlparse: Used by Django for admin and shell readability.  
-- asgiref, certifi, idna, charset-normalizer, tzdata, urllib3: Required dependencies for secure networking and timezone-aware apps.  
+    class Meta:
+        ordering = ["sort_order", "event_date", "id"]
+```
+| Field            | Type                   | Notes                                          |
+| ---------------- | ---------------------- | ---------------------------------------------- |
+| `title_en`       | `CharField(200)`       | Required                                       |
+| `title_it`       | `CharField(200)`       | Optional                                       |
+| `description_en` | `TextField`            | Optional                                       |
+| `description_it` | `TextField`            | Optional                                       |
+| `extra_info_en`  | `CharField(255)`       | Optional (short blurb)                         |
+| `extra_info_it`  | `CharField(255)`       | Optional (short blurb)                         |
+| `image`          | `ImageField`           | Stored under `flyers/` (cloud storage backend) |
+| `event_date`     | `DateField(null=True)` | Optional                                       |
+| `sort_order`     | `PositiveIntegerField` | **Indexed**; drag/drop order                   |
+| `created_at`     | `DateTimeField`        | Audit                                          |
+| `__str__()`      | method                 | Title fallback                                 |
+| `Meta.ordering`  | —                      | `["sort_order","event_date","id"]`             |
 
-<h3> 4. THIRD-PARTY SERVICES </h3>
-- Cloudinary: Manages and hosts all uploaded blog media (images and videos).  
-- Mailchimp: Stores newsletter subscribers when users opt-in via the contact form.  
-- Google Maps API: Displays the school’s Corvetto location with a custom map pin.  
-- ChatGPT: Assisted in generating carousel images and class description icons.  
-- GoDaddy: Provides domain registration and hosting for the site’s custom domain.  
+Internationalisation (i18n) pattern
 
-<h3> 5. DATABASE </h3>
-- PostgreSQL: Relational database used for storing all project data.  
+* Parallel EN/IT fields in models (e.g., title_en / title_it).
+* Templates resolve via LANGUAGE_CODE.
+* Simple queries; no translation tables.
 
-<h3> 4. DEPLOYMENT & DEV TOOLS </h3>
+| Key                      | Required | Example                                                       | Purpose                            |
+| ------------------------ | -------- | ------------------------------------------------------------- | ---------------------------------- |
+| `SECRET_KEY`             | ✅        | `django-insecure-…`                                           | Django crypto/signing key.         |
+| `DEBUG`                  | ✅        | `False`                                                       | Never `True` in production.        |
+| `ALLOWED_HOSTS`          | ✅        | `theenglishstudiocorvetto.com,.onrender.com`                  | Comma-separated hostnames.         |
+| `CSRF_TRUSTED_ORIGINS`   | ✅        | `https://theenglishstudiocorvetto.com,https://*.onrender.com` | CSRF origin safelist.              |
+| `DATABASE_URL`           | ✅        | `postgres://…`                                                | Render Postgres connection string. |
+| `CLOUDINARY_URL`         | ✅        | `cloudinary://…`                                              | Media storage backend.             |
+| `GOOGLE_MAPS_API_KEY`    | ✅        | `AIza…`                                                       | Contact page map loader.           |
+| `MAILCHIMP_API_KEY`      | ⬜        | `usX-…`                                                       | Newsletter opt-in.                 |
+| `MAILCHIMP_LIST_ID`      | ⬜        | `abcd1234`                                                    | Audience ID.                       |
+| `DJANGO_SETTINGS_MODULE` | ⬜        | `the_english_studio.settings`                                 | Usually default.                   |
+| `SECURE_SSL_REDIRECT`    | ⬜        | `True`                                                        | Force HTTPS (prod).                |
 
-- Render: Hosting platform for both the Django backend and PostgreSQL database.
-- GitHub: Used for version control and collaborative development.
-- GitHub Codespaces: Cloud-based development environment.
-Environment Variables (.env): Used to securely store all API keys, database credentials, and sensitive settings.
+| Area                | Method | Path (i18n prefix varies)                                               | Notes                  |
+| ------------------- | ------ | ----------------------------------------------------------------------- | ---------------------- |
+| Schedule Portal     | `GET`  | `/en/schedule/portal/`                                                  | Admin schedule UI.     |
+| Delete Event        | `POST` | `/en/schedule/portal/_/events/<id>/delete/`                             | Confirmed 200 in logs. |
+| Delete Class        | `POST` | `/en/schedule/portal/_/classes/<id>/delete/`                            | Confirmed 200 in logs. |
+| Create/Update Event | `POST` | `{% url 'portal:create_event' %}`, `{% url 'portal:update_event' id %}` | Used by `schedule.js`. |
+| Create/Update Class | `POST` | `{% url 'portal:create_class' %}`, `{% url 'portal:update_class' id %}` | Used by `schedule.js`. |
 
-<h2> TESTING </h2> 
+i18n
 
-<h3>1. About Testing</h3>
-The English Studio website has undergone extensive testing throughout development to ensure all functionality works as intended, is accessible to users, and meets modern usability standards.
-A full breakdown of all tests can be found in TESTING.md. Additional debugging history is logged in detail in BUGLOG.md.
+* Locale prefixes: /en/... and /it/... (Django LocaleMiddleware).
+* Translate templates with {% trans %} / {% blocktrans %}.
+* Update translations:
+`django-admin makemessages -l it`
+`django-admin compilemessages`
 
-* Every time a feature was implemented or updated, the entire site was manually reviewed to confirm no regressions occurred across views, forms, and interactions.
-* The project has been tested by non-technical users to simulate real-world interactions with the target audience.
-* Features like the calendar, contact form, and blog were tested for performance, form validation, and response handling.
-* A wide range of devices and screen sizes were tested manually to ensure responsive design and interactive stability.
-* Colour contrast was checked and adjusted where needed to ensure WCAG 2.1 compliance.
-* CSS code was validated using Jigsaw W3C Validator and passed without errors.
+Security & Privacy
 
-The document including a table with all tests can be found [here](TESTING.md).
+Secrets only via environment variables; never committed.
 
-<h3> 2. Validation </h3>
-The validation section of the testing document can be found [here](TESTING.md#validation)
+HTTPS enforced (e.g., SECURE_SSL_REDIRECT=True); HSTS handled by platform.
 
-</h3> 3. Mobile & Desktop Testing </h3>
-The mobile & desktop testing section of the testing document can be found [here](TESTING.md#mobiletesting)
+Personal data handled by contact form/newsletter; document retention and GDPR contact.
 
-<h3> 4. Manual Testing </h3>
-The manual testing section of the testing document can be found [here](TESTING.md#manual)
+Backups: Render Postgres snapshots (plus any additional policy you adopt).
 
-<h3> 5. User Story Testing </h3>
-The user story testing section of the testing document can be found [here](TESTING.md#user)
+Error logging: Render logs (add Sentry if you choose).
 
-<h3> 6. Bugs </h3>
-A comprehensive log of all debugging actions taken throughout the project timeline can be found [here](BUGLOG.md).
+<h2> TECHNOLOGIES USED </h2> 
 
-There is also a list of bugs which are yet to be resolved in the [testing document](TESTING.md).
+<h3>1. Languages</h3> 
 
-<h2> DEPLOYMENT</h2
+* Python
+* HTML
+* CSS
+* JavaScript
 
-<h3> 1. LOCAL DEPLOYMENT </h3>
-To run *The English Studio* project locally for development or testing purposes:
+<h3>2. Frameworks</h3> 
 
-#### REQUIREMENTS:
-- Python 3.9+ installed
-- An IDE such as Visual Studio Code
-- pip (Python package installer)
-- Git
-- PostgreSQL (or SQLite for local testing only)
-- Accounts with Cloudinary and Mailchimp (optional but required for full feature support)
-- A `.env` file with the correct environment variables
+* Django (5.x)
+* Bootstrap 5, 
+* CKEditor (via `django-ckeditor`). 
+ 
+ <h3>3. Django / Python Packages</h3> 
 
-#### SETUP INSTRUCTIONS:
-1. Clone the repository from GitHub:
-   git clone https://github.com/kimjev-webdev/theenglishstudiocorvetto.git
+* cloudinary
+* django-cloudinary-storage
+* django-ckeditor
+* dj-database-url
+* gunicorn
+* pillow
+* psycopg2-binary
+* python-decouple
+* python-dotenv
+* python-dateutil
+* requests
+* whitenoise
+* sqlparse
+* asgiref
+* certifi
+* idna
+* charset-normalizer
+* tzdata
+* urllib3
+<h3>4. Third-Party Services</h3>
 
-2. Navigate into the project folder:
-   cd theenglishstudiocorvetto
+* Render: App & Postgres hosting
+* Cloudinary: Media storage
+* Mailchimp: Newsletter opt-in (optional)
+* Google Maps API: Contact page map
+* GoDaddy: Domain registrar/DNS
 
-3. (Recommended) Set up and activate a virtual environment:
-   python3 -m venv .venv  
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+<h3>5. Database</h3> 
 
-4. Install dependencies:
-   pip install -r requirements.txt
+* PostgreSQL. 
 
-5. Create a `.env` file in the root directory and include the environment variables found inside env.example
+<h3>6. Deployment & Dev Tools</h3>
 
-6. Apply migrations and create a superuser:
-   python manage.py migrate  
-   python manage.py createsuperuser
+* Render
+* GitHub
+* GitHub Codespaces
+* Environment variables (`.env`) for all secrets
 
-7. Run the development server:
-   python manage.py runserver
+<h2> TESTING </h2> <h3>1. About Testing</h3> 
 
-8. Visit http://127.0.0.1:8000 to access the site locally. The Django admin is accessible at `/admin`.
+Extensive manual testing across views, forms, interactions, devices; non-technical users involved for realistic feedback. Colour contrast checked against WCAG 2.1. CSS validated (W3C Jigsaw).
+A full breakdown of tests is in TESTING.md. Debug history lives in BUGLOG.md.
 
-<h3> 2. PRODUCTION DEPLOYMENT (RENDER) </h3>
+<h3>2. Validation</h3>
 
-The project is deployed using **Render**, which manages the build process, static file hosting, and PostgreSQL database.
+See [TESTING.md](TESTING.md).
 
-#### RENDER DEPLOYMENT STEPS:
-1. Push your full project repository to GitHub.
-2. Log in to https://render.com and create a new **Web Service**.
-3. Select your GitHub repo and configure:
-   - **Build Command**:  
-     pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --no-input
-   - **Start Command**:  
-     gunicorn the_english_studio.wsgi:application
-4. Under "Environment → Environment Variables", add the following config vars (matching your local `.env` - see env.example. 
+<h3>3. Mobile & Desktop Testing</h3>
 
-5. Set up static file hosting in Render's "Static Files" section:
-   - Path: /static
-   - Directory: staticfiles
+See [TESTING.md](TESTING.md).
 
-6. Once configured, click "Deploy" and wait for the build to finish.
-7. Click "View Live" to access your live production site.
+<h3>4. Manual Testing</h3>
+
+See [TESTING.md](TESTING.md).
+
+<h3>5. User Story Testing</h3>
+
+See [TESTING.md](TESTING.md).
+
+<h3>6. Bugs</h3>
+
+See [BUGLOG.md](BUGLOG.md); unresolved items listed at the bottom of [TESTING.md](TESTING.md).
+
+<h2> DEPLOYMENT </h2>
+
+The website is deployed at https://theenglishstudiocorvetto.com
+
+<h3>1. Local Development</h3>
+
+Requirements: Python 3.9+, pip, Git, (optional) PostgreSQL, Cloudinary/Mailchimp accounts if using those features.
+
+### 1) Clone
+git clone https://github.com/kimjev-webdev/theenglishstudiocorvetto.git
+cd theenglishstudiocorvetto
+
+### 2) Virtualenv
+python3 -m venv .venv
+#### Windows:
+.venv\Scripts\activate
+#### macOS/Linux:
+source .venv/bin/activate
+
+### 3) Install deps
+pip install -r requirements.txt
+
+### 4) Create .env from env.example and fill values
+
+### 5) Migrate & superuser
+python manage.py migrate
+python manage.py createsuperuser
+
+### 6) Run
+python manage.py runserver
+
+Visit http://127.0.0.1:8000
+ (Django admin at /admin).
+
+<h3>2. Production (Render)</h3>
+
+* Build: pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --no-input
+
+* Start: gunicorn the_english_studio.wsgi:application
+
+* Configure environment variables in Render dashboard.
+
+* Static files: served via WhiteNoise; (optional) configure a static route if needed.
+
+<h2> LICENSE </h2>
+
+Proprietary License – The English Studio Website
+
+Copyright (c) 2025 The English Studio. All rights reserved.
+
+This project (including all source code, designs, images, copy, and build
+artifacts) is proprietary to The English Studio (“Client”). It may not be
+copied, reproduced, modified, distributed, publicly displayed, or used for
+any purpose other than operating and maintaining The English Studio website,
+except with the Client’s prior written permission.
+
+1) Ownership
+   - All intellectual property in this repository belongs to The English Studio.
+   - All branding, logos, images, and written content are owned by the Client.
+   - Any third-party components remain the property of their respective owners
+     and are licensed separately as noted in their documentation.
+
+2) Limited Use Grant
+   - The Client and its expressly authorized staff/contractors are granted a
+     non-transferable, non-sublicensable license to use, run, and modify this
+     codebase solely for the operation and maintenance of The English Studio
+     website.
+   - No other rights are granted.
+
+3) Restrictions
+   - No redistribution, relicensing, or sale of this code or assets.
+   - No copying or reuse in other projects, products, or services.
+   - No extraction of components (including styles, images, or copy) for
+     unrelated use.
+   - No publication of source code or assets in public repositories or package
+     registries without the Client’s written consent.
+
+4) Trademarks & Branding
+   - The English Studio name, logo, and brand elements may not be used without
+     the Client’s written permission.
+
+5) Third-Party Software
+   - This project may include third-party libraries or services (e.g., Django,
+     Bootstrap, Cloudinary, Mailchimp, Google Maps). Such components are
+     governed by their own licenses and terms, which must be followed.
+
+6) Termination
+   - Any breach of these terms immediately terminates the license.
+
+7) “AS IS” Disclaimer
+   - The software is provided “AS IS”, without warranties of any kind, express
+     or implied, including but not limited to fitness for a particular purpose.
+
+8) Future Open-Source Option
+   - If the Client decides to open-source this project, this file may be
+     replaced with an open-source license (e.g., MIT or BSD-3-Clause).
+
+For permissions or questions, contact:
+The English Studio — theenglishstudio.corvetto@gmail.com
 
 <h2> CREDIT & CONTACT </h2>
+
 All content and structure were developed for a real-world client project. Media, blog posts, and calendar data are owned by the client.
 
-For technical questions or collaboration inquiries, contact:
-**Developer:**  
-📧 kimjev.webdev@gmail.com  
+Developer
+📧 kimjev.webdev@gmail.com
+
 🔗 https://github.com/kimjev-webdev/theenglishstudiocorvetto

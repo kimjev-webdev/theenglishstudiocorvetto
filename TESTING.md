@@ -191,59 +191,57 @@ contact.html | <img src="readmefiles\devicetesting\public\contact.html\iPhone-13
 ### F. Portal: Authentication & Security
 | Step | Expected | Result | 
 |-----|----------|--------|
-| Visit `/portal/` logged out | Redirect to login | _ | _ | _ |
-| Login valid user | Dashboard visible | _ | _ | _ |
-| Logout | Session cleared; login required again | _ | _ | _ |
-| Password reset | Reset email flow works (templates render) | _ | _ | _ |
-| Direct access to portal sub-routes when logged out | Redirects to login | _ | _ | _ |
+| Visit `/portal/` logged out | Redirect to login | PASS |
+| Login valid user | Dashboard visible | PASS |
+| Logout | Session cleared; login required again | PASS |
+| Password reset | Reset email flow works (templates render) | PASS |
+| Direct access to portal sub-routes when logged out | Redirects to login | PASS |
 
 ### G. Portal: Blog CRUD
-| Step | Expected | Actual | Pass | Notes |
-|-----|----------|--------|------|------|
-| Create blog post (EN/IT) | Saved; appears in list | _ | _ | _ |
-| Upload image/video (Cloudinary) | Media previews; loads on detail | _ | _ | _ |
-| Edit / delete | Updates persist | _ | _ | _ |
-| Draft vs Published | Draft hidden from public; Published visible | _ | _ | _ |
+| Step | Expected | Result | 
+|-----|----------|--------|
+| Create blog post (EN/IT) | Saved; appears in list | PASS | 
+| Upload image/video (Cloudinary) | Media previews; loads on detail | PASS |
+| Edit / delete | Updates persist | PASS | _ |
+| Draft vs Published | Draft hidden from public; Published visible | PASS | 
 
 ### H. Portal: Flyers CRUD & Reordering
-| Step | Expected | Actual | Pass | Notes |
-|-----|----------|--------|------|------|
-| Create flyer (EN/IT) | Saved; can upload image/PDF | _ | _ | _ |
-| Toggle `publish` | Appears/disappears on Home | _ | _ | _ |
-| Change `sort_order` | Home list updates to new order | _ | _ | _ |
+| Step | Expected | Result | 
+|-----|----------|--------|
+| Create flyer (EN/IT) | Saved; can upload image/PDF | PASS |
+| Toggle `publish` | Appears/disappears on Home | PASS |
+| Change `sort_order` | Home list updates to new order | PASS |
 
 ### I. Portal: Classes & Events (Recurrence)
-| Step | Expected | Actual | Pass | Notes |
-|-----|----------|--------|------|------|
-| Create Class (EN/IT, emoji) | Visible in event form + calendar | _ | _ | _ |
-| Create Event (one-time) | Displays on selected date | _ | _ | _ |
-| Create Event (weekly/biweekly/monthly) | All instances appear correctly | _ | _ | _ |
-| Custom days (days_of_week) | Instances generated on chosen weekdays | _ | _ | _ |
-| Add Exceptions | Exception dates omitted | _ | _ | _ |
-| Edit/Delete event | Calendar updates accordingly | _ | _ | _ |
+| Step | Expected | Result |
+|-----|----------|--------|
+| Create Class (EN/IT, emoji) | Visible in event form + calendar | PASS |
+| Create Event (one-time) | Displays on selected date | PASS |
+| Create Event (weekly/biweekly/monthly) | All instances appear correctly | PASS |
+| Custom days (days_of_week) | Instances generated on chosen weekdays | PASS |
+| Add Exceptions | Exception dates omitted | PASS |
+| Edit/Delete event | Calendar updates accordingly | PASS |
 
 ### J. User Management (Django Auth)
 | Step | Expected | Result | Notes |
 |-----|----------|--------|------|
-| Create user (staff) | Can log into portal | PASS | _ | 
-| Change permissions | Access reflects new roles | PASS | _ |
-| Delete user | Access revoked, can’t login | PASS | _ | 
+| Create user (staff) | Can log into portal | PASS | 
+| Change permissions | Access reflects new roles | PASS |
+| Delete user | Access revoked, can’t login | PASS | 
 
 ---
 
 ## 6. User Story Testing <a id="user"></a>
 
-Map each story in the README to concrete tests above.
-
 | User Story | Covered By |
 |------------|------------|
-| Teacher updates monthly schedule (recurrence & exceptions) | D + I |
-| Parent browses events with child | A + C + D |
-| Owner manages posts/events/flyers in portal | F + G + H + I |
-| Student finds IELTS/Business classes & contacts | C + D + E |
-| Sponsor/partner reviews professionalism | A + C + D + E |
-| Visitor selects contact category & subscribes | E |
-| Newsletter subscriber receives updates | E |
+| Teacher updates monthly schedule (recurrence & exceptions) | <img src="readmefiles\devicetesting\staff\portal\event_list.html\Macbook-Air-theenglishstudiocorvetto.com (5).png" height="280" style="object-fit:contain;"/> <img src="readmefiles\devicetesting\staff\portal\event_list.html\Macbook-Air-theenglishstudiocorvetto.com (6).png" height="280" style="object-fit:contain;"/> |
+| Parent browses events with child | <img src="readmefiles\devicetesting\public\calendar.html\Galaxy-Tab-S7-theenglishstudiocorvetto.com (3).png" height="280" style="object-fit:contain;"/> |
+| Owner manages posts/events/flyers in portal | <img src="readmefiles\devicetesting\staff\portal\event_list.html\iPhone-13-(iOS-15)-theenglishstudiocorvetto.com (1).png" height="280" style="object-fit:contain;"/> <img src="readmefiles\devicetesting\staff\portal\flyers\flyer_form.html\iPhone-13-(iOS-15)-theenglishstudiocorvetto.com (1).png" height="280" style="object-fit:contain;"/> <img src="readmefiles\devicetesting\staff\portal\blog\form.html\iPhone-13-(iOS-15)-theenglishstudiocorvetto.com (4).png" height="280" style="object-fit:contain;"/> <img src="readmefiles\devicetesting\staff\portal\blog\form.html\iPhone-13-(iOS-15)-theenglishstudiocorvetto.com (5).png" height="280" style="object-fit:contain;"/> |
+| Student finds IELTS/Business classes & contacts | <img src="readmefiles\devicetesting\public\index.html\iPad-PRO-11-theenglishstudiocorvetto.com (2).png" height="280" style="object-fit:contain;"/> <img src="readmefiles\devicetesting\public\contact.html\Huawei-P30-PRO-theenglishstudiocorvetto.com (5).png" height="280" style="object-fit:contain;"/> |
+| Sponsor/partner reviews professionalism | <img src="readmefiles\devicetesting\public\index.html\Macbook-Air-theenglishstudiocorvetto.com (1).png" height="280" style="object-fit:contain;"/> |
+| Visitor selects contact category & subscribes | <img src="readmefiles\devicetesting\public\contact.html\Huawei-P30-PRO-theenglishstudiocorvetto.com (4).png" height="280" style="object-fit:contain;"/> <img src="readmefiles\devicetesting\public\contact.html\Huawei-P30-PRO-theenglishstudiocorvetto.com (5).png" height="280" style="object-fit:contain;"/> |
+| Newsletter subscriber receives updates | The website owner has not yet created a newsletter via MailChimp, so evidence is provided which illustrates that contact details are collected for future newsletters. <img src="readmefiles\mailchimp.png" height="280" style="object-fit:contain;"/> |
 
 
 
