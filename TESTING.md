@@ -84,24 +84,24 @@ Where feasible all inline JS is avoided. The only instances where inline JS is f
 ### Accessibility (Lighthouse)
 **Method:** Chrome DevTools → Lighthouse (Desktop & Mobile)  
 **Record:** Accessibility & SEO  
-**Result:** 
+**Result:**  
 | Page                | Screenshot                                                                                   | Notes |
 |---------------------|---------------------------------------------------------------------------------------------|-------|
-| blog_detail.html    | ![blog_detail](readmefiles\devicetesting\lighthouse\blog_detail.jpg)                        |  PASS     |
-| blog_list.html      | ![blog_list](readmefiles\devicetesting\lighthouse\blog_list.jpg)                            |    PASS   |
-| contact.html        | ![contact](readmefiles\devicetesting\lighthouse\contact.jpg)                                |  PASS     |
-| create_user.html    | ![create_user](readmefiles\devicetesting\lighthouse\create_user.jpg)                        |  PASS     |
-| dashboard.html      | ![dashboard](readmefiles\devicetesting\lighthouse\dashboard.jpg)                            |   PASS    |
-| edit_user.html      | ![edit_user](readmefiles\devicetesting\lighthouse\edit_user.jpg)                            |   PASS    |
-| event_list.html     | ![event_list](readmefiles\devicetesting\lighthouse\event_list.jpg)                          |   PASS    |
-| flyer_form.html     | ![flyer_form](readmefiles\devicetesting\lighthouse\flyer_form.jpg)                          |  PASS     |
-| flyers_list.html    | ![flyers_list](readmefiles\devicetesting\lighthouse\flyers_list.jpg)                        |  PASS     |
-| form.html           | ![form](readmefiles\devicetesting\lighthouse\form.jpg)                                      | PASS      |
-| index.html          | ![index](readmefiles\devicetesting\lighthouse\index.jpg)                                    |   PASS    |
-| list.html           | ![list](readmefiles\devicetesting\lighthouse\list.jpg)                                      |   PASS    |
-| login.html          | ![login](readmefiles\devicetesting\lighthouse\login.jpg)                                    |   PASS    |
-| schedule.html       | ![schedule](readmefiles\devicetesting\lighthouse\schedule.jpg)                              |    PASS   |
-| user_list.html      | ![user_list](readmefiles\devicetesting\lighthouse\user_list.jpg)                            |  PASS     |
+| blog_detail.html    | <img src="readmefiles\devicetesting\lighthouse\blog_detail.jpg" height="180" style="object-fit:contain;"/>                        |  PASS     |
+| blog_list.html      | <img src="readmefiles\devicetesting\lighthouse\blog_list.jpg" height="180" style="object-fit:contain;"/>                            |    PASS   |
+| contact.html        | <img src="readmefiles\devicetesting\lighthouse\contact.jpg" height="180" style="object-fit:contain;"/>                                |  PASS     |
+| create_user.html    | <img src="readmefiles\devicetesting\lighthouse\create_user.jpg" height="180" style="object-fit:contain;"/>                        |  PASS     |
+| dashboard.html      | <img src="readmefiles\devicetesting\lighthouse\dashboard.jpg" height="180" style="object-fit:contain;"/>                            |   PASS    |
+| edit_user.html      | <img src="readmefiles\devicetesting\lighthouse\edit_user.jpg" height="180" style="object-fit:contain;"/>                            |   PASS    |
+| event_list.html     | <img src="readmefiles\devicetesting\lighthouse\event_list.jpg" height="180" style="object-fit:contain;"/>                          |   PASS    |
+| flyer_form.html     | <img src="readmefiles\devicetesting\lighthouse\flyer_form.jpg" height="180" style="object-fit:contain;"/>                          |  PASS     |
+| flyers_list.html    | <img src="readmefiles\devicetesting\lighthouse\flyers_list.jpg" height="180" style="object-fit:contain;"/>                        |  PASS     |
+| form.html           | <img src="readmefiles\devicetesting\lighthouse\form.jpg" height="180" style="object-fit:contain;"/>                                      | PASS      |
+| index.html          | <img src="readmefiles\devicetesting\lighthouse\index.jpg" height="180" style="object-fit:contain;"/>                                    |   PASS    |
+| list.html           | <img src="readmefiles\devicetesting\lighthouse\list.jpg" height="180" style="object-fit:contain;"/>                                      |   PASS    |
+| login.html          | <img src="readmefiles\devicetesting\lighthouse\login.jpg" height="180" style="object-fit:contain;"/>                                    |   PASS    |
+| schedule.html       | <img src="readmefiles\devicetesting\lighthouse\schedule.jpg" height="180" style="object-fit:contain;"/>                              |    PASS   |
+| user_list.html      | <img src="readmefiles\devicetesting\lighthouse\user_list.jpg" height="180" style="object-fit:contain;"/>                            |  PASS     |
 
 ## 3. Mobile & Desktop Testing <a id="mobiletesting"></a>
 
