@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container mt-5">
-  <h2>Create User</h2>
+  <h2 class="primaryfont red">Create User</h2>
 
   <form method="post" novalidate>
     {% csrf_token %}
@@ -72,7 +72,7 @@
 
       </div>
       <div class="col-md-6">
-        <h5>Password</h5>
+        <p class="primaryfont red">Password</h5>
 
         <div class="mb-3">
           {{ form.password1.label_tag }}
@@ -97,7 +97,7 @@
         </div>
 
         <hr>
-        <h5>Feature Access</h5>
+        <p class="primaryfont red">Feature Access</h5>
         <div class="mb-3">
           {{ form.features }}
           {% if form.features.help_text %}
