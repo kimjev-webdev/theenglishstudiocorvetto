@@ -1,3 +1,7 @@
+/* jshint esversion: 11, browser: true, devel: true, asi: true */
+/* global bootstrap */
+/* jshint -W030, -W033, -W014 */
+
 document.addEventListener('DOMContentLoaded', function () {
   tippy('.day[data-tippy-content]', {
     placement: 'top',

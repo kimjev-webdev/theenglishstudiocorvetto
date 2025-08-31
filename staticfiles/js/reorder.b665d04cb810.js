@@ -1,3 +1,7 @@
+/* jshint esversion: 11, browser: true, devel: true, asi: true */
+/* global bootstrap */
+/* jshint -W030, -W033, -W014 */
+
 (function() {
   const list = document.getElementById('flyers-list');
   if (!list) return;

@@ -51,3 +51,11 @@ async function initMap() {
 
 // Make it available globally; the template calls it after the loader is ready.
 window.initMap = initMap;
+
+// Auto-init on pages that contain #map
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('map')) {
+    initMap().catch(err => console.error('[maps] init failed:', err));
+  }
+});
+

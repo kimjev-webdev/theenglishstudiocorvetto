@@ -61,7 +61,7 @@ https://www.instagram.com/theenglishstudio.corvetto
 https://www.facebook.com/ - unpersonalised will update when client creates business page.
 
 ### JavaScript Console
-**Method:** Inline JS was passed through JSHint.
+**Method:** JS was passed through JSHint.
 
 **Results:** 
 | Page                  | Screenshot                                                                                 | Notes |
@@ -75,7 +75,6 @@ https://www.facebook.com/ - unpersonalised will update when client creates busin
 | maps.js      | <img src="readmefiles\devicetesting\jstesting\maps.jpg" width="250"/>          |       |
 | reorder.js         | <img src="readmefiles\devicetesting\jstesting\reorder.jpg" width="250"/>              |       |
 | schedule.js        | <img src="readmefiles\devicetesting\jstesting\schedule.jpg" width="250"/>                |       |
-
 
 
 Where feasible all inline JS is avoided. The only instances where inline JS is found is due to unavoidable Django variables ({% url %}, {{ csrf_token }}, {{ GOOGLE_MAPS_API_KEY }}), which must be rendered server-side. These stay as tiny inline config objects, for the external JS to consume.
